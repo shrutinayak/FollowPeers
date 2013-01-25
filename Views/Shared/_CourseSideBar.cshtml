@@ -1,0 +1,21 @@
+﻿@{
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+
+    <div class="grid_3">
+        <div class="box">
+            <h2>Options</h2>
+            <div class="block">
+                <ul class="menu">
+                    <li><a href="/Course/Index">
+                        <img src="../../Content/images/icons/16x16/document_inspector.png" />Browse</a></li>
+                    <li><a href="/Course/Create">
+                        <img src="../../Content/images/icons/16x16/add.png" />Create</a></li>
+                    <li><a href="/Course/Mine/">
+                        <img src="../../Content/images/icons/16x16/briefcase.png" />My Courses</a></li>
+                    </ul>
+            </div>
+        </div>
+    </div>
+}

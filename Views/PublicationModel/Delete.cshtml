@@ -1,0 +1,87 @@
+﻿@model FollowPeers.Models.PublicationModel
+@{
+    ViewBag.Title = "Delete Publication";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<<div class="grid_10">
+    <div class="box">
+        <h2>
+            Delete Publication</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="/Content/css/rte.css" rel="stylesheet" type="text/css" />
+        <fieldset>
+            <legend>Do You Want To Delete This Publication?</legend>
+            <div class="display-label" style="font-weight:bold">
+                Title</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.title)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Author(s)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.author)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Type</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.type)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Journal</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.journal)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Publisher</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.publisher)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Conference</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.conference)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                University</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.university)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Reference ID</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.referenceID)
+            </div>
+            <div class="display-label" style="font-weight:bold">
+                Year</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.year)
+            </div>
+        </fieldset>
+        @using (Html.BeginForm())
+        {
+            <p>
+                <input type="submit" value="Delete" />
+                |
+                @Html.ActionLink("Back to My Publication", "MyPublication")
+            </p>
+        }
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        <h2>
+            Bookmarks</h2>
+        @*@{Html.RenderAction("ProgressTracker", "Profile");}*@
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}

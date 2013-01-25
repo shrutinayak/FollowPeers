@@ -1,0 +1,101 @@
+﻿@model FollowPeers.Models.Job
+@{
+    ViewBag.Title = "Job Details";
+     @Html.Partial("_Header")
+     @Html.Partial("_SideBar4")
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    FollowPeers.Models.UserProfile owner = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserProfileId == Model.ownerId);
+    string myname = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == myname);
+                  
+}
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Job Details
+        </h2>
+            <fieldset>
+                 <div id="follow" style="float:right;margin:15px;">
+                            
+                 @if (myprofile.UserProfileId != Model.ownerId)
+                 {
+
+                     if (ViewData[Model.JobId.ToString()] == "1")
+                     {
+                         using (Html.BeginForm("UnBookmark", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                         {
+                            <input type="hidden" name="jobid" value="@Model.JobId" />
+                            <input type="submit" value="UnBookmark" style="padding: 8px 20px;color:gray;float: right;cursor: pointer;font-weight: bold;" />
+                         }
+                     }
+                     else
+                     {
+                         using (Html.BeginForm("Bookmark", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                         {
+                            <input type="hidden" name="jobid" value="@Model.JobId" />
+                            <input type="submit" value="Bookmark" style="padding: 8px 20px;float: right;cursor: pointer;font-weight: bold;" />
+                         }
+                     }
+                 }
+                 <div style="color: grey;font-weight: bold;">By <a href="../../Profile/Index/@owner.UserProfileId"  name="PostedBy">@owner.FirstName @owner.LastName</a></div>
+                 <div style="font-size:11px;">Posted on @Model.publishDate.ToShortDateString()</div>
+                 <div class="editor-field" style="height:22px;font-size: 11px;">
+                            @{int peoplebookmarked = @Model.UserProfiles.Count() - 1;}
+                            Bookmarked by @peoplebookmarked people </div></div>
+                  
+
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Title</div>
+                            <div class="editor-field" style="height:auto">
+                                <input type="hidden" name="Title" value="@Model..Title" style="width:250px;margin-left: 2px;" />@Model.Title 
+                            </div>
+                 
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Country</div>
+                            <div class="editor-field" style="height:22px">
+                                <input type="hidden" name="Country" value="@Html.Encode(Model.Country)" />@Model.Country
+                            </div>
+
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Target Groups</div>
+                            <div class="editor-field" style="height:22px">
+                            For 
+                                @if(@Model.students==true){<text>Students  | </text>}
+                                @if (@Model.professors == true)
+                                {<text>Professors  | </text>}
+                                @if (@Model.investors == true)
+                                {<text>Investors  | </text>}
+                                @if (@Model.researchers == true)
+                                {<text>Researchers </text>}
+                            </div>
+                               
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Target Specializations</div>
+                            <div class="editor-field" style="height:22px">
+                            @{string specialization="";
+                                foreach(var s in Model.Specializations)
+                                {
+                                    <text>@s.SpecializationName  </text>
+                                    specialization += s.SpecializationId;
+                                }
+                                specialization += ",";
+                            }                   
+                            <input type="hidden" class="as-values" name="Specializations" id="as-values-062" value="@specialization">
+                            </div>
+
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Description</div>
+                            <div class="editor-field" style="height:auto">
+                                <input type="hidden" name="Description"  value="@Html.Encode(Model.Description)" />@Model.Description
+                            </div>
+
+                           
+
+                           
+                
+
+                        </fieldset>
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+       
+    </div>
+</div>
+@Html.Partial("_Footer")

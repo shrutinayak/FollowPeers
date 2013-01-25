@@ -1,0 +1,85 @@
+﻿@{
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+    var keywords = ViewData["keywords"];
+<div class="grid_3">
+    <div class="box">
+        <h2>
+            Search By Categories</h2>
+        <div class="block">
+            <ul class="menu">
+            @{
+                     string mylink;
+                     if (keywords != null)
+                     {
+                         mylink = "../Profile/Search?keywords=" + keywords;
+                     }
+                     else
+                     {
+                         mylink = "../Profile/Search";
+                     }
+                     }
+                <li><a href="@mylink">
+                    <img src="../../Content/images/icons/16x16/user.png" />People</a></li>
+                    
+                     @{
+                     
+                     if (keywords != null)
+                     {
+                         mylink = "../../PublicationModel/Search?searchstring=" + keywords;
+                     }
+                     else
+                     {
+                         mylink = "../../PublicationModel/Search?searchstring=";
+                     }
+                     }
+
+                <li><a href="@mylink">
+                    <img src="../../Content/images/icons/16x16/blogs.png" />Publications</a></li>
+                     @{
+                     
+                     if (keywords != null)
+                     {
+                         mylink = "../../PatentModel/Search?searchstring=" + keywords;
+                     }
+                     else
+                     {
+                         mylink = "../../PatentModel/Search?searchstring=";
+                     }
+                     }
+                <li><a href="@mylink">
+                    <img src="../../Content/images/icons/16x16/brain.png" />Patents</a></li>
+                 
+                     
+                      @{
+                     
+                     if (keywords != null)
+                     {
+                         mylink = "../../Profile/SearchJobs?sort=1&keywords=" + keywords;
+                     }
+                     else
+                     {
+                         mylink = "../../Profile/SearchJobs?sort=1";
+                     }
+                     }
+                <li><a href="@mylink">
+                    <img src="../../Content/images/icons/16x16/briefcase.png" />Jobs</a></li>
+                     @{
+                     
+                     if (keywords != null)
+                     {
+                         mylink = "../../Forum/Search?q=" + keywords;
+                     }
+                     else
+                     {
+                         mylink = "../../Forum/Search?q=";
+                     }
+                     }
+                    <li><a href="@mylink">
+                    <img src="../../Content/images/icons/16x16/comments.png" />Forums</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    }
