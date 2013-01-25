@@ -1,0 +1,162 @@
+﻿@model IEnumerable<FollowPeers.Models.PublicationModel>
+@using FollowPeers.Models;
+@{
+    ViewBag.Title = "My Publication";
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    ViewBag.UserName = name;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
+}
+
+@Html.Partial("_PubHeader")
+<div style=" ">
+    <div class="box" style="padding-top: 60px; padding-bottom: 40px">
+            <h6 align="center" style="height:7px" >
+                Recommended Publications
+            </h6>
+              <div id="myCarousel" class="carousel slide">
+			  <!-- Carousel items -->
+			  <div class="carousel-inner">
+			    <div class="active item"><img src="../../Content/images/s1.png"/></div>
+			    <div class="item"><img src="../../Content/images/s2.png"/></div>
+			  </div>
+			  <!-- Carousel nav -->
+			  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+			</div>
+    
+          <div class="box">
+            <h6 align="center" style="height:7px">
+                Your Publications
+            </h6>
+            
+            <div id="Tabs">
+            <br/>
+           
+            
+                <ul class="nav nav-tabs">               
+                    <li id="li_tab1" onclick="tab('tab1')"><a>Uploads</a></li>
+                    <li id="li_tab2" onclick="tab('tab2')"><a>Discussions</a></li>
+                    <li id="li_tab3" onclick="tab('tab3')"><a>Liked</a></li>
+                    <li id="li_tab4" onclick="tab('tab4')"><a>Peer Recommendations</a></li>
+                </ul>
+                <div id="Content_Area" class="tab-content">
+                    <div id="tab2" style="display: none;" class="tab-pane" >
+                        <p>This is the text for tab 2.</p>
+                    </div>
+                    <div id="tab3" style="display: none;" class="tab-pane" >
+                        <p>You havent like any recommendations</p>
+                    </div>
+                    <div id="tab4" style="display: none;" class="tab-pane" >
+                        <p>This is the text for tab 4.</p>
+                    </div>
+                    <div id="tab1" style="display: none;" class="tab-pane" >
+                       @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        @{
+            if (Model.Count() != 0)
+            {
+                <fieldset>
+                <table> <tr><td><p>Number of Publications in the Database : @Model.Count()</p></td><td> <button> @Html.ActionLink("Add Publication", "Create")</button></td></tr></table>
+               
+                
+                </fieldset>
+                foreach (var item in Model)
+                {
+            <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                <div style="float: left;" id="Image">
+                    <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;
+                        width: 50px;" />
+                </div>
+                <div style="margin-left: 8px; float: left;">
+                    <a href="/PublicationModel/Details/@item.publicationID" id="title"><b>@item.title</b></a> 
+                    <div id="Author">Author(s) : @item.author</div>
+                    <div id="Year">Year of Publication : @item.year</div>
+                    @{if (@item.keyword != null)
+                      {<div id="Keyword">Keyword(s) : @item.keyword</div>}}
+                    @{if (@item.journal != null)
+                      {<div id="Journal">Journal : @item.journal</div>}}
+                    @{if (@item.conference != null)
+                      {<div id="Conference">Conference : @item.conference</div>}}
+                    @{if (@item.university != null)
+                      {<div id="University">University : @item.university</div>}}
+                </div>
+                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.type)
+                    | @Html.DisplayFor(modelItem => item.status)  |
+                    <div style="float:right; font-size: 15px; margin-left: 5px;">
+                        @Html.ActionLink("More>>", "Details", new { id = item.publicationID })
+                    </div>
+                    </div>
+            </div>
+            <hr /> 
+                }
+            }
+            else
+            {
+                <fieldset>
+                    <legend>@Html.ActionLink("Add Publication", "Create")</legend>
+                    <legend>You haven't added publications to your profile</legend>
+                </fieldset>
+            }
+      }  
+                    </div>
+                </div> <!– End of Content_Area Div –>
+            </div> <!– End of Tabs Div –>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+    <link rel="stylesheet" type="text/css" href="../../Content/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../../Content/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../Content/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../Content/css/bootstrap.min.css" />
+    <script type="text/javascript" src="../../Scripts/jquery.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap.js"></script>
+   	    
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+
+    $('.carousel').carousel({
+        interval: 2000
+    });
+    $('#myModal').modal()
+    $('#myModal').modal('hide')
+
+    $('#Image').mouseover(function () {
+        $('#Keyword').slideDown("fast");
+        $('#Journal').slideDown("fast");
+        $('#Conference').slideDown("fast");
+        $('#University').slideDown("fast");
+    });
+    $('#Image').mouseout(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+    function tab(tab) {
+        document.getElementById('tab1').style.display = 'none';
+        document.getElementById('tab2').style.display = 'none';
+        document.getElementById('tab3').style.display = 'none';
+        document.getElementById('tab4').style.display = 'none';
+        document.getElementById('li_tab1').setAttribute("class", "");
+        document.getElementById('li_tab2').setAttribute("class", "");
+        document.getElementById('li_tab3').setAttribute("class", "");
+        document.getElementById('li_tab4').setAttribute("class", "");
+        document.getElementById(tab).style.display = 'block';
+        document.getElementById('li_' + tab).setAttribute("class", "active");
+    }
+</script>

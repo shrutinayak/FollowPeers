@@ -1,0 +1,152 @@
+﻿@model FollowPeers.Models.UserProfile 
+@{
+    ViewBag.Title = @Model.FirstName + " " + @Model.LastName + " Update Your Education History";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Update Your Education History
+        </h2>
+        @{var message = ViewData["message"];}
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.UserProfileId)
+            @Html.HiddenFor(model => model.UserName)
+            @Html.HiddenFor(model => model.activated)
+            if (message != null)
+            {
+                <div style="background: #eee;padding: 5px;color: green;">@message</div>
+            }
+            int i = 0;
+            <div id="EducationFields">
+                
+                @foreach (var E in Model.Educations)
+                {
+
+                    string TempData = "Edu" + i.ToString();
+                    string TempData2 = "Delete" + i.ToString();
+                    string TempData3 = "Organization" + i.ToString();
+                    string TempData4 = "Country" + i.ToString();
+                    <div id=@TempData>
+                        <fieldset>
+                            <legend>Education History</legend>
+                            <div id=@TempData2  style="float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;" title="Click to delete this record.">
+                                x</div>
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Organization, "Institution")
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" id="@TempData3" name="Organization" style="margin-left:2px;width:210px" value="@Model.Educations.ElementAt(i).UniversityName" />
+                            </div>
+                            <div class="editor-label">
+                                Country
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" name="Country" id="@TempData4" style="margin-left:2px;width:210px" value="@Html.Encode(Model.Educations.ElementAt(i).country)" />
+                            </div>
+                            <div class="editor-label">
+                                Degree
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" name="Degree" value="@Model.Educations.ElementAt(i).Degree" />
+                            </div>
+                           
+                             <div class="editor-label">
+                                Start Year (yyyy)
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" name="startYear" value="@Model.Educations.ElementAt(i).startYear" />
+                            </div>
+                            <div class="editor-label">
+                                End Year (yyyy)
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" name="endYear" value="@Model.Educations.ElementAt(i).endYear" />
+                            </div>
+                        </fieldset>
+                    </div>
+            
+                    i = i + 1;
+                }</div>
+            
+            <p>
+                <div id="Add" style="cursor: pointer;back: white;background: white;width: 25px;padding: 2px 5px;color: dimgray;" title="Click to add another record.">
+                    Add</div>
+                <input type="submit" value="Save" style="float: right; padding: 3px 8px; cursor: pointer;">
+            </p>
+        }</div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+        
+    </div>
+</div>
+@Html.Partial("_Footer")
+<script type="text/javascript">
+    $(document).ready(function () {
+        counter = 0;
+        if ($('#Edu0').length) { AutoComplete(0); counter++; $('#Delete0').click(function () { Delete(0); }); }
+        if ($('#Edu1').length) { AutoComplete(1); counter++; $('#Delete1').click(function () { Delete(1); }); }
+        if ($('#Edu2').length) { AutoComplete(2); counter++; $('#Delete2').click(function () { Delete(2); }); }
+        $('#Add').click(function () { AddField(); });
+        if (counter==0) AddField();
+        function AutoComplete(id) 
+        {
+            $("#Organization"+id).autocomplete({source: function (request, response) {$.ajax({
+            url: "/Profile/FindOrganizationNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 10 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.OrganizationId }
+                }))
+                }
+                })
+                },
+            });
+
+            $("#Country"+id).autocomplete({source: function (request, response) {$.ajax({
+            url: "/Profile/FindCountryNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 10 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.CountryId }
+                }))
+                }
+                })
+                },
+            });
+         }
+
+
+        function AddField() {
+            if (counter >= 3) alert("You can add a maximum of 3 Education Records");
+            else {
+                var name;
+                if (!($('#Edu0').length)) name = 0;
+                else if (!($('#Edu1').length)) name = 1;
+                else if (!($('#Edu2').length)) name = 2;
+                $('#EducationFields').append("<div id='Edu" + name + "'><fieldset><legend>Education History</legend><div id='Delete" + name + "'  style='float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;' title='Click to delete this record.'>x</div><div class='editor-label'>Institution</div><div class='editor-field'> <input type='text' id='Organization" + name + "' name='Organization' style='margin-left:2px;width:210px'  /> </div><div class='editor-label'>Country</div><div class='editor-field'><input type='text' name='Country' id='Country"+name+"' /></div><div class='editor-label'>Degree</div><div class='editor-field'><input type='text' name='Degree'  /></div> <div class='editor-label'> Start Year (yyyy)</div><div class='editor-field'><input type='text' name='startYear'  /></div><div class='editor-label'>End Year (yyyy)</div><div class='editor-field'><input type='text' name='endYear' /> </div></fieldset></div>");
+                $('#Delete' + name).click(function () { Delete(name); });
+                counter++;
+                AutoComplete(name);
+
+            }
+        }
+        function Delete(id) {
+           
+            if ($('#Edu' + id).length) {
+                $('#Edu' + id).slideUp('fast', function () { $('#Edu' + id).remove(); });
+                counter--;
+            }
+        }
+    });
+</script>

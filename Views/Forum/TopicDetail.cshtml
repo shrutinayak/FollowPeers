@@ -1,0 +1,62 @@
+﻿@model FollowPeers.Models.ForumTopic
+  
+
+@Html.Partial("_Header")
+@Html.Partial("Categories")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">Posts for @Model.Name</h2>
+        <fieldset>
+        <legend>Existing Posts</legend>
+        <table style="margin:5px 0px 5px 0px">
+        @{
+            if (Model == null || Model.Posts.Count == 0)
+            {
+               <tr >
+                <td>
+                    <div class="MessageContainer">
+                        <div class="messageDetails" style="width:73%; height:40px; float:left; padding: 5px 0px 0px 10px;">
+                            <div class="messageSubject"><a>No posts for this topic.</a><a> Consider adding one below</a></div>
+                        </div>
+                    </div>
+                </td>
+                </tr> 
+            }
+            else
+            {
+                foreach (var post in Model.Posts)
+                {
+                    var currentForumPost = Model.Posts.Single(t => t.ForumPostId == post.ForumPostId);
+                    
+                    <tr >
+                        <td>
+                            <div class="MessageContainer">
+                                <div class="messageDetails" style="width:73%;height:auto; float:left; padding: 5px 0px 0px 10px;">
+                                    <div class="messageName"><a href="../../Profile/Index/?id=@post.Postedby.UserProfileId">@post.Postedby.FirstName @post.Postedby.LastName</a></div>
+                                    <div class="messageSubject">@post.PostMessage</div>
+                                </div>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                }
+            }
+        }
+        </table>
+        </fieldset>
+            
+        <fieldset>
+        <legend>Add Post</legend>
+        <form action="../../Forum/AddPost/" method="post">
+            <div class="editor-field" style="width:90%">
+                <p>Add a post to this forum topic</p>
+                <input type="hidden" id="ForumTopicId" name="ForumTopicId" value="@Model.ForumTopicId"/>
+                <textarea id="PostMesage" name="PostMessage" rows="2" cols="20" style="width:100%"></textarea>
+            </div>
+            <input type="submit" value="Post" />
+        </form>
+        </fieldset>
+    </div>
+</div>
+
+@Html.Partial("_Footer")

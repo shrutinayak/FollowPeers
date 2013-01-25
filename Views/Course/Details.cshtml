@@ -1,0 +1,70 @@
+﻿@model FollowPeers.Models.Course
+
+@{
+    ViewBag.Title = "New Conversation";
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+}
+
+@Html.Partial("_Header")
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+
+@Html.Partial("_CourseSideBar")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">Course Details</h2>
+            <fieldset>
+                @{
+                    
+                    if (false)
+                    {
+                       <p>You have not followed anyone & no body is following you. Please follow someone to send them a message.</p>
+                    }
+                    else
+                    {   <legend style="width:80%; height: 40px; padding-top:10px;"><img src="../../Content/images/icons/32x32/education.png" style="width:24px; height:24px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/>@Html.DisplayFor(m => Model.CourseName)</legend>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div style="padding:5px 0px 5px 5px;font-size: 0.9em; font-weight: normal; border:0 none black;">Description:</div>
+                                </td>
+                                <td>
+                                    <div style="padding:5px 0px 0px 5px;font-size: 1.1em; font-weight: bold;">  @Html.DisplayFor(m => Model.CourseDescription)</div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                 <td>
+                                    <div style="padding:5px 0px 5px 5px;font-size: 0.9em; font-weight: normal; border:0 none black;">Course Starts:</div>
+                                </td>
+                                <td>
+                                    <div style="padding:5px 0px 5px 5px;font-size: 0.9em; font-weight: normal; border:0 none black;">@Html.DisplayFor(m => Model.StartDate)</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                 <td>
+                                    <div style="padding:5px 0px 5px 5px;font-size: 0.9em; font-weight: normal; border:0 none black;">Course Ends:</div>
+                                </td>
+                                <td>
+                                    <div style="padding:5px 0px 5px 5px;font-size: 0.9em; font-weight: normal; border:0 none black;">@Html.DisplayFor(m => Model.EndDate)</div>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                       
+                    }
+                }
+                
+            </fieldset>
+
+        <div>
+            @Html.ActionLink("Back to Browse", "Index")
+        </div>
+    </div>
+</div>
+@Html.Partial("_Footer")

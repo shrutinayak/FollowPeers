@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FollowPeers.Models.PublicationModel>
+@{
+    ViewBag.Title = "Publication Search Page";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar4")
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            @ViewBag.searchstring
+        </h2>
+        @foreach (var item in Model)
+        { 
+            <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                <div style="float: left;">
+                    <a href="/PublicationModel/Details/@item.publicationID" id="image">
+                        <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;
+                            width: 50px;" /></a>
+                </div>
+                <div style="margin-left: 8px; float: left;">
+                    <a href="/PublicationModel/Details/@item.publicationID" id="title"><b>@item.title</b></a>
+                    <div style="font-style: italic">
+                        Author(s) : @item.author</div>
+                    <div>
+                        Keywords : @item.keyword</div>
+                </div>
+                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.type)
+                    | @Html.DisplayFor(modelItem => item.status) |
+                    <div style="float: right; font-size: 15px; margin-left: 5px;">
+                        @Html.ActionLink("Details", "Details", new { id = item.publicationID })
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        <h2>
+            </h2>
+        @*@{Html.RenderAction("ProgressTracker", "Profile");}*@
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}

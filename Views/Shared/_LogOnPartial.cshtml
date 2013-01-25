@@ -1,0 +1,81 @@
+﻿@model FollowPeers.Models.LogOnModel
+@if (Request.IsAuthenticated)
+{
+    <div style="float: right; color: white;">
+        <text>Welcome <strong>@User.Identity.Name</strong>! [ @Html.ActionLink("Log Off", "LogOff", "Account")
+    ]</text>
+    </div>
+}
+
+else
+{
+    using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class="navbar-form pull-right" }))
+    {
+        <nav class="pull-right">
+             @Html.TextBoxFor(m => m.UserName, new { @class = "span2", @type = "text", @placeholder = "Email" })
+       
+             @Html.PasswordFor(m => m.Password, new { @class = "span2", @type = "password", @placeholder = "Password" })
+                
+             <button type="submit" class="btn" cursor="pointer">Sign in</button>
+        </nav>
+        @*<nav_bottom>
+            <div class="editor-label" style="margin:0; float:left; color:#eee;">
+                @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe)
+            </div>
+        </nav_bottom>*@
+            
+    }
+    <script type="text/javascript" language="javascript">
+        function puthint(divname,hinttext) {
+            $(document).ready(function () {
+
+                // Define what happens when the textbox comes under focus
+                // Remove the watermark class and clear the box
+                $(divname).focus(function () {
+
+                    $(this).filter(function () {
+
+                        // We only want this to apply if there's not 
+                        // something actually entered
+                        return $(this).val() == "" || $(this).val() == hinttext
+
+                    }).removeClass("watermarkOn").val("");
+
+                });
+
+                // Define what happens when the textbox loses focus
+                // Add the watermark class and default text
+                $(divname).filter(function () {
+
+                    // We only want this to apply if there's not
+                    // something actually entered
+                    return $(this).val() == ""
+
+                }).addClass("watermarkOn").val(hinttext);
+
+                $(divname).blur(function () {
+
+                    $(this).filter(function () {
+
+                        // We only want this to apply if there's not
+                        // something actually entered
+                        return $(this).val() == ""
+
+                    }).addClass("watermarkOn").val(hinttext);
+
+                });
+
+            });
+        }
+        puthint("#UserName", "Email Address");
+        
+    </script>
+    <style type="text/css">
+        .watermarkOn
+        {
+            color: #CCCCCC;
+            type: text;
+        }
+    </style>
+}

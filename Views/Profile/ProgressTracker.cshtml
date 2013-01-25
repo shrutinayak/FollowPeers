@@ -1,0 +1,18 @@
+﻿@{var width = 100 - Convert.ToInt16(ViewBag.Percent);}
+@if (ViewBag.Percent != "100")
+{
+    <h2>
+        Profile Update</h2>
+    <div title="Click" style="height: 8px; border: 1px solid gray; margin-top: 5px; cursor: pointer;">
+        <div style="height: 8px;background: dimgray;float: left;width: @ViewBag.Percent%;">
+        </div>
+        <div style="float: right;background: lightgray;height: 8px;width: @width%;">
+        </div>
+    </div>
+    @ViewBag.Percent <text>% Completed</text>
+    <br />
+    if (ViewBag.Text != null)
+    {
+        <a href=@ViewBag.Link>Next: @ViewBag.Text</a>
+    }
+}

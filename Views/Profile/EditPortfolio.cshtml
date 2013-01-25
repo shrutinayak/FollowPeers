@@ -1,0 +1,157 @@
+﻿@model FollowPeers.Models.UserProfile 
+@{
+    ViewBag.Title = @Model.FirstName + " " + @Model.LastName + " Update Your Profile";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Update Your Portfolio
+        </h2>
+        @{var message = ViewData["message"];}
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.UserProfileId)
+            @Html.HiddenFor(model => model.UserName)
+            @Html.HiddenFor(model => model.activated)
+            if (message != null)
+            {
+                <div style="background: #eee;padding: 5px;color: green;">@message</div>
+            }
+            int i = 0;
+            <div id="ComcationFields">
+                
+                @foreach (var E in Model.Portfolios)
+                {
+
+                    string TempData = "Com" + i.ToString();
+                    string TempData2 = "Delete" + i.ToString();
+                    string TempData4 = "Country" + i.ToString();
+                    <div id="@TempData">
+                        <fieldset>
+                            <legend>Company Profile @(i + 1)</legend>
+                            <div id="@TempData2"  style="float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;" title="Click to delete this record.">
+                                x</div>
+                            <div class="editor-label">Name</div>
+                            <div class="editor-field">
+                                <input type="text" name="Name" value="@Model.Portfolios.ElementAt(i).Name" style="width:250px;margin-left: 2px;" />
+                            </div>
+
+                            <div class="editor-label">Field</div>
+                            <div class="editor-field">
+                                <input type="text" name="Field" value="@Model.Portfolios.ElementAt(i).BusinessField" />
+                            </div>
+                 
+                            <div class="editor-label">Country</div>
+                            <div class="editor-field">
+                                <input type="text" name="Country" id="@TempData4" value="@Html.Encode(Model.Portfolios.ElementAt(i).Country)" />
+                            </div>
+                            
+                            <div class="editor-label">Year Funded (yyyy)</div>
+                            <div class="editor-field">
+                                <input type="text" name="Year" value="@Model.Portfolios.ElementAt(i).Year" />
+                            </div>
+
+                            <div class="editor-label">Status</div>
+                            <div class="editor-field">
+                                <input type="text" name="Status" value="@Model.Portfolios.ElementAt(i).Status" />
+                            </div>
+
+                            <div class="editor-label">Website</div>
+                            <div class="editor-field">
+                                <input type="text" name="Website" value="@Model.Portfolios.ElementAt(i).Website" style="width:250px;margin-left: 2px;" />
+                            </div>
+
+                            <div class="editor-label">More Info</div>
+                            <div class="editor-field">
+                                <textarea rows="3" cols="60" name="MoreInfo" type="text">@Model.Portfolios.ElementAt(i).MoreInfo</textarea>
+                            </div>
+
+                        </fieldset>
+                    </div>
+            
+                    i = i + 1;
+                }</div>
+            
+            <p>
+                <div id="Add" style="cursor: pointer;back: white;background: white;width: 25px;padding: 2px 5px;color: dimgray;" title="Click to add another record.">
+                    Add</div>
+                <input type="submit" value="Save" style="float: right; padding: 3px 8px; cursor: pointer;">
+            </p>
+        }</div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+        
+    </div>
+</div>
+@Html.Partial("_Footer")
+<script type="text/javascript">
+    $(document).ready(function () {
+        counter = 0;
+        if ($('#Com0').length) { AutoComplete(0); counter++; $('#Delete0').click(function () { Delete(0); }); }
+        if ($('#Com1').length) { AutoComplete(1); counter++; $('#Delete1').click(function () { Delete(1); }); }
+        if ($('#Com2').length) { AutoComplete(2); counter++; $('#Delete2').click(function () { Delete(2); }); }
+        if ($('#Com3').length) { AutoComplete(3); counter++; $('#Delete3').click(function () { Delete(3); }); }
+        if ($('#Com4').length) { AutoComplete(4); counter++; $('#Delete4').click(function () { Delete(4); }); }
+        if ($('#Com5').length) { AutoComplete(5); counter++; $('#Delete5').click(function () { Delete(5); }); }
+        if ($('#Com6').length) { AutoComplete(6); counter++; $('#Delete6').click(function () { Delete(6); }); }
+        if ($('#Com7').length) { AutoComplete(7); counter++; $('#Delete7').click(function () { Delete(7); }); }
+        if ($('#Com8').length) { AutoComplete(8); counter++; $('#Delete8').click(function () { Delete(8); }); }
+        if ($('#Com9').length) { AutoComplete(9); counter++; $('#Delete9').click(function () { Delete(9); }); }
+        $('#Add').click(function () { AddField(); });
+        if (counter==0) AddField();
+        function AutoComplete(id) 
+        {
+            $("#Country"+id).autocomplete({source: function (request, response) {$.ajax({
+            url: "/Profile/FindCountryNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 10 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.CountryId }
+                }))
+                }
+                })
+                },
+            });
+         }
+
+
+        function AddField() {
+            if (counter >= 10) alert("You can add a maximum of 10 Companies in your Portfolio.");
+            else {
+                var name;
+                if (!($('#Com0').length)) name = 0;
+                else if (!($('#Com1').length)) name = 1;
+                else if (!($('#Com2').length)) name = 2;
+                else if (!($('#Com3').length)) name = 3;
+                else if (!($('#Com4').length)) name = 4;
+                else if (!($('#Com5').length)) name = 5;
+                else if (!($('#Com6').length)) name = 6;
+                else if (!($('#Com7').length)) name = 7;
+                else if (!($('#Com8').length)) name = 8;
+                else if (!($('#Com9').length)) name = 9;
+                $('#ComcationFields').append("<div id='Com" + name + "'><fieldset><legend>Company Profile "+(name+1)+"</legend><div id='Delete" + name + "'  style='float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;' title='Click to delete this record.'>x</div><div class='editor-label'>Name</div><div class='editor-field'><input type='text' name='Name' style='width:250px;margin-left: 2px;'/></div><div class='editor-label'>Field</div><div class='editor-field'><input type='text' name='Field'/></div><div class='editor-label'>Country</div><div class='editor-field'><input type='text' name='Country' id='Country"+name+"'/></div><div class='editor-label'>Year Funded (yyyy)</div><div class='editor-field'><input type='text' name='Year'/></div><div class='editor-label'>Status</div><div class='editor-field'><input type='text' name='Status'/></div><div class='editor-label'>Website</div><div class='editor-field'><input type='text' name='Website' style='width:250px;margin-left: 2px;' /></div><div class='editor-label'>More Info</div><div class='editor-field'><textarea rows='3' cols='60' name='MoreInfo' type='text'></textarea></div></fieldset>");
+                $('#Delete' + name).click(function () { Delete(name); });
+                counter++;
+                AutoComplete(name);
+
+            }
+        }
+        function Delete(id) {
+           
+            if ($('#Com' + id).length) {
+                $('#Com' + id).slideUp('fast', function () { $('#Com' + id).remove(); });
+                counter--;
+            }
+        }
+    });
+</script>

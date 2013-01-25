@@ -1,0 +1,137 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Follow Peers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="Content/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+   
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="index.cshtml">Follow Peers</a>
+          <div class="nav-collapse collapse">
+                @Html.Partial("_LogOnPartial")
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row" style="margin-top:20px;">
+      	<div class="span8">
+      		<div id="myCarousel" class="carousel slide">
+			  <!-- Carousel items -->
+			  <div class="carousel-inner">
+			    <div class="active item"><img src="Content/images/s1.png"/></div>
+			    <div class="item"><img src="Content/images/s2.png"/></div>
+			  </div>
+			  <!-- Carousel nav -->
+			  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+			</div>
+      	</div>
+      	<div class="span4">
+      		<h2>New User?</h2>
+          <h5>Register Here!</h5>
+                @Html.Partial("_RegisterPartial")
+
+	      @*  <form class="form">
+			  
+			    <div class="controls">
+			      <input type="text" id="inputEmail" placeholder="First Name" class="input-xlarge">
+			    </div>
+			    <div class="controls">
+			      <input type="text" id="inputEmail" placeholder="Last Name" class="input-xlarge">
+			    </div>
+                <div class="btn-group">
+                    <button class="btn" style="width:80%;">Profession</button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                       <li><input type="checkbox" value="Science"/></li>
+                       <li><input type="checkbox" value="Mathematics"/></li>
+                    </ul>
+                </div>
+			    <div class="controls">
+			      <input type="text" id="inputEmail" placeholder="Email" class="input-xlarge">
+			    </div>
+			   	<div class="controls">
+			      <input type="password" id="inputPassword" placeholder="Password" class="input-xlarge">
+			    </div>
+			    <div class="controls">
+			      <input type="password" id="inputPassword" placeholder="Password" class="input-xlarge">
+			    </div>
+			    <div class="controls">
+			      <input type="text" id="inputPassword" placeholder="Interests" class="input-xlarge">
+			    </div>
+			    <div class="controls">
+			      <button type="submit" class="btn">Sign up</button>
+			    </div>
+             </form>*@
+		</div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span6">
+          <h2>Individual</h2>
+          <p>Sign up as individual if you are a student, teacher, reseracher, professor, job seeker from any academic institution or anyone seeking information related to a particuar field.  </p>
+          <p><a class="btn" href="#myModal" data-toggle="modal">View details &raquo;</a></p>
+        </div>
+        <div class="span6">
+          <h2>Corporate</h2>
+          <p>Sign up as corporate if you would like to invest a study or a research project. If you'd like to invest in a research, you could contact the reserachers directly via our messaging service. </p>
+          <p><a class="btn" href="#myModal" role="button" class="btn" data-toggle="modal">View details &raquo;</a></p>
+       </div>
+  
+      </div>
+
+      <hr>
+
+      <footer>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="Scripts/jquery.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+   	<script type="text/javascript">
+   	    $('.carousel').carousel({
+   	        interval: 2000
+   	    });
+   	    $('#myModal').modal()
+        $('#myModal').modal('hide')
+    </script>
+
+  </body>
+</html>

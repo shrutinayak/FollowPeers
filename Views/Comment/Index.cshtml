@@ -1,0 +1,43 @@
+﻿@model IEnumerable<FollowPeers.Models.Comment>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.UserFullName = ViewBag.UserProfile.FirstName + " " + ViewBag.UserProfile.LastName;
+}
+
+<fieldset>
+    <legend>Comments</legend>
+    <table style="margin:5px 0px 5px 0px">
+    @{
+        foreach (var item in Model)
+        {
+            <tr >
+                <td>
+                    <div class="MessageContainer">
+                        <img src="@ViewBag.UserProfile.PhotoUrl" style="width:10%; height:48px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/>
+                        <div class="messageDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                            <div class="messageName"> <strong>@ViewBag.UserFullName</strong></div>
+                            <div class="messageSubject">@Html.Label(item.CommentBody)</div>
+                        </div>
+                        <div class="MessageOptions" style="width:15%; float:right; display:inline-block;">
+                            @Html.ActionLink("flag", "Flag", new { id = item.CommentId, PublicationId = item.ParentId })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+                
+        }
+        
+        
+    }
+    </table>
+    @*@Html.Partial("CreateAjax")*@
+     
+</fieldset>
+
+
+
+
+
+
+

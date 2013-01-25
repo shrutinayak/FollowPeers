@@ -1,0 +1,77 @@
+﻿@model IEnumerable<FollowPeers.Models.UserProfile>
+@{
+    ViewBag.Title = "Search Results";
+    
+       @Html.Partial("_Header")
+    
+    var keywords = ViewData["keywords"];
+    if (keywords != null)
+    {
+        @Html.Partial("_SideBar4", new { keywords = keywords })
+    }
+    else
+    {
+        @Html.Partial("_SideBar4")
+    }
+}
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            @ViewBag.searchstring
+        </h2>
+        @if (Model.Count() == 0)
+        {
+            <div style="padding:10px;">No Results Found</div>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {   <div style="height:90px">
+                <div class="block" style="overflow:hidden; height:70px; width:70px;float:left; text-align: center">
+                    <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" /></a>
+                </div>
+                <div style="float:left; margin: 15px 0px 0px 5px;">@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) (@Html.DisplayFor(modelitem => item.Profession))
+                <br />
+                <a href="/Profile/Search?department=@item.Departments">@Html.DisplayFor(modelitem => item.Departments)</a> , <a href="/Profile/Search?organization=@item.Organization">@Html.DisplayFor(modelitem => item.Organization)</a>
+                <br />
+                @Html.DisplayFor(modelitem => item.Country) 
+                </div>
+                <div id="follow" style="float:right;margin:15px;">
+                 @if (Membership.GetUser().UserName != item.UserName)
+                 {
+
+                     if (ViewData[item.UserName] == "1")
+                     {
+                         using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                         {
+                            <input type="hidden" name="username" value="@item.UserName" />
+                            <input type="submit" value="UnFollow" style="padding: 8px 20px;width:90px;color:gray;float: right;cursor: pointer;font-weight: bold;" />
+                         }
+                     }
+                     else
+                     {
+                         using (Html.BeginForm("Follow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                         {
+                            <input type="hidden" name="username" value="@item.UserName" />
+                            <input type="submit" value="Follow" style="padding: 8px 20px;width:90px;float: right;cursor: pointer;font-weight: bold;" />
+                         }
+                     }
+                 }</div>
+                <div style="clear:none"></div></div>
+                
+            }
+
+            }
+        
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+       
+        @{Html.RenderAction("FollowPeopleRecommendation", "Profile", null);
+          
+        }
+    </div>
+</div>
+@Html.Partial("_Footer")

@@ -1,0 +1,138 @@
+﻿@model FollowPeers.Models.PatentModel
+@{
+    ViewBag.Title = "Add Patent";
+}
+
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+
+<div class="grid_10">
+    <div class="box">
+        <h2>Add Patent</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.tools.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.bgiframe.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.mcdropdown.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.rte.js")" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+        @using (Html.BeginForm()) {
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Add Patent</legend>
+                @*-----------Ranking-----------*@
+                <input id="Ranking" name="Ranking" type="hidden" value="0" />
+                @*-----------ViewCount-----------*@
+                <input id="ViewCount" name="ViewCount" type="hidden" value="0" />
+                @*-----------Title-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Title, "Title")
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Title, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Title)
+                </div>
+                @*-----------About-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.About,"About")
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.About, new { cols = "50", rows = "5" })
+                    @Html.ValidationMessageFor(model => model.About)
+                </div>
+                @*-----------RefNo-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.RefNo, "Patent Number")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.RefNo)
+                    @Html.ValidationMessageFor(model => model.RefNo)
+                </div>
+                @*-----------ApplyYear-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ApplyYear, "Application Date")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ApplyYear)
+                    @Html.ValidationMessageFor(model => model.ApplyYear)
+                </div>
+                 @*-----------AproveYear-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.AproveYear, "Approval Date")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.AproveYear)
+                    @Html.ValidationMessageFor(model => model.AproveYear)
+                </div>
+                 @*-----------Country-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Country, "Country Filed In")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Country)
+                    @Html.ValidationMessageFor(model => model.Country)
+                </div>
+                @*-----------Keyword-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Keyword, "Keywords sperated by (;)")
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Keyword, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Keyword)
+                </div>
+                </fieldset>
+                <p>
+                    <input type="submit" value="Create"style="float: right;padding: 3px 8px;cursor: pointer;" />
+                </p>
+        }
+        </div>
+    </div>
+
+<div class="grid_3">
+    <div class="box">
+        <h2></h2>
+        @*@{Html.RenderAction("ProgressTracker", "Profile");}*@
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+
+@helper Script(string scriptName)
+{
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+            $("#Country").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PatentModel/FindCountryNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 10 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.CountryId }
+                }))
+                }
+                })
+                },
+            });
+
+     $(".rte-zone").rte("/Content/css/rte.css", "/Content/css/images/");
+     $(":input[data-datepicker]").datepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'mm-dd-yy',
+         yearRange: '1950:2050'
+     });
+
+    });
+
+</script>

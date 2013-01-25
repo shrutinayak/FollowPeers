@@ -1,0 +1,47 @@
+﻿@model IEnumerable<FollowPeers.Models.Course>
+
+@{
+    ViewBag.Title = "Courses > Browse";
+}
+
+@Html.Partial("_PubHeader")
+@Html.Partial("_SideBar2")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">Browse Courses</h2>
+        <table style="margin:5px 0px 5px 0px">
+        @{
+            if (Model.Any(c => c.CourseId > 0 ))
+            {
+                foreach (var item in Model)
+                {
+                
+                    <tr >
+                        <td>
+                            <div class="CourseContainer">
+                                <img src="../../Content/images/icons/32x32/education.png" style="width:10%; height:48px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/>
+                                <div class="courseDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                                    <div class="courseName"> @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId})</div>
+                                    <div class="courseDescription">@Html.Label(item.CourseDescription)</div>
+                                </div>
+                                <div class="MessageOptions" style="width:15%; float:right; display:inline-block;">
+                                    @Html.ActionLink("Join", "joinCourse", new { id = item.CourseId}) 
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                  
+            }
+            else{
+                <tr>
+                    <td>There are not courses at present. You can add a course by clicking the button below.
+                     </td>
+                </tr> 
+            }        
+        }
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Footer")

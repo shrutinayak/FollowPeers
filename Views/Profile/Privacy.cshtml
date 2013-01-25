@@ -1,0 +1,304 @@
+@model FollowPeers.Models.UserProfile
+@{
+    ViewBag.Title = ViewBag.Name;
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar3")
+<div class="grid_10">
+    <div class="box">
+        @Html.ValidationSummary(true)
+        @using (Html.BeginForm())
+        {
+            <table>
+                <tr>
+                    <th style="background: dimGray; color: white;width:140px;">
+                        Attributes
+                    </th>
+                    <th style="background: dimGray; color: white;width:140px;">
+                        Tier 1 (Unknown)
+                    </th>
+                    <th style="background: dimGray; color: white;width:140px;">
+                        Tier 2 (Acquaintances)
+                    </th>
+                    <th style="background: dimGray; color: white;width:140px;">
+                        Tier 3 (Close Friends)
+                    </th>
+                </tr>
+                <tr><td colspan="4" style="color: #888;">Check the box if you want to allow the information to appear on your Info Page when viewed by certained tiered followers.</td></tr>
+                <tr>
+                    @{string Email1 = "";
+                      string Email2 = "";
+                      string Email3 = "";
+
+                      string Phone1 = "";
+                      string Phone2 = "";
+                      string Phone3 = "";
+
+                      string Mobile1 = "";
+                      string Mobile2 = "";
+                      string Mobile3 = "";
+
+                      string Address1 = "";
+                      string Address2 = "";
+                      string Address3 = "";
+
+                      string Education1 = "";
+                      string Education2 = "";
+                      string Education3 = "";
+                      
+                      string Publication1 = "";
+                      string Publication2 = "";
+                      string Publication3 = "";
+
+                      string Patent1 = "";
+                      string Patent2 = "";
+                      string Patent3 = "";
+
+                      string Tier1 = "";
+                      string Tier2 = "";
+                      string Tier3 = "";
+
+                      string Noticeboard1 = "";
+                      string Noticeboard2 = "";
+                      string Noticeboard3 = "";
+
+                      string Aboutme1 = "";
+                      string Aboutme2 = "";
+                      string Aboutme3 = "";
+                      
+                    }
+                    @{if (Model.Tiers.ElementAt(0).Email == 1) { Email1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Email == 1) { Email2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Email == 1) { Email3 = "checked"; }
+
+                      if (Model.Tiers.ElementAt(0).Phone == 1) { Phone1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Phone == 1) { Phone2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Phone == 1) { Phone3 = "checked"; }
+
+                      if (Model.Tiers.ElementAt(0).Mobile == 1) { Mobile1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Mobile == 1) { Mobile2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Mobile == 1) { Mobile3 = "checked"; }
+
+                      if (Model.Tiers.ElementAt(0).Address == 1) { Address1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Address == 1) { Address2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Address == 1) { Address3 = "checked"; }
+
+                      if (Model.Tiers.ElementAt(0).Education == 1) { Education1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Education == 1) { Education2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Education == 1) { Education3 = "checked"; }
+
+                      if (Model.Tiers.ElementAt(0).Publication == 1) { Publication1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Publication == 1) { Publication2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Publication == 1) { Publication3 = "checked"; }
+
+                      if (Model.Tiers.ElementAt(0).Patent == 1) { Patent1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Patent == 1) { Patent2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Patent == 1) { Patent3 = "checked"; }
+
+                      if (Model.Default == 1) { Tier1 = "selected"; }
+                      if (Model.Default == 2) { Tier2 = "selected"; }
+                      if (Model.Default == 3) { Tier3 = "selected"; }
+
+                      if (Model.Tiers.ElementAt(0).Noticeboard == 1) { Noticeboard1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).Noticeboard == 1) { Noticeboard2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).Noticeboard == 1) { Noticeboard3 = "checked"; }
+                      
+                      if (Model.Tiers.ElementAt(0).AboutMe == 1) { Aboutme1 = "checked"; }
+                      if (Model.Tiers.ElementAt(1).AboutMe == 1) { Aboutme2 = "checked"; }
+                      if (Model.Tiers.ElementAt(2).AboutMe == 1) { Aboutme3 = "checked"; }
+                  
+                    }
+                    <td>
+                        <div class="custom1">
+                            Email</div>
+                            </td>
+                            <td>
+                        <div>
+                            <input type="checkbox" name="Email1" value="1" @Email1/></div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Email2" value="1" @Email2/></div>
+                    </td>
+                    <td>
+                       
+                        <div>
+                            <input type="checkbox" name="Email3" value="1" @Email3 /></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            Phone</div>
+                        
+                    </td>
+                    <td><div>
+                            <input type="checkbox" name="Phone1" value="1" @Phone1/></div></td>
+                    <td>
+                        
+                        <div>
+                            <input type="checkbox" name="Phone2" value="1" @Phone2/></div>
+                    </td>
+                    <td>
+                       
+                        <div>
+                            <input type="checkbox" name="Phone3" value="1" @Phone3/></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            Mobile</div>
+                        
+                    </td>
+                    <td><div>
+                            <input type="checkbox" name="Mobile1" value="1" @Mobile1/></div></td>
+                    <td>
+                       
+                        <div>
+                            <input type="checkbox" name="Mobile2" value="1" @Mobile2/></div>
+                    </td>
+                    <td>
+                        
+                        <div>
+                            <input type="checkbox" name="Mobile3" value="1" @Mobile3/></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            Address</div>
+                        
+                    </td>
+                    <td><div>
+                            <input type="checkbox" name="Address1" value="1" @Address1/></div></td>
+                    <td>
+                        
+                        <div>
+                            <input type="checkbox" name="Address2" value="1" @Address2/></div>
+                    </td>
+                    <td>
+                        
+                        <div>
+                            <input type="checkbox" name="Address3" value="1" @Address3/></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            Education</div>
+                        
+                    </td>
+                    <td><div>
+                            <input type="checkbox" name="Education1" value="1" @Education1/></div>
+                    </td>
+                    <td>
+                       
+                        <div>
+                            <input type="checkbox" name="Education2" value="1" @Education2/></div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Education3" value="1" @Education3/></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            About Me</div>
+                       
+                    </td>
+                    <td> <div>
+                            <input type="checkbox" name="Aboutme1" value="1" @Aboutme1/></div></td>
+                    <td>
+                        
+                        <div>
+                            <input type="checkbox" name="Aboutme2" value="1" @Aboutme2/></div>
+                    </td>
+                    <td>
+                       
+                        <div>
+                            <input type="checkbox" name="Aboutme3" value="1" @Aboutme3/></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            Publication</div>
+                        
+                    </td>
+                    <td><div>
+                            <input type="checkbox" name="Publication1" value="1" @Publication1/></div></td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Publication2" value="1" @Publication2/></div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Publication3" value="1" @Publication3/></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="custom1">
+                            Patent</div>
+                       
+                    </td>
+                    <td> <div>
+                            <input type="checkbox" name="Patent1" value="1" @Patent1/></div></td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Patent2" value="1" @Patent2/></div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Patent3" value="1" @Patent3/></div>
+                    </td>
+                    
+                </tr>
+                <tr><td colspan="4" style="color: #888;">Check the box if you want to allow posting on your Noticeboard.</td></tr>
+               <tr>
+                    <td>
+                        <div class="custom1">
+                            Noticeboard</div>
+                        
+                    </td>
+                    <td><div>
+                            <input type="checkbox" name="Noticeboard1" value="1" @Noticeboard1/></div></td>
+                    <td>
+                      
+                        <div>
+                            <input type="checkbox" name="Noticeboard2" value="1" @Noticeboard2/></div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" name="Noticeboard3" value="1" @Noticeboard3/></div>
+                    </td>
+                    
+                </tr>
+            </table>
+            <p>
+                <div style="width: 40%; float: left;">
+                    Default Tier for a new follower:</div>
+                <select name="Default">
+                    <option value="1" @Tier1>Tier 1</option>
+                    <option value="2" @Tier2>Tier 2</option>
+                    <option value="3" @Tier3>Tier 3</option>
+                </select>
+            </p>
+            <p>
+                <div style="width: 40%; float: left;">
+                    Default Tier for public view:</div>
+                <select name="Default1">
+                    <option value="1" @Tier1>Tier 1</option>
+                </select>
+            </p>
+            <p>
+                <input type="submit" value="Save" style="margin-bottom: 10px; float: right; padding: 3px 8px;
+                    cursor: pointer;">
+            </p>
+        }
+    </div>
+</div>
+
+@Html.Partial("_Footer")

@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Search Results";
+    
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+}
+
+
+@Html.Partial("_Header")
+@Html.Partial("_SideBar4")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">Showing Forum results for search string: @ViewBag.SearchString</h2>
+        
+        @{
+            if (ViewBag.ResultCount == 0)
+            {
+                <fieldset>
+                    <legend>Results</legend>
+                    <table style="margin:5px 0px 5px 0px">
+                        <tr>
+                            <td>No results found. :(
+                             </td>
+                        </tr>
+                    </table>
+                </fieldset>   
+            }
+            else
+            {
+                <fieldset>
+                    <legend>Forum Category Results</legend>
+                    <table style="margin:5px 0px 5px 0px">
+                        @foreach (var item in ViewBag.ResultForum)
+                        {
+                            <tr >
+                                <td>
+                                    <div class="MessageContainer">
+                                        <div class="messageDetails" style="width:73%;height:24px; float:left; padding: 2px 0px 0px 2px;">
+                                            <div class="messageName"><a href="../../Forum/Index/?Category=@item.Category">@item.Category </a> </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </fieldset>   
+                
+                <fieldset>
+                    <legend>Forum Topic Results</legend>
+                    <table style="margin:5px 0px 5px 0px">
+                        @foreach (var item in ViewBag.ResultTopic)
+                        {
+                            <tr >
+                                <td>
+                                    <div class="MessageContainer">
+                                        <div class="messageDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                                            <div class="messageName"><a href="../../Forum/TopicDetail/?Id=@item.ForumTopicId"> @item.Name</a></div>
+                                            <div class="messageSubject">@item.Description</div>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </fieldset>  
+                     /* TODO: do search for forum posts
+                <fieldset>
+                    <legend>Forum Post Results</legend>
+                    <table style="margin:5px 0px 5px 0px">
+                        @foreach (var item in ViewBag.ResultPost)
+                        {
+                            <tr >
+                                <td>
+                                    <div class="MessageContainer">
+                                        <div class="messageDetails" style="width:73%;height:16px; float:left; padding: 5px 0px 0px 10px;">
+                                            <div class="messageName"> @item.PostMessage</div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </fieldset>          
+               */
+            }
+       }
+    </div>
+</div>
+
+@Html.Partial("_Footer")

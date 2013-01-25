@@ -1,0 +1,106 @@
+﻿@model FollowPeers.Models.PatentModel
+@{
+    ViewBag.Title = "Edit Patent";
+}
+
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+
+<div class="grid_10">
+    <div class="box">
+        <h2>Edit Patent</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+        @using (Html.BeginForm()) {
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Edit Patent</legend>
+                @*-----------ID-----------*@
+                @Html.HiddenFor(model => model.ID)
+                @*-----------Ranking-----------*@
+                @Html.HiddenFor(model => model.Ranking)
+                @*-----------ViewCount-----------*@
+                @Html.HiddenFor(model => model.Ranking)
+                @*-----------Title-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Title, "Title")
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Title, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Title)
+                </div>
+                @*-----------About-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.About,"About")
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.About, new { cols = "50", rows = "10" })
+                    @Html.ValidationMessageFor(model => model.About)
+                </div>
+                @*-----------RefNo-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.RefNo, "Reference Number")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.RefNo)
+                    @Html.ValidationMessageFor(model => model.RefNo)
+                </div>
+                @*-----------ApplyYear-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ApplyYear, "Year of Application")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ApplyYear)
+                    @Html.ValidationMessageFor(model => model.ApplyYear)
+                </div>
+                @*-----------AproveYear-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.AproveYear, "Year of Approval")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.AproveYear)
+                    @Html.ValidationMessageFor(model => model.AproveYear)
+                </div>
+                @*-----------Country-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Country, "Country")
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Country)
+                    @Html.ValidationMessageFor(model => model.Country)
+                </div>
+                @*-----------Keyword-----------*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Keyword, "Keywords sperated by (;)")
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Keyword, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Keyword)
+                </div>
+                </fieldset>
+                <p>
+                    <input type="submit" value="Save" style="float: right;padding: 3px 8px;cursor: pointer;" />
+                </p>
+        }
+    </div>
+</div>
+
+<div class="grid_3">
+    <div class="box">
+        <h2></h2>
+        @*@{Html.RenderAction("ProgressTracker", "Profile");}*@
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+
+@helper Script(string scriptName)
+{
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}

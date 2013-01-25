@@ -1,0 +1,16 @@
+﻿@model IEnumerable<FollowPeers.Models.Job>
+<h2>
+    Jobs For You</h2>
+<table style="margin-bottom: 3px;">
+    @foreach (var item in Model)
+    {
+        int numberofbookmarks = item.UserProfiles.Count() - 1;
+        <div class="block" style="overflow: hidden; height: auto; width: 100%; float: left;
+            text-align: left; margin: 0px; padding: 0px; text-decoration: none; font-size: 12px;">
+            <a title="@numberofbookmarks people have bookmarked this job" href="/Profile/DetailJob/@item.JobId" style="font-weight:normal;font-size:11px;">@item.Title
+                <span style="color:Red;font-size:10px;" title="@numberofbookmarks people have bookmarked this job">(@numberofbookmarks)</span></a>
+        </div>
+    }
+</table>
+<div style="cursor: pointer">
+    <a href="../../Profile/ViewRecommendedJobs">See All (@Model.Count().ToString())</a></div>

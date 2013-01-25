@@ -1,0 +1,80 @@
+﻿@{
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name1 = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name1);
+    var profileUserName = myprofile.UserName;
+    var name = ViewData["Name"];
+
+    if (name == null) { name = myprofile.FirstName + " " + myprofile.LastName; }
+
+    var photourl = ViewData["PhotoUrl"];
+    int myself = 0;
+    if (photourl == null) { myself = 1; } //if cannot read from ViewData, I am viewing my own profile
+    if (photourl == null) { photourl = myprofile.PhotoUrl; }
+
+    var Myself = ViewData["Myself"];
+    if (Myself != null && (int)Myself == 1) { myself = 1; }
+    if (Myself != null && (int)Myself == 0) { myself = 0; }
+
+    var profilename = ViewData["ProfileName"];
+    if (profilename == null) { profilename = myprofile.UserProfileId; }
+
+                  
+                
+    <div class="grid_3">
+        <div class="box">
+            <h2>@name</h2>
+            @{
+                char[] delimiterChars = { ' ' };
+                string name2 = name.ToString();
+
+                string[] firstname = name2.Split(delimiterChars);
+                }
+            <div class="block" style="text-align: center">
+                <img src="@Html.Encode(photourl)" style="margin-left:auto; margin-right:auto; width:100%;" />
+            </div>
+            <div class="block">
+                <ul class="menu">
+                @if (myself == 0)
+                {
+                    <li><a href="../../Profile/Index/@profilename">
+                        <img src="../../Content/images/icons/16x16/user.png" />@firstname[0]'s Info</a></li>
+                }
+                    
+                    <li><a href="/Notice/Index/@profilename">
+                        <img src="../../Content/images/icons/16x16/sign.png" />@if (myself == 1)
+                                                                               {<text>My </text>}
+                                                                               else
+                                                                               {<text></text>}Noticeboard</a></li>
+
+                                                                            <li><a href="/PublicationModel/Index">
+                        <img src="../../Content/images/icons/16x16/database.png" />@if (myself == 1)
+                                                                               {<text>Publication Db </text>}
+                                                                                   else
+                                                                                   {<text>Publication Db </text>}
+                                                                               </a></li>
+
+                                                                               <li><a href="/PatentModel/Index">
+                        <img src="../../Content/images/icons/16x16/database_connect.png" />@if (myself == 1)
+                                                                                           {<text>Patent Db</text>}
+                                                                                           else
+                                                                                           {<text>Patent Db</text>}
+                                                                              </a></li>
+                                                                              <li><a href="/Forum/Search">
+                        <img src="../../Content/images/icons/16x16/comments.png" />@if (myself == 1)
+                                                                                           {<text>Forums</text>}
+                                                                                           else
+                                                                                           {<text>Forum</text>}
+                                                                              </a></li>
+
+                    @if (myself == 0)
+                    {
+                        <li><a href="../../Message/Create?Receiver=@profilename">
+                        <img src="../../Content/images/icons/16x16/email.png" />Message</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </div>
+}

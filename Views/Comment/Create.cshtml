@@ -1,0 +1,42 @@
+﻿@model FollowPeers.Models.Comment
+
+@{
+    ViewBag.Title = "Comment";
+}
+
+@Html.Partial("_Header")
+<div class="grid_16">
+    <h2 id="page-heading">Comments</h2>
+</div>
+<div class="clear"></div>
+<div class="grid_10 prefix_3">
+
+<div class="box">
+<h2>Comments</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@Html.ValidationSummary(true, "Please correct the errors and try again.")
+
+@using (Html.BeginForm()) {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>Add Comment</legend>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CommentBody," Add Comment:")
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.CommentBody)
+                @Html.ValidationMessageFor(model => model.CommentBody)
+            </div>
+            <input type="submit" value="Submit" />
+        </fieldset>
+
+}
+</div>
+</div>
+<div class="clear"></div>
+@Html.Partial("_Footer")
+
+    

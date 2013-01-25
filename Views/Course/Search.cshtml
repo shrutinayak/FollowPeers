@@ -1,0 +1,56 @@
+﻿@model IEnumerable<FollowPeers.Models.Course>
+@{
+    ViewBag.Title = "Search Results";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar4")
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            @ViewBag.searchstring
+        </h2>
+        <table style="margin:5px 0px 5px 0px">
+            @{
+                if (ViewBag.CourseCount == 0)
+                {
+                    <tr>
+                        <td>There are not courses at present. You can add a course by clicking the button below.
+                         </td>
+                    </tr>
+                    <tr>
+                        <td><a href="/Course/Create">
+                        <img src="../../Content/images/icons/16x16/add.png" />  Create</a></td>
+                    </tr> 
+                }
+                else
+                {
+
+                    foreach (var item in Model)
+                    {
+                        <tr >
+                            <td>
+                                <div class="CourseContainer">
+                                    <img src="../../Content/images/icons/32x32/education.png" style="width:10%; height:48px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/>
+                                    <div class="courseDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                                        <div class="courseName"> @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })</div>
+                                        <div class="courseDescription">@Html.Label(item.CourseDescription)</div>
+                                    </div>
+                                    <div class="MessageOptions" style="width:15%; float:right; display:inline-block;">
+                                        @Html.ActionLink("Join", "joinCourse", new { id = item.CourseId }) 
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+       
+    </div>
+</div>
+@Html.Partial("_Footer")

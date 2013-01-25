@@ -1,0 +1,23 @@
+﻿@model IEnumerable<FollowPeers.Models.UserProfile>
+
+<h2>
+    People you may know</h2>
+<table style="margin-bottom: 3px;">
+    @{int i = 0;}
+    @foreach (var u in Model)
+    {
+        string temp = u.UserName;
+
+        <div class="block" style="overflow: hidden; height: 40px; width: 40px; float: left;
+            text-align: center; margin: 3px;">
+            <a href="/Profile/Index/@u.UserProfileId" style="height:40px;overflow:hidden;">
+                <img src="@Html.Encode(u.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:40px;" title='@u.FirstName @u.LastName (@u.Organization)' /></a>
+        </div>
+               
+        <div style="clear: none">
+        </div>  
+        i++;
+        if (i == 8) { break; }
+
+    }
+</table>

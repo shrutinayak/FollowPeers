@@ -1,0 +1,51 @@
+﻿@model IEnumerable<FollowPeers.Models.UserProfile>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Administrator Page</h2>
+<table>
+    <tr>
+        <th>
+            FirstName
+        </th>
+        <th>
+            LastName
+        </th>
+        <th>
+            Profession
+        </th>       
+        <th>
+            Organization
+        </th>
+        <th>
+            Departments
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Profession)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Organization)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Departments)
+        </td>       
+        <td>
+            @Html.ActionLink("Delete", "Delete", new { id=item.UserProfileId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,50 @@
+﻿@model FollowPeers.Models.Comment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Comment</legend>
+
+    <div class="display-label">CommentParentType</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ParentType)
+    </div>
+
+    <div class="display-label">CommentParentId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ParentId)
+    </div>
+
+    <div class="display-label">SubmittedBy</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SubmittedBy)
+    </div>
+
+    <div class="display-label">CommentBody</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CommentBody)
+    </div>
+
+    <div class="display-label">TimeSent</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TimeSent)
+    </div>
+
+    <div class="display-label">Flagged</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Flagged)
+    </div>
+
+    <div class="display-label">Starred</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Starred)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.CommentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

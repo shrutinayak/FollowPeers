@@ -1,0 +1,37 @@
+﻿@model IEnumerable<FollowPeers.Models.Notification>
+@Html.Partial("_Header")
+@{
+    ViewBag.Title = "ViewMoreNotifications";
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+   
+    @Html.Partial("_SideBar1", new ViewDataDictionary { { "Name", myprofile.FirstName + " " + myprofile.LastName } })
+   
+    
+}
+@using FollowPeers.Models;
+<div class="grid_10">
+    <div class="box" style="overflow: auto; min-height: 200px; height: auto;">
+        <h2>
+            Notifications</h2>
+        @{
+            foreach (var item in Model)
+            {
+            <div class="each_rec" style="margin:10px;padding-bottom:5px;border-bottom:1px solid #ccc;">
+                <div style="height: 50px; overflow: hidden; float: left;">
+                    <img src="@item.imagelink" style="width: 50px;">
+                </div>
+                <div style="float: left; width: 70%; text-align: left;margin-left:10px;">
+                    <a href="@item.link" style="height: 50px; line-height: 14px; width: 100%; font-weight: normal;">
+                        @item.message</a></div>
+                <div style="clear: both;">
+                </div>
+            </div>
+            }
+           
+           
+        }
+    </div>
+</div>
+@Html.Partial("_Footer")

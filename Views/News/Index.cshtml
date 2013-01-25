@@ -1,0 +1,121 @@
+﻿@model IEnumerable<FollowPeers.Models.Rss>
+
+@{
+    ViewBag.Title = "News for you from "+ViewBag.reader;
+}
+
+<script src="@Url.Content("~/Scripts/organictabs.jquery.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#example-two").organicTabs();
+    });
+    </script>
+@Html.Partial("_PubHeader")
+@Html.Partial("_SideBar1")
+@{string keyword = "";
+  List<string> temp2 = ViewBag.query;
+  foreach(string _keyword in temp2)
+  {
+      keyword += _keyword+", ";
+  }
+  if (keyword == "") { keyword = "Latest News  "; }
+  keyword = keyword.Substring(0,keyword.Length-2);
+  
+  }
+<div class="grid_10">
+    <div class="box">
+    @{
+                string sel1 = ""; string sel2 = "";
+                if (ViewBag.reader == "Yahoo") { sel1 = "selected"; }
+                if (ViewBag.reader == "Bing") { sel2 = "selected"; }
+             }
+<h2>News for you from @ViewBag.reader
+<div class="editing" style="float:right" ><span id="keyword" title="Manage Keywords" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 10px;">Keywords</span>
+    <div id="toolWrapper" style="display: none; height: 75px; ">
+    <span style="color: #666;margin-left: 15px;margin-top: 3px;">Enter your keywords separated by comma (,)</span>
+        <div style="margin: 10px 0px 5px 14px;"><input type="text" id="keywordlist" style="font-size:13px;color:#444;padding:4px;height: 25px;width: 530px;border: 1px solid #ddd;float: left;" value="@keyword"></div>
+        <span id="submitbtn" onclick="UpdateKeywords()" style="float: right;padding: 5px;background: #ccc;cursor: pointer;border: 1px solid #bbb;margin-top: 2px;">Update</span>
+    </div>
+</div>
+<select style="float:right" onChange="return setswitch(this);">
+                <option value='1' @sel1>Yahoo</option>
+                <option value='2' @sel2>Bing</option>
+                </select>
+</h2>
+
+<div id="example-two" style="margin-top:10px;">
+
+    <ul class="nav">
+    @{List<string> q= ViewBag.query;
+      int k=0;
+      foreach(string query in q)
+      {
+          string temp = query;
+          temp = temp.Replace(" ",string.Empty);
+          if(k==0){<li class="nav-one"><a href="#@temp" class="current" style="width:100%;font-size:14px;">@query</a></li>}
+          else
+          {<li class="nav-one"><a href="#@temp" style="width:100%;font-size:14px;margin-left:5px;">@query</a></li>}
+          k++;
+      }
+      
+      }
+        
+    </ul>
+    <div class="list-wrap">
+    <ul id="@q[0].Replace(" ", string.Empty)">
+        @foreach (var item in Model)
+        {
+            if (item.Area == q[0])
+            {<li style="margin:0px; padding:5px; border-bottom: 1px solid #bbb; color:#333;"><a href="@item.Link" target="_blank" style="background: darkGray;">@System.Web.HttpUtility.HtmlDecode(item.Title)</a>@Html.Raw(item.Description)..... </li>}
+        }
+    </ul>
+    @for (int i = 1; i < q.Count(); i++)
+    {
+        <ul id="@q[i].Replace(" ", string.Empty)" class="hide">
+            @foreach (var item in Model)
+            {
+                if (item.Area == q[i])
+                {<li style="margin:0px; padding:5px; border-bottom: 1px solid #bbb; color:#333;"><a href="@item.Link" target="_blank" style="background: darkGray;">@System.Web.HttpUtility.HtmlEncode(item.Title)</a>@Html.Raw(item.Description)..... </li>}
+            }
+         </ul>
+    }
+    </div>
+</div>
+
+
+
+
+ </div>
+</div>
+@Html.Partial("_Footer")
+
+<script type="text/javascript">
+    function setswitch(sel) {
+        var opt = sel.options[sel.selectedIndex].value;
+        if (opt == 1)
+            window.location = "./News?reader=Yahoo";
+        else if (opt == 2)
+            window.location = "./News?reader=Bing";
+
+    }
+    $(document).ready(function () {
+
+        $("#keyword").click(function () {
+            $('#toolWrapper').toggle(function () {
+                $(document).click(function (event) {
+                    if (!($(event.target).is('#toolWrapper') || $(event.target).parents('#toolWrapper').length || $(event.target).is('#keyword'))) {
+                        $('#toolWrapper').hide(500);
+                    }
+                });
+            });
+        });
+
+
+    });
+
+    function UpdateKeywords() {
+        var mygroupname = document.getElementById('keywordlist').value;
+        window.location.href = "./Profile/UpdateKeywords?keywordlist=" + mygroupname;
+    }
+</script>

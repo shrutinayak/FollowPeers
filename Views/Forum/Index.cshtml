@@ -1,0 +1,52 @@
+﻿@model FollowPeers.Models.Forum
+
+
+@Html.Partial("_PubHeader")
+@Html.Partial("Categories")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">Topics for @Model.Category</h2>
+        <table style="margin:5px 0px 5px 0px">
+        @{
+            if(Model== null){
+               <tr >
+                <td>
+                    <div class="MessageContainer">
+                        <div class="messageDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                            <div class="messageSubject"><a>No forum topics for this category.</a><a> Consider adding one by clicking the button</a></div>
+                        </div>
+                    </div>
+                </td>
+                <td><a href="../../Forum/AddTopic/"><input type="button" value="Add Topic"></input></a></td>
+                </tr> 
+            }else{
+                foreach(var topic in Model.Topics){
+                        var currentForumTopic = Model.Topics.SingleOrDefault(t => t.Name == topic.Name);
+                    
+                    <tr >
+                        <td>
+                            <div class="MessageContainer">
+                                <div class="messageDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                                    <div class="messageName"><a href="../../Forum/TopicDetail/?id=@currentForumTopic.ForumTopicId">@topic.Name</a></div>
+                                    <div class="messageSubject">@topic.Description</div>
+                                </div>
+                                <div class="MessageOptions" style="width:15%; float:right; display:inline-block;">
+                                    <div class="messageName"><a>Posts</a></div>
+                                    <div class="messageSubject">@topic.Posts.Count</div>
+                                </div>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                }
+                <tr>
+                <td><a href="../../Forum/AddTopic/"><input type="button" value="Add Topic"></input></a></td>
+                </tr>
+            }
+            
+       }
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Footer")

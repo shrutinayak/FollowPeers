@@ -1,0 +1,71 @@
+﻿@model FollowPeers.Models.RegisterModel
+
+@using (Html.BeginForm("Register", "Account"))
+{
+            
+            @*<p class="notice">Sign up Now! It's Free...</p>*@
+         <!--   <p>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName) 
+            </p> -->
+            <input type="hidden" name="UserName" id="UserName" value="0" />
+           <div class="controls">
+               @* @Html.LabelFor(m => m.FirstName,"First Name")*@
+                @Html.TextBoxFor(m => m.FirstName, new { @placeholder="First Name", @class="input-xlarge" })
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+            <div class="controls">
+                @*@Html.LabelFor(m => m.LastName,"Last Name")*@
+                @Html.TextBoxFor(m => m.LastName, new { @placeholder="Last Name", @class="input-xlarge" })
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+
+            <div class="controls">
+               @* @Html.LabelFor(m => m.Email)*@
+                <input length="0" data-val="true" data-val-required="The Email address field is required." id="Email" name="Email" type="text" value="" placeholder="Email" class="input-xlarge">
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+
+            <div class="controls">
+               @* @Html.LabelFor(m => m.Password)*@
+                @Html.PasswordFor(m => m.Password, new { @placeholder="Password", @class="input-xlarge"})
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+
+            <div class="controls">
+               @* @Html.LabelFor(m => m.ConfirmPassword)*@
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @placeholder="Password", @class="input-xlarge"})
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </div>
+    
+            <div class="controls" style="margin-bottom:10px;">
+            
+                   @* @Html.LabelFor(model => model.Profession)*@
+                   <p>Select User Type and interests from below</p>
+                
+                    @{List<string> profession = new List<string>();
+                      profession.Add("Individual");
+                      profession.Add("Corporate");
+                    }
+                    @Html.DropDownList("Profession", new SelectList(profession), new { @class = "btn", @style = "width:47%;" })
+
+                     @{List<string> interest = new List<string>();
+                      interest.Add("Architecture");
+                      interest.Add("Mathematics");
+                    }
+                    @Html.DropDownList("Profession", new SelectList(interest), new { @class = "btn", @style = "width:47%;" })
+                
+            </div>
+
+            <div class="controls">
+                <input class="btn" type="submit" value="Sign up"/>
+            </div>
+            
+      @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")
+     @* <fieldset class="login">
+            <legend>Social Sign On</legend>
+            <p class="notice">or, user your existing social identities...</p>
+            <p>Login via facebook, twitter, linkedIn, Google coming soon...</p>
+      </fieldset>*@
+}

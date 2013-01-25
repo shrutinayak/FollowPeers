@@ -1,0 +1,524 @@
+﻿@model FollowPeers.Models.UserProfile
+@{
+    ViewBag.Title = ViewBag.Name;
+    bool toCheck = true;
+    bool showEmail = false;
+    bool showPhone = false;
+    bool showMobile = false;
+    bool showAddress = false;
+    bool showEducation = false;
+    bool showPublication = false;
+    bool showPatent = false;
+    bool showAboutMe=false;
+    bool showCourse = false;
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+}
+       
+                    @if (Membership.GetUser().UserName == Model.UserName)
+                    {
+                        toCheck = false; //if you are viewing your own profile, no need to check privacy
+                    }
+                    @{
+                    if (toCheck == true)
+                    {
+                        string membername = Membership.GetUser().UserName;
+
+                        IQueryable<int> custQuery = from cust in followPeersDB.Relationships where cust.personAName == membername && cust.personBName == Model.UserName select cust.tier;
+                        if (custQuery.Count() != 0)
+                        {
+                            foreach (int tier in custQuery)
+                            {
+                                FollowPeers.Models.Tier temp = Model.Tiers.SingleOrDefault(p => p.Level == tier);
+                                if (temp.Email == 1) { showEmail = true; }
+                                if (temp.Phone == 1) { showPhone = true; }
+                                if (temp.Mobile == 1) { showMobile = true; }
+                                if (temp.Address == 1) { showAddress = true; }
+                                if (temp.Education == 1) { showEducation = true; }
+                                if (temp.Publication == 1) { showPublication = true; }
+                                if (temp.Patent == 1) { showPatent = true; }
+                                if (temp.AboutMe == 1) { showAboutMe = true; }
+                            }
+                        }
+                        //else (meaning public view.. so check tier 1)
+                        else
+                        {
+                            FollowPeers.Models.Tier temp = Model.Tiers.SingleOrDefault(p => p.Level == 1);
+                            if (temp.Email == 1) { showEmail = true; }
+                            if (temp.Phone == 1) { showPhone = true; }
+                            if (temp.Mobile == 1) { showMobile = true; }
+                            if (temp.Address == 1) { showAddress = true; }
+                            if (temp.Education == 1) { showEducation = true; }
+                            if (temp.Publication == 1) { showPublication = true; }
+                            if (temp.Patent == 1) { showPatent = true; }
+                            if (temp.AboutMe == 1) { showAboutMe = true; }
+
+                        }
+                    } 
+                    }
+<script type="text/javascript">
+
+    function setswitch(sel) {
+        var opt = sel.options[sel.selectedIndex].value;        
+        window.location = "#"+opt;
+    }
+    </script>
+@Html.Partial("_PubHeader")
+@{
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+    if (Model.UserProfileId == myprofile.UserProfileId)
+    {
+        @Html.Partial("_SideBar1", new ViewDataDictionary { { "Name", myprofile.FirstName + " " + myprofile.LastName } })
+    }
+    else
+    {
+        @Html.Partial("_SideBar1", new ViewDataDictionary { { "PhotoUrl", @Model.PhotoUrl }, { "ProfileName", @Model.UserProfileId }, { "Name", @Model.FirstName + " " + Model.LastName } })
+ 
+    }
+    }
+
+
+
+
+<div class="grid_10">
+    <div class="box">
+        @if (Model.activated == true)
+        {
+            <h2 style="text-align:right;height:15px;"> Choose to scroll to certain sections
+            <select onChange="return setswitch(this);">
+            <option value="BasicInfo">Basic Info</option>
+            @if ((Model.Specializations.Count() != 0) && (Model.Profession == "Investor"))
+            {
+                <option value="Research">Interest Industries</option>
+            }
+            @if ((Model.Specializations.Count() != 0) && (Model.Profession != "Investor"))
+            {
+                <option value="Research">Research Interests</option>
+            }
+            @if ((Model.Portfolios.Count() != 0) && (Model.Profession == "Investor"))
+            {
+                <option value="Portfolio">Companies Funded</option>
+            }
+            @if ((toCheck == false || ((toCheck == true) && (showEducation == true))) && (Model.Educations.Count() != 0))
+            {
+                <option value="Education">Education</option>
+            }
+            @if (@Model.Students.Count() != 0)
+            {
+                <option value="Students">Students</option>
+            }
+            @if (@Model.Contact != null && Model.Contact.Country!=null)
+            {
+                <option value="Contact">Contact</option>
+            }
+            @if ((toCheck == false || ((toCheck == true) && (showPublication == true))) && (Model.Publication.Count() != 0))
+            {
+                   <option value="Publications">Publication</option>
+            }
+            @if ((toCheck == false || ((toCheck == true) && (showPatent == true))) && (Model.Patent.Count() != 0))
+            {
+                  <option value="Patents">Patent</option>
+            }
+            @if ((toCheck == false || ((toCheck == true) && (showCourse == true))) && (Model.Courses.Count() != 0))
+            {
+                  <option value="Courses">Courses</option>
+            }
+            @if (toCheck == false || ((toCheck == true) && (showAboutMe == true)))
+            {
+                <option value="AboutMe">More Info</option>
+            }
+                </select></h2>
+        
+            <div class="display-field">
+                <fieldset>
+                    <div>
+                        <div style="width: 80%; float: left;">
+                            <div style="font-size: 20px">@Model.FirstName @Model.LastName</div>
+                            <div>@Model.Profession</div>
+                            <div><a href="/Profile/Search?department=@Model.Departments">@Model.Departments</a>, <a href="/Profile/Search?organization=@Model.Organization">@Model.Organization</a></div>
+                            <div>@Model.Country</div>
+                            <br />
+                        </div>
+                        <div id="BasicInfo" style="float: right; width: 100px;">
+                            @if (Membership.GetUser().UserName != Model.UserName)
+                            {
+                                if (ViewBag.Alreadyfollowed == 1)
+                                {
+                                    using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                                    {
+                                <input type="hidden" name="username" value="@Model.UserName" />
+                                <input type="submit" value="UnFollow" style="padding: 8px 20px; float: right; cursor: pointer;width:90px;
+                                    font-weight: bold;" />
+                                    }
+                                }
+                                else
+                                {
+                                    using (Html.BeginForm("Follow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                                    {
+                                <input type="hidden" name="username" value="@Model.UserName" />
+                                <input type="submit" value="Follow" style="padding: 8px 20px; float: right; cursor: pointer; width:90px;
+                                    font-weight: bold;" />
+                                    }
+                                }
+                            }
+                        </div>
+                        <div style="clear: both;">
+                        </div>
+                    </div>
+                    @if (Model.Specializations.Count() != 0)
+                    {
+                    <div id="Research" style="margin-bottom:7px;">
+
+                        <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                            @if (Model.Profession != "Investor")
+                            {<text>Research Interests</text>}
+                            else
+                            {<text>Interest Industries</text>
+                            }</div>
+                            @{
+                            foreach (var S in Model.Specializations)
+                            {<a href="/Profile/Search?specialization=@S.SpecializationName">@S.SpecializationName</a> <text><br /> </text>
+                            }}
+                            <br />
+                    </div>
+                    }
+                    
+                    @if (Model.Profession == "Investor" && Model.Portfolios.Count() != 0)
+                    {
+                        <div id="Portfolio">
+                            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                                Companies Funded</div>
+                            <table>
+                                @{
+                        foreach (var E in Model.Portfolios)
+                        {
+                                    <tr>
+                                        
+                                        <td><a href="http://@E.Website" target="_blank">@E.Name</a>  (@E.Status)<br />
+                                        @E.BusinessField |  @E.Country<br />
+                                        
+                                        @E.MoreInfo
+                                        </td>
+                                    </tr>
+                        }
+                    
+                                }
+                            </table>
+                        </div>
+                    }
+
+          
+                    @{
+                    if ((toCheck == false || ((toCheck == true) && (showEducation == true))) && (Model.Educations.Count() != 0))
+                    {
+                        <div id="Education">
+                            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                                Education</div>
+                            <table>
+                                @{
+                        foreach (var E in Model.Educations)
+                        {
+                                    <tr>
+                                        <td style="width: 90px">@E.startYear - @E.endYear
+                                        </td>
+                                        <td>@E.Degree<br />
+                                        <a href="/Profile/Search?organization=@E.UniversityName">@E.UniversityName</a>
+                                        <br />
+                                        @E.country
+                                        </td>
+                                    </tr>
+                        }
+                    
+                                }
+                            </table>
+                        </div>
+                    }
+                    <div id="Students">
+                    @{
+                    if (@Model.Students.Count() != 0)
+                    {
+                            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                            Students</div>
+                            <table>
+                            @{var newList = Model.Students.OrderBy(x => x.Type).ToList();}
+
+                            @foreach (var E in newList)
+                            {
+                                   <tr>
+                                    <td style="width: 90px"> @{if (E.Type == 1)
+                                                               {<text>PhD Student</text>}
+                                                               else if (E.Type == 2)
+                                                               {<text>Master Student</text>}
+                                                               else if (E.Type == 3)
+                                                               {<text>Bachelor Student</text> }
+                                                               else
+                                                               {<text>Other Type</text> }
+                                                               }
+                                    </td>
+                                    <td>@{if (E.Link != 0)
+                                          {<a href='@E.Link'>@E.Name</a>}
+                                          else
+                                          {@E.Name}}
+                                    (@E.StartYear - @E.EndYear)<br />@E.About
+                                    </td>
+                                   </tr> 
+
+                            }
+                            </table> 
+                    }
+                     }
+                     </div>
+
+                    if (Model.Contact != null && Model.Contact.Country!=null )
+                    {
+                        <div id="Contact">
+                            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                                Contact</div>
+                            <table>
+                                @if (Model.Contact.Street1 != null)
+                                {
+                                    if (toCheck == false || ((toCheck == true) && (showAddress == true)))
+                                    {
+                                    <tr>
+                                        <td style="width: 90px">
+                                            Address
+                                        </td>
+                                        <td>
+                                            @if (Model.Contact.Street1 != null)
+                                            {@Model.Contact.Street1}@if (Model.Contact.Street2 != null)
+                                                                    {<br />@Model.Contact.Street2}<br />
+                                            @Model.Contact.City<br />@Model.Contact.Country
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                                @if (Model.Contact.Mobile != null)
+                                {
+                                    if (toCheck == false || ((toCheck == true) && (showMobile == true)))
+                                    {
+                                    <tr>
+                                        <td>
+                                            Mobile
+                                        </td>
+                                        <td>@Model.Contact.Mobile
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                                @if (Model.Contact.Phone != null)
+                                {
+                                    if (toCheck == false || ((toCheck == true) && (showPhone == true)))
+                                    {
+                                    <tr>
+                                        <td>
+                                            Phone
+                                        </td>
+                                        <td>@Model.Contact.Phone
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                                @if (Model.Contact.Fax != null)
+                                {
+                                    <tr>
+                                        <td>
+                                            Fax
+                                        </td>
+                                        <td>@Model.Contact.Fax
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.Contact.Email != null)
+                                {
+                                    if (toCheck == false || ((toCheck == true) && (showEmail == true)))
+                                    {
+                                    <tr>
+                                        <td>
+                                            Email
+                                        </td>
+                                        <td>@Model.Contact.Email
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                                @if (Model.Contact.Website != null)
+                                {<tr>
+                                    <td>
+                                        Website
+                                    </td>
+                                    <td><a href="http://@Model.Contact.Website" target="_blank">@Model.Contact.Website</a>
+                                    </td>
+                                </tr>
+                                }
+                            </table>
+                        </div>
+                    }
+ 
+                    }
+                     @{if ((toCheck == false || ((toCheck == true) && (showPublication == true))) && (Model.Publication.Count() != 0))
+                       {<div id="Publications">
+                                <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                                    Publication
+                                </div>
+                                <table>
+                                    @{var pubList = Model.Publication.OrderBy(x => x.title).ToList();}
+                                    @foreach (var E in pubList)
+                                    {
+                                        <tr>
+                                            <td style="width: 90px">
+                                                Type : @E.type<br />
+                                                Year : @E.year
+                                            </td>
+                                            <td>
+                                                <b>Title : @E.title</b><br />
+                                                <i>Authour(s) : @E.author</i><br />
+                                                <u>Status : @E.status</u>
+                                            </td>
+                                        </tr> 
+                                    }
+                                </table> </div>
+                       }
+                     } @{if ((toCheck == false || ((toCheck == true) && (showPatent == true))) && (Model.Patent.Count() != 0))
+                         { <div id="Patents">
+                                <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                                    Patent
+                                </div>
+                                <table>
+                                    @{var patList = Model.Patent.OrderBy(x => x.Title).ToList();}
+                                    @foreach (var E in patList)
+                                    {
+                                        <tr>
+                                            <td style="width: 150px">
+                                                Apply Year : @E.ApplyYear<br />
+                                                Approve Year : @E.AproveYear
+                                            </td>
+                                            <td>
+                                                <b>Title : @E.Title</b><br />
+                                                <i>Reference No. : @E.RefNo</i><br />
+                                            </td>
+                                        </tr> 
+                                    }
+                                </table> </div>
+                         }
+                      }
+                      @{if (Model.Courses.Count() != 0)
+                       {<div id="Courses">
+                                <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                                    Courses
+                                </div>
+                                <table>
+                                    @{var courseList = Model.Courses.OrderBy(c => c.CourseName).ToList();}
+                                    @foreach (var c in courseList)
+                                    {
+                                        <tr>
+                                            <td style="width: 90px">
+                                                Name <br />
+                                                Description <br />
+                                                Start Date <br />
+                                                End Date   <br /> 
+                                            </td>
+                                            <td>
+                                                <b>@c.CourseName</b><br />
+                                                @c.CourseDescription<br />
+                                                <i>@c.StartDate</i><br />
+                                                <i>@c.EndDate</i><br />
+
+                                            </td>
+                                        </tr> 
+                                    }
+                                </table> </div>
+                       }
+                     }
+                        
+
+                        @{if ((toCheck == false || ((toCheck == true) && (showAboutMe == true))))
+                          {
+                           <div id="AboutMe">
+                           <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                            More About Me</div>
+                           @Html.Raw(Model.AboutMe)</div>
+                          }
+                        }
+                        
+
+                </fieldset>
+            </div>
+                
+           
+            }
+        
+        else
+        {
+            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px;color: dimGray;background: #ddd;padding: 3px;margin-bottom: 5px;">
+                User Account is not activated.</div>
+            
+        }
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        <h2>
+            @Model.FirstName @Model.LastName follows</h2>
+        @{Html.RenderAction("Following", "Profile", Model.UserProfileId);}
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        <h2>
+            @Model.FirstName @Model.LastName's followers</h2>
+        @{Html.RenderAction("FollowedBy", "Profile", Model.UserProfileId);}
+    </div>
+</div>
+@Html.Partial("_Footer")
+
+<script type="text/javascript">
+$(document).ready(function() {
+  function filterPath(string) {
+  return string
+    .replace(/^\//,'')
+    .replace(/(index|default).[a-zA-Z]{3,4}$/,'')
+    .replace(/\/$/,'');
+  }
+  var locationPath = filterPath(location.pathname);
+  var scrollElem = scrollableElement('html', 'body');
+
+  $('a[href*=#]').each(function() {
+    var thisPath = filterPath(this.pathname) || locationPath;
+    if (  locationPath == thisPath
+    && (location.hostname == this.hostname || !this.hostname)
+    && this.hash.replace(/#/,'') ) {
+      var $target = $(this.hash), target = this.hash;
+      if (target) {
+        var targetOffset = $target.offset().top;
+        $(this).click(function(event) {
+          event.preventDefault();
+          $(scrollElem).animate({scrollTop: targetOffset}, 400, function() {
+            location.hash = target;
+          });
+        });
+      }
+    }
+  });
+
+  // use the first element that is "scrollable"
+  function scrollableElement(els) {
+    for (var i = 0, argLength = arguments.length; i <argLength; i++) {
+      var el = arguments[i],
+          $scrollElement = $(el);
+      if ($scrollElement.scrollTop()> 0) {
+        return el;
+      } else {
+        $scrollElement.scrollTop(1);
+        var isScrollable = $scrollElement.scrollTop()> 0;
+        $scrollElement.scrollTop(0);
+        if (isScrollable) {
+          return el;
+        }
+      }
+    }
+    return [];
+  }
+
+});
+
+</script>

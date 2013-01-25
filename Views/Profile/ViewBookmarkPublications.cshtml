@@ -1,0 +1,81 @@
+﻿@model IEnumerable<FollowPeers.Models.PublicationModel>
+@{
+    ViewBag.Title = "My Bookmarked Publications";
+    
+       @Html.Partial("_Header")
+      @Html.Partial("_SideBar5")
+    
+}
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            My Bookmarked Publications
+        </h2>
+        @if (Model.Count() == 0)
+        {
+            <div style="padding:10px;">You have no bookmarked publications.</div>
+        }
+            @foreach (var item in Model)
+            {   
+                <div style="height:75px">
+                <div style="border-bottom: 1px solid grey; margin: 10px 0px;height:auto;">
+                <div style="float: left;" id="Image">
+                    <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;
+                        width: 50px;" />
+                </div>
+                <div style="margin-left: 8px; float: left;">
+                    <a href="/PublicationModel/Details/@item.publicationID" id="title"><b>@item.title</b></a> 
+                    <div id="Author">Author(s) : @item.author</div>
+                    <div id="Year">Year of Publication : @item.year</div>
+                    @{if (@item.keyword != null)
+                      {<div id="Keyword">Keyword(s) : @item.keyword</div>}}
+                    @{if (@item.journal != null)
+                      {<div id="Journal">Journal : @item.journal</div>}}
+                    @{if (@item.conference != null)
+                      {<div id="Conference">Conference : @item.conference</div>}}
+                    @{if (@item.university != null)
+                      {<div id="University">University : @item.university</div>}}
+                </div>
+                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.type)
+                    | @Html.DisplayFor(modelItem => item.status)  |
+                    <div style="float:right; font-size: 15px; margin-left: 5px;">
+                        @Html.ActionLink("More>>", "Details", "PublicationModel",new { id = item.publicationID },null)
+                    </div>
+                    </div>
+            </div>
+                <div style="clear:none"></div></div>
+
+            }
+        
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+       
+    </div>
+</div>
+@Html.Partial("_Footer")
+
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+
+    $('#Image').mouseover(function () {
+        $('#Keyword').slideDown("fast");
+        $('#Journal').slideDown("fast");
+        $('#Conference').slideDown("fast");
+        $('#University').slideDown("fast");
+    });
+    $('#Image').mouseout(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+</script>

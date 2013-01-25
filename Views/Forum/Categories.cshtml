@@ -1,0 +1,21 @@
+﻿@{
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+    IEnumerable<FollowPeers.Models.Specialization> specializations = followPeersDB.Specializations.ToList();
+
+    <div class="grid_3">
+        <div class="box">
+            <h2>Forum Categories</h2>
+            
+            <div class="block">
+                <ul class="menu">
+                   @foreach (var item in specializations)
+                   {
+                        <li><a href="/Forum/Index/?Category=@item.SpecializationName">@item.SpecializationName</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}

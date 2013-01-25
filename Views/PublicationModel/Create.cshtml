@@ -1,0 +1,405 @@
+﻿@model FollowPeers.Models.PublicationModel
+@{
+    ViewBag.Title = "Add Publication";
+}
+@Html.Partial("_PubHeader")
+<div class="container">
+    <div class="box">
+        <h2>
+            Add Publication</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("modernizr-1.7.min.js")
+        @Script("jquery-ui-1.8.11.js")
+        @Script("jquery.tools.min.js")
+        @Script("jquery.rte.js")
+     
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Enter Publication Details!</legend>
+                @*-----------OwnerId-----------*@
+                <input id="OwnerId" name="OwnerId" type="hidden" value="@ViewBag.userID" />
+                @*-----------ViewCount-----------*@
+                <input id="ViewCount" name="ViewCount" type="hidden" value="0" />
+                @*-----------Title-----------*@
+                <div class="editor-label" id="title_l">
+                    @Html.LabelFor(model => model.title, "Title ")
+                </div>
+                <div class="editor-field" id="title_f">
+                    @Html.TextBoxFor(model => model.title, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.title)
+                </div>
+                @*-----------Status-----------*@
+                <div class="editor-label" id="status_l">
+                    @Html.LabelFor(model => model.status, "Status ")
+                </div>
+                <div class="editor-field" id="status_f">
+                    @{
+            List<string> publicationstatus = new List<string>();
+            publicationstatus.Add("In Preparation");
+            publicationstatus.Add("In Review");
+            publicationstatus.Add("In Press");
+            publicationstatus.Add("Published");
+            publicationstatus.Add("N.A.");
+                    }
+                    @Html.DropDownList("Status", new SelectList(publicationstatus))
+                    @Html.ValidationMessageFor(model => model.status)
+                </div>
+                @*-----------Author-----------*@
+                <div class="editor-label" id="author_l">
+                    @Html.LabelFor(model => model.author, "Author(s) ")
+                </div>
+                <div class="editor-field" id="author_f">
+                    @Html.TextBoxFor(model => model.author, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.author)
+                </div>
+                @*-----------Type-----------*@
+                <div class="editor-label" id = "type_l">
+                    @Html.LabelFor(model => model.type, "Type ")
+                </div>
+                <div class="editor-field" id = "type_f">
+                    @{
+            List<string> publicationtype = new List<string>();
+            publicationtype.Add("Book");
+            publicationtype.Add("Conference");
+            publicationtype.Add("Journal");
+            publicationtype.Add("Thesis");
+            publicationtype.Add("Other");
+                    }
+                    @Html.DropDownList("Type", new SelectList(publicationtype))
+                    @Html.ValidationMessageFor(model => model.type)
+                </div>
+                @*-----------Journal-----------*@
+                <div class="editor-label" id = "journal_l">
+                    @Html.LabelFor(model => model.journal, "Journal")
+                </div>
+                <div class="editor-field" id = "journal_f">
+                    <input id="journal" name="journal" type="text" style="margin-left: 0px; width: 250px" />
+                </div>
+                @*-----------Publisher-----------*@
+                <div class="editor-label" id="publisher_l">
+                    @Html.LabelFor(model => model.publisher, "Publisher")
+                </div>
+                <div class="editor-field" id="publisher_f">
+                    <input id="publisher" name="publisher" type="text" style="margin-left: 0px; width: 250px" />
+                </div>
+                @*-----------Conference-----------*@
+                <div class="editor-label" id="conference_l">
+                    @Html.LabelFor(model => model.conference, "Conference")
+                </div>
+                <div class="editor-field" id="conference_f">
+                    <input id="conference" name="conference" type="text" style="margin-left: 0px; width: 250px" />
+                </div>
+                @*-----------University-----------*@
+                <div class="editor-label" id="university_l">
+                    @Html.LabelFor(model => model.university, "University ")
+                </div>
+                <div class="editor-field" id="university_f">
+                    <input id="university" name="university" type="text" style="margin-left: 0px; width: 250px" />
+                </div>
+                @*-----------Year-----------*@
+                <div class="editor-label" id="year_l">
+                    @Html.LabelFor(model => model.year, "Year ")
+                </div>
+                <div class="editor-field" id="year_f">
+                    @Html.EditorFor(model => model.year)
+                    @Html.ValidationMessageFor(model => model.year)
+                </div>
+                @*-----------Issue-----------*@
+                <div class="editor-label" id = "issue_l">
+                    @Html.LabelFor(model => model.issue, "Issue ")
+                </div>
+                <div class="editor-field" id = "issue_f">
+                    @Html.EditorFor(model => model.issue)
+                    @Html.ValidationMessageFor(model => model.issue)
+                </div>
+                @*-----------Volume-----------*@
+                <div class="editor-label" id="volume_l">
+                    @Html.LabelFor(model => model.volume, "Volume ")
+                </div>
+                <div class="editor-field" id="volume_f">
+                    @Html.EditorFor(model => model.volume)
+                    @Html.ValidationMessageFor(model => model.volume)
+                </div>
+                @*-----------Page-----------*@
+                <div class="editor-label" id="page_l">
+                    @Html.LabelFor(model => model.page, "Page ")
+                </div>
+                <div class="editor-field" id="page_f">
+                    @Html.EditorFor(model => model.page)
+                    @Html.ValidationMessageFor(model => model.page)
+                </div>
+                @*-----------Location-----------*@
+                <div class="editor-label" id="location_l">
+                    @Html.LabelFor(model => model.referenceID, "Location ")
+                </div>
+                <div class="editor-field" id="location_f">
+                    <input id="location" name="location" type="text" style="margin-left: 0px; width: 250px" />
+                </div>
+                @*-----------Keywords-----------*@
+                <div class="editor-label" id="keyword_l">
+                    @Html.LabelFor(model => model.keyword, "Keywords(seperated by ;)")
+                </div>
+                <div class="editor-field"  id="keyword_f">
+                    @Html.TextBoxFor(model => model.keyword, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.keyword)
+                </div>
+                @*-----------Description-----------*@
+                <div class="editor-label" id="description_l">
+                    @Html.LabelFor(model => model.description, "Abstract ")
+                </div>
+                <div class="editor-field" id="description_f">
+                    @Html.TextAreaFor(model => model.description, new { cols = "49", rows = "5" })
+                    @Html.ValidationMessageFor(model => model.description)
+                </div>
+            </fieldset>
+            <p>
+                <input type="submit" value="Create" style="float: right; padding: 3px 8px;" class="btn btn-primary"/>
+            </p> 
+        }
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        
+        
+
+       if ($('#journal').length) {
+            AutoCompleteJournal();
+        }
+        if ($('#publisher').length) {
+            AutoCompletePublisher();
+        }
+        if ($('#conference').length) {
+            AutoCompleteConference();
+        }
+        if ($('#university').length) {
+            AutoCompleteUniversity();
+        }
+//        if ($('#location').length) {
+//            AutoCompleteUniversity();
+//        }
+
+HideOnPageLoad();
+$("#publisher_l").show();
+        $("#publisher_f").show();
+        $("#year_l").show();
+        $("#year_f").show();
+        $("#issue_l").show();
+        $("#issue_f").show();
+        $("#keyword_l").show();
+        $("#keyword_f").show();
+        $("#description_l").show();
+        $("#description_f").show();
+
+        function AutoCompleteJournal() 
+        {
+            $("#journal").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findJournalNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.JournalID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+            function AutoCompletePublisher() 
+        {
+            $("#publisher").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findPublisherNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.PublisherID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+            function AutoCompleteConference() 
+        {
+            $("#conference").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findConferenceNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.ConferenceID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+        function AutoCompleteUniversity() 
+        {
+            $("#university").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findUniversityNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.UniversityID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+//        function AutoCompleteCountry() 
+//        {
+//            $("#location").autocomplete({source: function (request, response) {$.ajax({
+//            url: "/PublicationModel/FindCountryNames", type: "POST", dataType: "json",
+//            data: { searchText: request.term, maxResults: 5 },
+//            success: function (data) {
+//            response($.map(data, function (item) {
+//            return { label: item.Name, value: item.Name, id: item.JournalID }
+//                }))
+//                }
+//                })
+//                },
+//            });
+//        }
+
+});
+
+    function displayVals() {
+      var typeval = $("#Type").val();
+      if(typeval == "Book")
+      {
+        HideOnPageLoad();
+        $("#publisher_l").show();
+        $("#publisher_f").show();
+        $("#year_l").show();
+        $("#year_f").show();
+        $("#issue_l").show();
+        $("#issue_f").show();
+        $("#keyword_l").show();
+        $("#keyword_f").show();
+        $("#description_l").show();
+        $("#description_f").show();
+      }
+      if(typeval == "Conference")
+      {
+        HideOnPageLoad();
+        $("#conference_l").show();
+        $("#conference_f").show();
+        $("#year_l").show();
+        $("#year_f").show();
+        $("#location_l").show();
+        $("#location_f").show();
+        $("#keyword_l").show();
+        $("#keyword_f").show();
+        $("#description_l").show();
+        $("#description_f").show();
+        $("#volume_l").show();
+        $("#volume_f").show();
+        $("#page_l").show();
+        $("#page_f").show();
+      }
+      if(typeval == "Journal")
+      {
+      HideOnPageLoad();
+        $("#journal_l").show();
+        $("#journal_f").show();
+        $("#publisher_l").show();
+        $("#publisher_f").show();
+        $("#year_l").show();
+        $("#year_f").show();
+        $("#issue_l").show();
+        $("#issue_f").show();
+        $("#volume_l").show();
+        $("#volume_f").show();
+        $("#page_l").show();
+        $("#page_f").show();
+        $("#keyword_l").show();
+        $("#keyword_f").show();
+        $("#description_l").show();
+        $("#description_f").show();
+      }
+      if(typeval == "Thesis")
+      {
+      HideOnPageLoad();
+        $("#year_l").show();
+        $("#year_f").show();
+        $("#keyword_l").show();
+        $("#keyword_f").show();
+        $("#description_l").show();
+        $("#description_f").show();
+        $("#university_l").show();
+        $("#university_f").show();
+      }
+      if(typeval == "Other")
+      {
+      HideOnPageLoad();
+        $("#journal_l").show();
+        $("#journal_f").show();
+        $("#publisher_l").show();
+        $("#publisher_f").show();
+        $("#conference_l").show();
+        $("#conference_f").show();
+        $("#year_l").show();
+        $("#year_f").show();
+        $("#issue_l").show();
+        $("#issue_f").show();
+        $("#volume_l").show();
+        $("#volume_f").show();
+        $("#page_l").show();
+        $("#page_f").show();
+        $("#location_l").show();
+        $("#location_f").show();
+        $("#keyword_l").show();
+        $("#keyword_f").show();
+        $("#description_l").show();
+        $("#description_f").show();
+        $("#university_l").show();
+        $("#university_f").show();
+      }
+
+    }
+
+    $("#Type").change(displayVals);
+    displayVals();
+
+
+function HideOnPageLoad()
+        {
+            $("#journal_l").hide();
+            $("#journal_f").hide();
+            $("#publisher_l").hide();
+            $("#publisher_f").hide();
+            $("#conference_l").hide();
+            $("#conference_f").hide();
+            $("#year_l").hide();
+            $("#year_f").hide();
+            $("#issue_l").hide();
+            $("#issue_f").hide();
+            $("#volume_l").hide();
+            $("#volume_f").hide();
+            $("#page_l").hide();
+            $("#page_f").hide();
+            $("#location_l").hide();
+            $("#location_f").hide();
+            $("#keyword_l").hide();
+            $("#keyword_f").hide();
+            $("#description_l").hide();
+            $("#description_f").hide();
+            $("#university_l").hide();
+            $("#university_f").hide();
+        }
+</script>

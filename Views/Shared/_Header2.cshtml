@@ -1,0 +1,36 @@
+﻿<div class="grid_16">
+    <ul class="nav main" id="smallheader">
+        <li><a href="../../Home/Index" id="branding">FollowPeers</a></li>
+        @{
+            if (User.Identity.IsAuthenticated)
+            {
+                FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+                string name = Membership.GetUser().UserName;
+                FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+                
+            <li class="secondary" style="margin-top: 13px;"><a href="#">
+                <img src="../../Content/images/icons/16x16/house.png" /></a> </li>
+            <li class="secondary" style="margin-top: 13px;"><a href="../../Message/Index"><img src="../../Content/images/icons/16x16/email.png" /></a></li>
+            <li class="secondary" style="margin-top: 13px;"><a href="#">
+                <img src="../../Content/images/icons/16x16/newspaper.png" /></a> </li>
+            <li class="secondary" style="margin-top: 10px;">@Html.ActionLink(myprofile.FirstName+" "+myprofile.LastName, "Index",new { id = myprofile.UserProfileId })
+                <ul>
+                    <li>@Html.ActionLink("Update Profile", "Edit", "Profile")</li>
+                    <li>@Html.ActionLink("Privacy", "Privacy", "Profile")</li>
+                    <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+                </ul>
+            </li>
+            <li class="secondary" style = "float: left; margin-left: 90px; margin-top: 10px;">
+                @using (Html.BeginForm("Search", "PublicationModel", FormMethod.Get))
+                {
+                     @Html.TextBox("SearchString")
+                 <input type="submit" title="Seach all publications" style="cursor:pointer; padding:2px 5px;" value="Search" style="padding: 2px;" />
+                }
+            </li>
+                
+            }
+        }
+    </ul>
+</div>
+<div class="clear">
+</div>

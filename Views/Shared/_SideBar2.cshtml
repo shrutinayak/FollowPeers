@@ -1,0 +1,54 @@
+﻿@{
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+
+    <div class="grid_3">
+        <div class="box">
+            <h2>@myprofile.FirstName @myprofile.LastName</h2>
+            <div class="block" style="text-align: center">
+                <img src="@Html.Encode(myprofile.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:100%;" />
+            </div>
+            <div class="block">
+                <ul class="menu">
+                    <li><a href="/Profile/Edit">
+                        <img src="../../Content/images/icons/16x16/user.png" />Basic Info</a></li>
+                    <li><a href="/Profile/UploadPhoto">
+                        <img src="../../Content/images/icons/16x16/photo.png" />Photo</a></li>
+                    <li><a href="/Profile/EditResearch">
+                        <img src="../../Content/images/icons/16x16/document_stand.png" />Research</a></li>
+                    <li><a href="/Profile/EditEducation">
+                        <img src="../../Content/images/icons/16x16/blogs.png" />Education</a></li>
+                    @{ if (myprofile.Profession == "Professor")
+                       {
+                        <li><a href="/Profile/EditStudents">
+                            <img src="../../Content/images/icons/16x16/ceo.png" />Students</a></li>
+                       }
+                    }
+                    <li><a href="/Profile/EditContact">
+                        <img src="../../Content/images/icons/16x16/book_addresses.png" />Contact</a></li>
+
+                    @{ if (myprofile.Profession == "Investor")
+                       {
+                        <li><a href="/Profile/EditPortfolio">
+                            <img src="../../Content/images/icons/16x16/package.png" />Portfolio</a></li>
+                       }
+                    }
+
+                    <li><a href="../../PublicationModel/MyPublication">
+                        <img src="../../Content/images/icons/16x16/advanced_data_grid.png" />Publication
+                        </a></li>
+                  
+                    <li><a href="../../PatentModel/MyPatent">
+                        <img src="../../Content/images/icons/16x16/advanced_data_grid.png" />Patent
+                        </a></li>
+                    <li><a href="/Course/Mine/">
+                        <img src="../../Content/images/icons/16x16/blackboard_drawing.png" />My Courses</a></li>
+                    
+                    <li><a href="/Profile/PostJob">
+                        <img src="../../Content/images/icons/16x16/briefcase.png" />Post Job</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}

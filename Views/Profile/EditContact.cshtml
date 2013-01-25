@@ -1,0 +1,131 @@
+﻿@model FollowPeers.Models.UserProfile 
+@{
+    ViewBag.Title = @Model.FirstName + " " + @Model.LastName + " Update Your Profile";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Update Your Profile
+        </h2>
+        @{var message = ViewData["message"];}
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.UserProfileId)
+            @Html.HiddenFor(model => model.UserName)
+            @Html.HiddenFor(model => model.activated)
+          if (message != null)
+            {
+                <div style="background: #eee;padding: 5px;color: green;">@message</div>
+            }
+            <fieldset>
+                <legend>Contact</legend>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Street1, "Address Line1")
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Contact.Street1, new { style = "width: 200px; margin-left: 2px;" })
+                    @Html.ValidationMessageFor(model => model.Contact.Street1)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Street2, "Address Line2")
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Contact.Street2, new { style = "width: 200px;margin-left: 2px;" })
+                    @Html.ValidationMessageFor(model => model.Contact.Street2)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.City)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Contact.City)
+                    @Html.ValidationMessageFor(model => model.Contact.City)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Country)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Contact.Country)
+                    @Html.ValidationMessageFor(model => model.Contact.Country)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Mobile)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Contact.Mobile)
+                    @Html.ValidationMessageFor(model => model.Contact.Mobile)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Phone)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Contact.Phone)
+                    @Html.ValidationMessageFor(model => model.Contact.Phone)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Fax)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Contact.Fax)
+                    @Html.ValidationMessageFor(model => model.Contact.Fax)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Email)
+                </div>
+                <div class="editor-field">
+                @{
+                    string prompt="";
+                    if (Model.Contact.Email == null) { prompt = Model.UserName; }
+                    else {prompt = Model.Contact.Email;}
+                }
+                    <input id="Contact_Email" name="Contact.Email" style="width: 200px;margin-left: 2px;" type="text" value="@prompt" class="valid">
+                    @Html.ValidationMessageFor(model => model.Contact.Email)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Contact.Website)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Contact.Website, new { style = "width: 200px;margin-left: 2px;" })
+                    @Html.ValidationMessageFor(model => model.Contact.Website)
+                </div>
+            </fieldset>
+            
+            
+            <p>
+                <input type="submit" value="Save" style="float: right; padding: 3px 8px; cursor: pointer;">
+            </p>
+        }
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+        
+    </div>
+</div>
+@Html.Partial("_Footer")
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+            $("#Contact_Country").autocomplete({source: function (request, response) {$.ajax({
+            url: "/Profile/FindCountryNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 10 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.CountryId }
+                }))
+                }
+                })
+                },
+            });
+
+
+    });
+</script>

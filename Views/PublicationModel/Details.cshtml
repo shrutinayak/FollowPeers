@@ -1,0 +1,281 @@
+﻿@model FollowPeers.Models.PublicationModel
+@using FollowPeers.Models;
+@{
+    ViewBag.Title = "Publication Details";
+}
+@Html.Partial("_Header")
+ @{
+     FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+     string name = Membership.GetUser().UserName;
+     ViewBag.UserName = name;
+     FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
+     if (myprofile.UserProfileId == Model.ownerID)
+     {
+                    @Html.Partial("_SideBar2")
+     }
+     else
+     {
+                    @Html.Partial("_SideBar1")
+     }
+}
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Details 
+            
+            </h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <fieldset>
+            <legend>Publication Details</legend>
+            
+           <div class="display-label">
+                ViewCount:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.viewCount)
+            </div>
+            <div class="display-label">
+                Title:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.title)
+            </div>
+            
+            <div class="display-label">
+                Author(s):</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.author)
+            </div>
+            
+            <div class="display-label">
+                Type:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.type)
+            </div>
+            
+            <div class="display-label">
+                Owner Name:
+            </div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ownerID)
+            </div>
+            
+            <div class="display-label">
+                Year:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.year)
+            </div>
+            <hr />
+            <div class="display-label">
+                Description:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.description)
+            </div>
+            <hr />
+            <div class="display-label">
+                Status:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.status)
+            </div>
+            @{
+                if (Model.journal != "default")
+                { 
+                    <div class="display-label">
+                        Journal:</div>
+                    <div class="display-field">
+                        @Html.DisplayFor(model => model.journal)
+                    </div>
+                }
+            }
+            @{
+                if (Model.publisher != "default")
+                { 
+                    <div class="display-label">
+                        Publisher:</div>
+                    <div class="display-field">
+                        @Html.DisplayFor(model => model.publisher)
+                    </div>
+                }
+            }
+            @{
+                if (Model.conference != "default")
+                {
+                        <div class="display-label">
+                        Conference:</div>
+                    <div class="display-field">
+                        @Html.DisplayFor(model => model.conference)
+                    </div>
+                }
+            }
+            @{
+                if (Model.university != "default")
+                {
+                <div class="display-label">
+                University:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.university)
+            </div>
+                }
+            }
+            @{
+                if (Model.referenceID != "")
+                {
+                <div class="display-label">
+                Location:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.referenceID)
+            </div>
+                }
+            }
+            @{
+                if (Model.issue != "default")
+                {
+                    <div class="display-label">
+                Issue:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.issue)
+            </div>
+                }
+            }
+            
+            @{
+                if (Model.volume != "default")
+                {
+                    <div class="display-label">
+                Volume:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.volume)
+            </div>
+                }
+            }
+            
+            @{
+                if (Model.page != "default")
+                {
+                <div class="display-label">
+                Page:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.page)
+            </div>
+                }
+            }
+            <div class="display-label">
+                Keyword(s):</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.keyword)
+            </div>
+                <input id="publicationIdAJAX" style="display:none" type="text" value="@Model.publicationID" >
+        </fieldset>
+        <p>
+            
+            @Html.ActionLink("Edit", "Edit", new { id = Model.publicationID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Model.publicationID }) |
+            @{
+                if (myprofile.UserProfileId == Model.ownerID)
+                {
+                    // This viewer is author
+                    @Html.ActionLink("Back to My Publication", "MyPublication");
+                                                                               <text>|</text>
+                    @Html.ActionLink("Back to Publication Db", "Index");
+                }
+                else
+                {
+                    @Html.ActionLink("Back to Publication Db", "Index");
+                }
+            }
+        </p>
+        @{
+            Html.RenderAction("Index", "Comment", new { ParentType = "PublicationModel", ParentId = Model.publicationID });
+            <p>
+                @using (Html.BeginForm("Create", "Comment", FormMethod.Post, new { ParentType = "PublicationModel", ParentId = Model.publicationID, SubmittedBy = Membership.GetUser().UserName, TimeSent = DateTime.Now, Flagged = false, Starred = false }))
+                {
+                    <fieldset>
+                        <legend>Add Comment</legend>
+                        <input type="hidden" name="ParentType" value="PublicationModel" />
+                        <input type="hidden" name="ParentId" value="@Model.publicationID" />
+                        <input type="hidden" name="SubmittedBy" value="@ViewBag.UserName" />
+
+                        <div class="editor-label">
+                            <label>Add Comment</label>
+                            @*@Html.LabelFor(model => model.CommentBody, " Add Comment:")*@
+                        </div>
+                        <div class="editor-field">
+                            <textarea name="CommentBody" cols="40" rows="2"></textarea>
+                            @*@Html.TextAreaFor(model => model.CommentBody)
+                            @Html.ValidationMessageFor(model => model.CommentBody)*@
+                        </div>
+                        <input type="submit" value="Submit" />
+                    </fieldset>
+                }
+                
+            </p>
+        }
+        
+
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+ 
+        <h2>Bookmarking Controls</h2>
+                @{
+                    if (ViewBag.bookmarktag)
+                    {
+                <br />
+         <div id="bookmark_it" title="Bookmark Publication" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 15px; color:White; width:120px; text-align:center;">
+                Bookmark Publication
+                </div>
+            <br />
+                    }
+                    else
+                    {
+                <br />
+                <div id="unbookmark_it" title="Un-Bookmark Publication" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 5px; color:White; width:140px; text-align:center;">
+                Un-Bookmark Publication
+                </div>
+            <br />}
+            }
+
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+
+<script type="text/javascript" language="javascript">
+    $("#bookmark_it").click(function () {
+        // Get publication ID
+        var id1 = $("#publicationIdAJAX").val();
+        // Send Ajax Request
+        $.ajax({
+            type: "POST",
+            url: "/PublicationModel/AddBookmark",
+            data: "ID=" + id1,
+            success: function () {
+                alert('Bookmarked');
+                window.history.back(-1);
+            }
+        }); 
+    });
+
+    $("#unbookmark_it").click(function () {
+        // Get publication ID
+        var id2 = $("#publicationIdAJAX").val();
+        // Send Ajax Request
+        $.ajax({
+            type: "POST",
+            url: "/PublicationModel/DeleteBookmark",
+            data: "ID=" + id2,
+            success: function () {
+                alert('Un-Bookmarked');
+                window.history.back(-1);
+            }
+        });
+    });
+
+</script>

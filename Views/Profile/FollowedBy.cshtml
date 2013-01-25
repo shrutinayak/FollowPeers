@@ -1,0 +1,24 @@
+﻿@model IEnumerable<FollowPeers.Models.UserProfile>
+
+<table style="margin-bottom: 3px;">
+
+
+@foreach (var item in Model)
+{
+   
+
+                <div class="block" style="overflow:hidden; height:40px; width:40px;float:left; text-align: center; margin: 3px;">
+                    <a href="/Profile/Index/@item.UserProfileId" style="height:40px"><img src="@Html.Encode(item.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:40px;" title='@item.FirstName @item.LastName (@item.Organization)' /></a>
+                </div>
+               
+                <div style="clear:none"></div>
+    
+}
+</table>
+@{
+    string link = "/Profile/FollowedByList?name=" + ViewData["link"];
+}
+<div style="cursor:pointer"><a href="@link"> See All (@Model.Count().ToString())</a></div>
+
+
+

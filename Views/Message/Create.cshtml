@@ -1,0 +1,88 @@
+﻿@model FollowPeers.Models.Message
+
+@{
+    ViewBag.Title = "New Conversation";
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+}
+
+@Html.Partial("_Header")
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+
+@Html.Partial("_MessageSideBar")
+<div class="grid_9">
+    <div class="box">
+        <h2>Compose New Message</h2>
+        @using (Html.BeginForm("Create","Message")) {
+        @Html.ValidationSummary(true)
+            <fieldset>
+                @{
+                    if (false)
+                    {
+                       <p>You have not followed anyone & no body is following you. Please follow someone to send them a message.</p>
+                    }
+                    else
+                    {
+                        <div class="editor-label" >
+                            @Html.LabelFor(Model => Model.Reciever, "Send To")
+                        </div>
+                        <div class="editor-field">
+                           @Html.TextBoxFor(Model => Model.Reciever, new { id = "Message-Receiver" })
+                           @Html.ValidationMessageFor(Model => Model.Reciever)
+                        </div>
+                        <div class="editor-label">
+                            @Html.LabelFor(Model => Model.Subject, "Subject")
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(Model => Model.Subject)
+                            @Html.ValidationMessageFor(Model => Model.Subject)
+                        </div>
+                        <div class="editor-label">
+                            @Html.LabelFor(Model => Model.MessageBody, "Message")
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextAreaFor(Model => Model.MessageBody)
+                        </div>
+                        <input type="submit" value="Send" />
+                    }
+                }
+                
+            </fieldset>
+        }
+
+        <div>
+            @Html.ActionLink("Back to Inbox", "Index")
+        </div>
+    </div>
+</div>
+
+
+
+
+@Html.Partial("_Footer")
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+       
+       $("#Message-Receiver").autocomplete({
+            
+            source: function (request,response){
+                    $.ajax({
+                        url: "/Profile/FindUserNames", type: "post", dataType: "json",
+                        data: { searchText: request.term, maxResults: 10 },
+                        success: function (data) {
+				                    response($.map(data, function (item) { 
+                                                return { label: item.UserName, value: item.UserName, id: item.UserProfileId }
+				                            }))
+                                }
+                    })
+            }
+        });
+    });
+</script>

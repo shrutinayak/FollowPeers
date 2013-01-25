@@ -1,0 +1,12 @@
+﻿
+<form action="/Comment/CreateAjax" method="post">
+    <input type="hidden" name="ParentType" value="@ViewBag.ParentType" />
+    <input type="hidden" name="ParentId" value="@ViewBag.ParentId" />
+     <input type="hidden" name="SubmittedBy" value="@Membership.GetUser().UserName" />
+      <input type="hidden" name="TimeSent" value="@DateTime.Now" />
+       <input type="hidden" name="Flagged" value="false" />
+       <input type="hidden" name="Starred" value="false" />
+       <input id="commentBodyTextBox" name="CommentBody" type="text" style="width:80%" />
+</form>
+    
+    

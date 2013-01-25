@@ -1,0 +1,53 @@
+﻿@model FollowPeers.Models.Comment
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Comment</legend>
+
+    <div class="display-label">CommentParentType</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CommentParentType)
+    </div>
+
+    <div class="display-label">CommentParentId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CommentParentId)
+    </div>
+
+    <div class="display-label">SubmittedBy</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SubmittedBy)
+    </div>
+
+    <div class="display-label">CommentBody</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CommentBody)
+    </div>
+
+    <div class="display-label">TimeSent</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TimeSent)
+    </div>
+
+    <div class="display-label">Flagged</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Flagged)
+    </div>
+
+    <div class="display-label">Starred</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Starred)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

@@ -1,0 +1,595 @@
+﻿@model FollowPeers.Models.UserProfile
+@using FollowPeers.Models;
+@Html.Partial("_Header")
+@Html.Partial("_SideBar1")
+@{
+    ViewBag.Title = "Bulletin";
+    FollowPeersDBEntities followPeersDB = new FollowPeersDBEntities();
+    
+}
+
+<div class="grid_10">
+    <div class="box" style="overflow: auto;">
+        <h2>
+            @{
+                string sel1 = ""; string sel2 = ""; string sel3 = "";
+                if (ViewBag.sort == 1) { sel1 = "selected"; }
+                if (ViewBag.sort == 2) { sel2 = "selected"; }
+                if (ViewBag.sort == 3) { sel3 = "selected"; }
+             }
+            
+            Bulletin (Updates from people you are following)<select style="float:right" onChange="return setswitch(this);">
+                <option value='1' @sel1>Sort by Updates</option>
+                <option value='2' @sel2>Sort by Name</option>
+                <option value='3' @sel3>Sort by Groups</option>
+                </select>
+        </h2>
+       @{
+           int sortingway = ViewBag.sort; //1 denotes sort by most number of updates
+
+           //list contains tuple of (userprofile,num of all updates, no of new updates) 
+
+           List<Tuple<UserProfile, List<Update>, List<Update>>> list = new List<Tuple<UserProfile, List<Update>, List<Update>>>();
+           string name = Membership.GetUser().UserName;
+           UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+
+           IQueryable<string> custQuery = from cust in followPeersDB.Relationships where cust.personAName == name select cust.personBName;
+
+           foreach (string personBname in custQuery)
+           {
+               UserProfile temp = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == personBname);
+               //numOfUpdates is number of updates this person has for the logged in user
+               IQueryable<Update> updateQuery = from cust in followPeersDB.Updates where cust.owner == temp.UserProfileId select cust;
+               var newlist = updateQuery.OrderByDescending(x => x.Time).ToList();
+               List<Update> allupdates = new List<Update>();
+               List<Update> newupdates = new List<Update>();
+               foreach (var update in newlist)
+               {
+                   if (update.UserProfiles.Contains(myprofile))
+                   {
+                       allupdates.Add(update);
+                       if (update.New == true)
+                       {
+                           newupdates.Add(update);
+                       }
+                   }
+
+               }
+               list.Add(new Tuple<UserProfile, List<Update>, List<Update>>(temp, allupdates, newupdates));
+           }
+
+           if (list.Count() == 0)
+           {
+            <text>You have not followed any person yet.</text>
+           }
+
+           else
+           {
+
+               //sort by most number of updates
+               if (sortingway == 1)
+               {
+                   var list2 = list.OrderByDescending(x => x.Item3.Count());
+                   foreach (var tuple in list2)
+                   {
+                       string temp1 = "Recent Updates";
+                       string temphref = "";
+                       string tempstyle = "cursor:text";
+                       //if there is any new update
+                       if (tuple.Item3.Count() != 0)
+                       {
+                           temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                           tempstyle = "cursor:pointer";
+                           temp1 = "Mark as seen";
+                       }
+                       string message = "<a style='color:#ccc;' href='" + @temphref + "'><div class='markasseen' style='" + @tempstyle + "'>" + @temp1 + "</div></a><div style='height:76%;overflow:auto;width:100%'>";
+                       // Item 3 is new updates
+                       foreach (var Update in tuple.Item2)
+                       {
+                           string time = "";
+                           TimeSpan temp = DateTime.Now - Update.Time;
+                           if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                           else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                           else { time += temp.Minutes.ToString() + " mins ago"; }
+                           //if item2 is a comment type
+                           if (Update.type == 3)
+                           { Update.message = "Commented: \"" + @Update.message + "\""; }
+                           message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                       }
+                       message += "</div>";
+                    <a href="/Profile/Index/@tuple.Item1.UserProfileId" style="float:left; margin:8px;">
+                        <div style="width: 75px; text-align: center">
+                            <div id="demo" style="height:70px;overflow:hidden">
+                                <img src="@Html.Encode(tuple.Item1.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                            <div>@tuple.Item1.FirstName
+                                <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                         {<text>(@tuple.Item3.Count())</text>}}</c>
+                            </div>
+                        </div>
+                    </a>
+                   }
+               }//end of if sortingway == 1
+
+               //sorting by name
+               else if (sortingway == 2)
+               {
+                   var list2 = list.OrderBy(x => x.Item1.FirstName);
+                   foreach (var tuple in list2)
+                   {
+                       string temp1 = "Recent Updates";
+                       string temphref = "";
+                       string tempstyle = "cursor:text";
+                       //if there is any new update
+                       if (tuple.Item3.Count() != 0)
+                       {
+                           temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                           tempstyle = "cursor:pointer";
+                           temp1 = "Mark as seen";
+                       }
+                       string message = "<a style='color:#ccc;' href='" + @temphref + "'><div class='markasseen' style='" + @tempstyle + "'>" + @temp1 + "</div></a><div style='height:76%;overflow:auto;width:100%'>";
+                       // Item 3 is new updates
+                       foreach (var Update in tuple.Item2)
+                       {
+                           string time = "";
+                           TimeSpan temp = DateTime.Now - Update.Time;
+                           if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                           else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                           else { time += temp.Minutes.ToString() + " mins ago"; }
+                           //if item2 is a comment type
+                           if (Update.type == 3)
+                           { Update.message = "Commented: \"" + @Update.message + "\""; }
+                           message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                       }
+                       message += "</div>";
+                    <a href="/Profile/Index/@tuple.Item1.UserProfileId" style="float:left; margin:8px;">
+                        <div style="width: 75px; text-align: center">
+                            <div id="demo" style="height:70px;overflow:hidden">
+                                <img src="@Html.Encode(tuple.Item1.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                            <div>@tuple.Item1.FirstName
+                                <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                         {<text>(@tuple.Item3.Count())</text>}}</c>
+                            </div>
+                        </div>
+                    </a>
+                   }
+               }//end of if sortingway == 2
+
+               //sorting by profession
+               else if (sortingway == 3)
+               {
+                   var studentlist = new List<Tuple<UserProfile, List<Update>, List<Update>>>();
+                   var proflist = new List<Tuple<UserProfile, List<Update>, List<Update>>>();
+                   var investorlist = new List<Tuple<UserProfile, List<Update>, List<Update>>>();
+                   var researcherlist = new List<Tuple<UserProfile, List<Update>, List<Update>>>();
+                   var grouplist = new List<Tuple<List<Tuple<UserProfile, List<Update>, List<Update>>>, string>>();
+
+
+
+                   IQueryable<Group> grpQuery = from cust in followPeersDB.Groups where cust.OwnerId == myprofile.UserProfileId select cust;
+                   //grpQuery contains all the groups the user has
+                   foreach (var grp in grpQuery)
+                   {
+                       grouplist.Add(new Tuple<List<Tuple<UserProfile, List<Update>, List<Update>>>, string>(new List<Tuple<UserProfile, List<Update>, List<Update>>>(), grp.Name));
+                   }
+
+                   //for every tuple in list
+                   foreach (var tuple in list)
+                   {
+                       bool added = false; //temp bool
+                       //if they are a member of any group, add the tuple to the group
+                       foreach (var grp in grpQuery)
+                       {
+                           //checking if they are a member of any group
+                           if (grp.Members.Contains(tuple.Item1))
+                           {
+                               foreach (var grplist in grouplist)
+                               {
+                                   if (grplist.Item2 == grp.Name)
+                                   {
+                                       grplist.Item1.Add(tuple);
+                                   }
+                               }
+                               added = true;
+                           }
+
+                       }
+
+                       // if (added == false) //to remove duplicates in the groups
+                       {
+                           if (tuple.Item1.Profession == "Student") { studentlist.Add(tuple); }
+                           if (tuple.Item1.Profession == "Professor") { proflist.Add(tuple); }
+                           if (tuple.Item1.Profession == "Investor") { investorlist.Add(tuple); }
+                           if (tuple.Item1.Profession == "Researcher") { researcherlist.Add(tuple); }
+                       }
+                   }
+                
+                <script type="text/javascript">
+                    function creategroup() {
+                        var mygroupname = document.getElementById('groupname');
+                        var i=1;
+                        var text="";
+                        for (i = 1; i <= 25; i++) {
+                            var name = "as-selection-" + i.toString();
+                            if (document.getElementById(name)) {
+                                var test = document.getElementById('as-selection-' + i.toString())
+                                text += "&members=";
+                                var temp = test.innerHTML;
+                                text += temp.substring(25);
+                            }
+                        }
+                        
+                        
+
+                        window.location.href = "./Profile/CreateGroup?name=" + mygroupname.value + text;
+                    }
+                </script>
+
+                <div class="editing" style="float:right" ><span id="trigger" style="float: right;padding: 5px;background: #ccc;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;">Create New Group</span>
+                <div id="toolWrapper" style="display: none; ">
+                    <div style="margin: 10px 0px 5px 14px;"><input type="text" id="groupname" style="padding:4px;height: 25px;width:300px;border: 1px solid #ddd;"></div>
+                    <input type="auto" id="as-input-040" autocomplete="off" class="as-input">
+
+                    <span id="submitbtn" onClick="creategroup()" style="float: right;padding: 5px;background: #ccc;cursor: pointer;margin-top: -10px;margin-right:1px;border: 1px solid #bbb;">Create</span>
+                </div>
+                </div>
+                   if (grouplist.Count != 0)
+                   {
+                       foreach (var grpitem in grouplist)
+                       {
+                    <div style="width: 99.6%;float: left;background: #CCC;padding: 5px;margin-top: 5px;">
+                    <div style="float:left;background: #aaa;padding: 5px;width: 605px;color: #eee;font-size: 12px;font-weight: bold;">@grpitem.Item2</div>
+                   
+                        <a href="./Profile/DeleteGroup?name=@grpitem.Item2"><div title="Delete this group" style="margin-top:4px;float: right;font-weight: bold;font-size: 14px;background: #bbb;color: white;padding: 0px 7px; cursor: pointer; margin-left: 4px;">x</div></a>
+                    </div>
+                    <div id="@grpitem.Item2" class="droppable ui-widget-header" style="width: 100%;float: right;">
+                        @foreach (var tuple in grpitem.Item1)
+                        {
+                            string temp1 = "Recent Updates";
+                            string temphref = "";
+                            string tempstyle = "cursor:text";
+                            string temphref2 = "/Profile/RemoveFromGrp?name=" + tuple.Item1.UserProfileId + "&grpname=" + grpitem.Item2;
+                            //if there is any new update
+                            if (tuple.Item3.Count() != 0)
+                            {
+                                temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                                tempstyle = "cursor:pointer";
+                                temp1 = "Mark as seen";
+                            }
+                            string message = "<a style='color:#ccc;' href='" + @temphref + "'><div title='Mark this update as seen' class='markasseen' style='height:20px;width:90%;float:left;" + @tempstyle + "'>" + @temp1 + "</div></a>";
+                            message += "<a style='color:#ccc;' href='" + @temphref2 + "'><div style='cursor:pointer;float: right;border: 1px solid;padding: 3px;width: 13px;text-align: center;' title='Remove this person from group'>x</div></a><div style='float:left;height:76%;overflow:auto;width:100%'>";
+                            // Item 3 is new updates
+                            foreach (var Update in tuple.Item2)
+                            {
+                                string time = "";
+                                TimeSpan temp = DateTime.Now - Update.Time;
+                                if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                                else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                                else { time += temp.Minutes.ToString() + " mins ago"; }
+                                //if item2 is a comment type
+                                if (Update.type == 3)
+                                { Update.message = "Commented: \"" + @Update.message + "\""; }
+                                message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                            }
+                            message += "</div>";
+                            string tempname2 = tuple.Item1.FirstName + " " + @tuple.Item1.LastName;
+                            <div id="@tempname2" style="width: 75px; text-align: center;cursor:pointer;margin: 5px 0px;float: left;" class="draggable" class="ui-widget-content" >
+                                <div id="demo" style="cursor:move;height:70px;overflow:hidden">
+                                    <img src="@Html.Encode(tuple.Item1.PhotoUrl)" alt="" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                                <div  onclick="location.href='/Profile/Index/@tuple.Item1.UserProfileId'">@tempname2
+                                    <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                             {<text>(@tuple.Item3.Count())</text>}}</c>
+                                </div>
+                            </div>
+                        }</div>
+                        
+                       }
+
+                   }
+                   if (studentlist.Count != 0)
+                   {
+                    <div style="width: 99.6%;float: left;background: #CCC;padding: 5px;margin-top: 5px;">
+                    <div style="float:left;background: #aaa;padding: 5px;width: 605px;color: #eee;font-size: 12px;font-weight: bold;">Students</div></div>
+                    <div id="Students" style="width: 100%;float: right;">
+                    @foreach (var tuple in studentlist)
+                    {
+                        string temp1 = "Recent Updates";
+                        string temphref = "";
+                        string tempstyle = "cursor:text";
+                        //if there is any new update
+                        if (tuple.Item3.Count() != 0)
+                        {
+                            temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                            tempstyle = "cursor:pointer";
+                            temp1 = "Mark as seen";
+                        }
+                        string message = "<a style='color:#ccc;' href='" + @temphref + "'><div class='markasseen' style='" + @tempstyle + "'>" + @temp1 + "</div></a><div style='height:76%;overflow:auto;width:100%'>";
+                        // Item 3 is new updates
+                        foreach (var Update in tuple.Item2)
+                        {
+                            string time = "";
+                            TimeSpan temp = DateTime.Now - Update.Time;
+                            if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                            else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                            else { time += temp.Minutes.ToString() + " mins ago"; }
+                            //if item2 is a comment type
+                            if (Update.type == 3)
+                            { Update.message = "Commented: \"" + @Update.message + "\""; }
+                            message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                        }
+                        message += "</div>";
+                        string tempname1 = tuple.Item1.FirstName + " " + @tuple.Item1.LastName;
+                        <div id="@tempname1" style="width: 75px; text-align: center;cursor:pointer;margin: 5px 0px;float: left;" class="draggable" class="ui-widget-content" >
+                        <div id="demo" style="cursor:move;height:70px;overflow:hidden">
+                                    <img src="@Html.Encode(tuple.Item1.PhotoUrl)" alt="" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                                <div onclick="location.href='/Profile/Index/@tuple.Item1.UserProfileId'">@tempname1
+                                    <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                             {<text>(@tuple.Item3.Count())</text>}}</c>
+                                </div>
+                            </div>
+                    }
+                    </div>
+                   }
+                   if (proflist.Count != 0)
+                   {
+                    <div style="width: 99.6%;float: left;background: #CCC;padding: 5px;margin-top: 5px;">
+                    <div style="float:left;background: #aaa;padding: 5px;width: 605px;color: #eee;font-size: 12px;font-weight: bold;">Professors</div></div>
+                    <div id="Professors" style="width: 100%;float: right;">
+                    @foreach (var tuple in proflist)
+                    {
+                        string temp1 = "Recent Updates";
+                        string temphref = "";
+                        string tempstyle = "cursor:text";
+                        //if there is any new update
+                        if (tuple.Item3.Count() != 0)
+                        {
+                            temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                            tempstyle = "cursor:pointer";
+                            temp1 = "Mark as seen";
+                        }
+                        string message = "<a style='color:#ccc;' href='" + @temphref + "'><div class='markasseen' style='" + @tempstyle + "'>" + @temp1 + "</div></a><div style='height:76%;overflow:auto;width:100%'>";
+                        // Item 3 is new updates
+                        foreach (var Update in tuple.Item2)
+                        {
+                            string time = "";
+                            TimeSpan temp = DateTime.Now - Update.Time;
+                            if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                            else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                            else { time += temp.Minutes.ToString() + " mins ago"; }
+                            //if item2 is a comment type
+                            if (Update.type == 3)
+                            { Update.message = "Commented: \"" + @Update.message + "\""; }
+                            message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                        }
+                        message += "</div>";
+                        string tempname = tuple.Item1.FirstName + " " + @tuple.Item1.LastName;
+                            <div id="@tempname" style="width: 75px; text-align: center;cursor:pointer;margin: 5px 0px;float: left;" class="draggable" class="ui-widget-content">
+                        
+                                    <div id="demo" style="cursor:move;height:70px;overflow:hidden;">
+                                        <img src="@Html.Encode(tuple.Item1.PhotoUrl)" alt="" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                                    <div onclick="location.href='/Profile/Index/@tuple.Item1.UserProfileId'">@tempname
+                                        <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                                 {<text>(@tuple.Item3.Count())</text>}}</c>
+                                    </div>
+                                </div>
+                    }
+                    </div>
+                   }
+
+                   if (researcherlist.Count != 0)
+                   {
+                    <div style="width: 99.6%;float: left;background: #CCC;padding: 5px;margin-top: 5px;">
+                    <div style="float:left;background: #aaa;padding: 5px;width: 605px;color: #eee;font-size: 12px;font-weight: bold;">Researchers</div></div>
+                    <div id="Researchers" style="width: 100%;float: right;">
+                    @foreach (var tuple in researcherlist)
+                    {
+                        string temp1 = "Recent Updates";
+                        string temphref = "";
+                        string tempstyle = "cursor:text";
+                        //if there is any new update
+                        if (tuple.Item3.Count() != 0)
+                        {
+                            temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                            tempstyle = "cursor:pointer";
+                            temp1 = "Mark as seen";
+                        }
+                        string message = "<a style='color:#ccc;' href='" + @temphref + "'><div class='markasseen' style='" + @tempstyle + "'>" + @temp1 + "</div></a><div style='height:76%;overflow:auto;width:100%'>";
+                        // Item 3 is new updates
+                        foreach (var Update in tuple.Item2)
+                        {
+                            string time = "";
+                            TimeSpan temp = DateTime.Now - Update.Time;
+                            if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                            else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                            else { time += temp.Minutes.ToString() + " mins ago"; }
+                            //if item2 is a comment type
+                            if (Update.type == 3)
+                            { Update.message = "Commented: \"" + @Update.message + "\""; }
+                            message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                        }
+                        message += "</div>";
+                        string tempname1 = tuple.Item1.FirstName + " " + @tuple.Item1.LastName;
+                        <div id="@tempname1" style="width: 75px; text-align: center;cursor:pointer;margin: 5px 0px;float: left;" class="draggable" class="ui-widget-content" >
+                        <div id="demo" style="cursor:move;height:70px;overflow:hidden;">
+                                    <img src="@Html.Encode(tuple.Item1.PhotoUrl)" alt="" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                                <div onclick="location.href='/Profile/Index/@tuple.Item1.UserProfileId'">@tempname1
+                                    <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                             {<text>(@tuple.Item3.Count())</text>}}</c>
+                                </div>
+                            </div>
+                    }
+                    </div>
+                   }
+
+                   if (investorlist.Count != 0)
+                   {
+                    <div style="width: 99.6%;float: left;background: #CCC;padding: 5px;margin-top: 5px;">
+                    <div style="float:left;background: #aaa;padding: 5px;width: 605px;color: #eee;font-size: 12px;font-weight: bold;">Investors</div></div>
+                    <div id="Investors" style="width: 100%;float: right;">
+                    @foreach (var tuple in investorlist)
+                    {
+                        string temp1 = "Recent Updates";
+                        string temphref = "";
+                        string tempstyle = "cursor:text";
+                        //if there is any new update
+                        if (tuple.Item3.Count() != 0)
+                        {
+                            temphref = "/Bulletin/MarkCommentAsRead/" + tuple.Item1.UserProfileId;
+                            tempstyle = "cursor:pointer";
+                            temp1 = "Mark as seen";
+                        }
+                        string message = "<a style='color:#ccc;' href='" + @temphref + "'><div class='markasseen' style='" + @tempstyle + "'>" + @temp1 + "</div></a><div style='height:76%;overflow:auto;width:100%'>";
+                        // Item 3 is new updates
+                        foreach (var Update in tuple.Item2)
+                        {
+                            string time = "";
+                            TimeSpan temp = DateTime.Now - Update.Time;
+                            if (temp.Days > 1) { time += temp.Days.ToString() + " days ago"; }
+                            else if (temp.Hours > 1) { time += temp.Hours.ToString() + " hrs ago"; }
+                            else { time += temp.Minutes.ToString() + " mins ago"; }
+                            //if item2 is a comment type
+                            if (Update.type == 3)
+                            { Update.message = "Commented: \"" + @Update.message + "\""; }
+                            message += "<a style='font-weight:normal;color:#eee;' href='" + @Update.link + "'><div class='notiitem'><div class='msgitem'>" + Update.message + "</div><div class='timeitem'>" + time + "</div><div style='clear:both'></div></div></a>";
+
+                        }
+                        message += "</div>";
+                        string tempname1 = tuple.Item1.FirstName + " " + @tuple.Item1.LastName;
+                        <div id="@tempname1" style="width: 75px; text-align: center;cursor:pointer;margin: 5px 0px;float: left;" class="draggable" class="ui-widget-content" >
+                        <div id="demo" style="cursor:move;height:70px;overflow:hidden;">
+                                    <img src="@Html.Encode(tuple.Item1.PhotoUrl)" alt="" style="margin-left:auto; margin-right:auto; width:70px;" title="@message" /></div>
+                                <div onclick="location.href='/Profile/Index/@tuple.Item1.UserProfileId'">@tempname1
+                                    <c style="color: red;font-weight: bold;">@{if (tuple.Item3.Count() != 0)
+                                                             {<text>(@tuple.Item3.Count())</text>}}</c>
+                                </div>
+                            </div>
+                    }
+                    </div>
+                   }
+
+               }//end of if sortingway == 3
+           }
+        }
+    </div>
+</div>
+
+<div class="grid_3">
+    <div class="box">
+        <h2>
+            @Model.FirstName @Model.LastName's followers</h2>
+        @{Html.RenderAction("FollowedBy", "Profile", new {id=Model.UserProfileId});}
+    </div>
+</div>
+@Html.Partial("_Footer")
+ 
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+	<script src="../Scripts/jquery.ui.core.js" type="text/javascript"></script>
+	<script src="../Scripts/jquery.ui.widget.js" type="text/javascript"></script>
+
+	<script src="../Scripts/jquery.ui.mouse.js" type="text/javascript"></script>
+	<script src="../Scripts/jquery.ui.draggable.js" type="text/javascript"></script>
+	<script src="../Scripts/jquery.ui.droppable.js" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/jquery.tools.min.js")" type="text/javascript"></script>
+   <script src="@Url.Content("~/Scripts/jquery.autoSuggest.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+   
+        $("input[type=auto]").autoSuggest("./Profile/FindFriends", { minChars: 2, matchCase: false,selectedItemProp: "name", searchObjProps: "name" });
+        //$("input[type=text]").autoSuggest(data.items, { selectedItemProp: "name", searchObjProps: "name" });
+        $("#demo img[title]").tooltip({position: "bottom center", opacity: 0.9 });
+
+        $("#trigger").click(function () {
+            $('#toolWrapper').toggle(function () {
+                $(document).click(function (event) {
+                    if (!($(event.target).is('#toolWrapper') || $(event.target).parents('#toolWrapper').length || $(event.target).is('#trigger'))) {
+                        $('#toolWrapper').hide(500);
+                    }
+                });
+            });
+        });
+
+        $(".draggable").draggable({ revert: "invalid" });
+
+        $(".droppable").droppable({
+            activeClass: "ui-state-hover",
+            hoverClass: "ui-state-active",
+            drop: function (event, ui) {
+
+                var targetElem = $(this).attr("id");
+
+                $(this)
+					.addClass("ui-state-highlight")
+					.find("p")
+						.html("Dropped! inside " + targetElem);
+                window.location.href = "./Profile/AddMembertoGroup?name="+ui.draggable.attr('id')+"&grpname="+targetElem;
+            }
+        });
+
+    });
+
+ 
+    
+    function setswitch(sel) {
+        var opt = sel.options[sel.selectedIndex].value;
+        if (opt == 1)
+            window.location = "./Bulletin?sort=1";
+        else if (opt == 2)
+            window.location = "./Bulletin?sort=2";
+        else if (opt == 3)
+            window.location = "./Bulletin?sort=3";
+    }
+
+
+
+        function puthint(divname, hinttext) {
+            $(document).ready(function () {
+
+                // Define what happens when the textbox comes under focus
+                // Remove the watermark class and clear the box
+                $(divname).focus(function () {
+
+                    $(this).filter(function () {
+
+                        // We only want this to apply if there's not 
+                        // something actually entered
+                        return $(this).val() == "" || $(this).val() == hinttext
+
+                    }).removeClass("watermarkOn").val("");
+
+                });
+
+                // Define what happens when the textbox loses focus
+                // Add the watermark class and default text
+                $(divname).filter(function () {
+
+                    // We only want this to apply if there's not
+                    // something actually entered
+                    return $(this).val() == ""
+
+                }).addClass("watermarkOn").val(hinttext);
+
+                $(divname).blur(function () {
+
+                    $(this).filter(function () {
+
+                        // We only want this to apply if there's not
+                        // something actually entered
+                        return $(this).val() == ""
+
+                    }).addClass("watermarkOn").val(hinttext);
+
+                });
+
+            });
+        }
+        puthint("#groupname", "Enter Group Name");
+
+</script>
+  

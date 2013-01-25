@@ -1,0 +1,54 @@
+﻿@model IEnumerable<FollowPeers.Models.Course>
+
+@{
+    ViewBag.Title = "Courses > Mine";
+
+}
+
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">My Courses</h2>
+        <table style="margin:5px 0px 5px 0px">
+        @{
+            if (Model.Any(c => c.CourseId > 0 ))
+            {
+                foreach (var item in Model)
+                {
+                
+                    <tr >
+                        <td>
+                            <div class="CourseContainer">
+                                <img src="../../Content/images/icons/32x32/education.png" style="width:10%; height:48px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/>
+                                <div class="courseDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                                    <div class="courseName"> @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId})</div>
+                                    <div class="courseDescription">@Html.Label(item.CourseDescription)</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                }
+                <tr><td><a href="/Course/Create">
+                        <img src="../../Content/images/icons/16x16/add.png" />  Add Another</a></td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>You have not added any course. Please add a course to show it on your profile.
+                     </td>
+                     
+                </tr> 
+                <tr><td><a href="/Course/Create">
+                        <img src="../../Content/images/icons/16x16/add.png" />  Create</a></td>
+                
+                </tr>
+            }        
+        }
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_Footer")

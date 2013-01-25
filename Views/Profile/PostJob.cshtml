@@ -1,0 +1,192 @@
+﻿@model FollowPeers.Models.UserProfile 
+@{
+    ViewBag.Title = @Model.FirstName + " " + @Model.LastName + " Update Your Job Posts";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<script src="@Url.Content("~/Scripts/jquery.tools.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.autoSuggest2.js")" type="text/javascript"></script>
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Update Your Job Posts
+        </h2>
+        @{var message = ViewData["message"];}
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.UserProfileId)
+            @Html.HiddenFor(model => model.UserName)
+            @Html.HiddenFor(model => model.activated)
+            if (message != null)
+            {
+                <div style="background: #eee;padding: 5px;color: green;">@message</div>
+            }
+            string Students = "";
+            string Professors = "";
+            string Investors = "";
+            string Researchers = "";
+
+            int i = 0;
+            <div id="ComcationFields">
+                
+                @foreach (var E in Model.Jobs)
+                {
+                    if (E.ownerId == Model.UserProfileId)
+                    {
+
+                        string TempData = "Com" + i.ToString();
+                        string TempData2 = "Delete" + i.ToString();
+                        string TempData4 = "Country" + i.ToString();
+                        if (E.students == true) { Students = "checked"; }
+                        if (E.professors == true) { Professors = "checked"; }
+                        if (E.investors == true) { Investors = "checked"; }
+                        if (E.researchers == true) { Researchers = "checked"; }
+                    <div id="@TempData">
+                        <fieldset>
+                            <legend>Job Post @(i + 1)</legend>
+                            <div id="@TempData2"  style="float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;" title="Click to delete this record.">
+                                x</div>
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Title</div>
+                            <div class="editor-field" style="height:auto">
+                                <input type="hidden" name="Title" value="@E.Title" style="width:250px;margin-left: 2px;" />@E.Title (Posted on @E.publishDate.ToShortDateString())
+                            </div>
+                 
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Country</div>
+                            <div class="editor-field" style="height:22px">
+                                <input type="hidden" name="Country" id="@TempData4" value="@Html.Encode(E.Country)" />@E.Country
+                            </div>
+
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Target Groups</div>
+                            <div class="editor-field" style="height:22px">
+
+                                <input type="hidden" name="Students" value="1" @Students /> @if (Students == "checked")
+                                                                                            {<text>Students  </text>}
+                                <input type="hidden" name="Professors" value="1" @Professors /> @if (Professors == "checked")
+                                                                                                {<text>Professors  </text>}
+                                <input type="hidden" name="Investors" value="1" @Investors /> @if (Investors == "checked")
+                                                                                              {<text>Investors  </text>}
+                                <input type="hidden" name="Researchers" value="1" @Researchers /> @if (Researchers == "checked")
+                                                                                                  {<text>Researchers  </text>}
+                            </div>
+                               
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Target Specializations</div>
+                            <div class="editor-field" style="height:22px">
+                            @{string specialization = "";
+                              foreach (var s in E.Specializations)
+                              {
+                                    <text>@s.SpecializationName  </text>
+                                  specialization += s.SpecializationId;
+                              }
+                              specialization += ",";
+                            }                   
+                            <input type="hidden" class="as-values" name="Specializations" id="as-values-062" value="@specialization">
+                            </div>
+
+                            <div class="editor-label"  style="color: grey;font-weight: bold;">Description</div>
+                            <div class="editor-field" style="height:auto">
+                                <input type="hidden" name="Description" id="@TempData4" value="@E.Description" />@E.Description
+                            </div>
+
+                        </fieldset>
+                    </div>
+            
+                              i = i + 1;
+                    }
+                }</div>
+            
+            <p>
+                <div id="Add" style="cursor: pointer;back: white;background: white;width: 25px;padding: 2px 5px;color: dimgray;" title="Click to add another record.">
+                    Add</div>
+                <input type="submit" value="Save" style="float: right; padding: 3px 8px; cursor: pointer;">
+            </p>
+        }</div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+        
+    </div>
+</div>
+@Html.Partial("_Footer")
+        
+        
+        
+    
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("input[type=auto]").autoSuggest("./FindSpecializations", { minChars: 2, matchCase: false,selectedItemProp: "name", searchObjProps: "name"});
+        counter = 0;
+        if ($('#Com0').length) { AutoComplete(0); counter++; $('#Delete0').click(function () { Delete(0); }); }
+        if ($('#Com1').length) { AutoComplete(1); counter++; $('#Delete1').click(function () { Delete(1); }); }
+        if ($('#Com2').length) { AutoComplete(2); counter++; $('#Delete2').click(function () { Delete(2); }); }
+        if ($('#Com3').length) { AutoComplete(3); counter++; $('#Delete3').click(function () { Delete(3); }); }
+        if ($('#Com4').length) { AutoComplete(4); counter++; $('#Delete4').click(function () { Delete(4); }); }
+        if ($('#Com5').length) { AutoComplete(5); counter++; $('#Delete5').click(function () { Delete(5); }); }
+        if ($('#Com6').length) { AutoComplete(6); counter++; $('#Delete6').click(function () { Delete(6); }); }
+        if ($('#Com7').length) { AutoComplete(7); counter++; $('#Delete7').click(function () { Delete(7); }); }
+        if ($('#Com8').length) { AutoComplete(8); counter++; $('#Delete8').click(function () { Delete(8); }); }
+        if ($('#Com9').length) { AutoComplete(9); counter++; $('#Delete9').click(function () { Delete(9); }); }
+        $('#Add').click(function () { AddField(); });
+        if (counter==0) AddField();
+        function Remove(id)
+        {
+            alert(id);
+        }
+        function AutoComplete(id) 
+        {
+            $("#Country"+id).autocomplete({source: function (request, response) {$.ajax({
+            url: "/Profile/FindCountryNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 10 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.CountryId }
+                }))
+                }
+                })
+                },
+            });
+         }
+
+
+        function AddField() {
+            if (counter >= 10) alert("You can post a maximum of 10 Jobs.");
+            else {
+                var name;
+                if (!($('#Com0').length)) name = 0;
+                else if (!($('#Com1').length)) name = 1;
+                else if (!($('#Com2').length)) name = 2;
+                else if (!($('#Com3').length)) name = 3;
+                else if (!($('#Com4').length)) name = 4;
+                else if (!($('#Com5').length)) name = 5;
+                else if (!($('#Com6').length)) name = 6;
+                else if (!($('#Com7').length)) name = 7;
+                else if (!($('#Com8').length)) name = 8;
+                else if (!($('#Com9').length)) name = 9;
+
+                $('#ComcationFields').append("<div id='Com" + name + "'><fieldset><legend>Job Post "+(name+1)+"</legend><div id='Delete" + name + "'  style='float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;' title='Click to delete this record.'>x</div><div class='editor-label'>Title</div><div class='editor-field' style='height:auto'><input type='text' name='Title' style='width:250px;margin-left: 2px;' /></div><div class='editor-label'>Country</div><div class='editor-field' style='height:22px'><input type='text' name='Country' style='width:250px;margin-left:2px;' id='Country"+name+"'/></div><div class='editor-label'>Target Groups</div><div class='editor-field' style='height:22px'><input type='checkbox' name='Students' value='1'/> Students<input type='checkbox' name='Professors' value='1' /> Professors<input type='checkbox' name='Investors' value='1'/> Investors<input type='checkbox' name='Researchers' value='1'/> Researchers</div><input type='auto"+name+"' id='as-input-040' autocomplete='off' class='as-input'><textarea rows='3' cols='97' name='Description' type='text' style='margin-left:15px;'></textarea></fieldset></div>");
+                $("input[type=auto"+name+"]").autoSuggest("./FindSpecializations", { minChars: 2, matchCase: false,selectedItemProp: "name", searchObjProps: "name"});
+        
+                $('#Delete' + name).click(function () { Delete(name); });
+                counter++;
+                AutoComplete(name);
+
+            }
+        }
+        function Delete(id) {
+           
+            if ($('#Com' + id).length) {
+                $('#Com' + id).slideUp('fast', function () { $('#Com' + id).remove(); });
+                counter--;
+            }
+        }
+    });
+</script>

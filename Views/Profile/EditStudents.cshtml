@@ -1,0 +1,200 @@
+﻿@model FollowPeers.Models.UserProfile 
+@{
+    ViewBag.Title = @Model.FirstName + " " + @Model.LastName + " Update Your Students";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Update Your Students
+        </h2>
+        @{var message = ViewData["message"];}
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.UserProfileId)
+            @Html.HiddenFor(model => model.UserName)
+            @Html.HiddenFor(model => model.activated)
+            if (message != null)
+            {
+                <div style="background: #eee;padding: 5px;color: green;">@message</div>
+            }
+            int i = 0;
+            <div id="EducationFields">
+                
+                @foreach (var E in Model.Students)
+                {
+
+                    string TempData = "Edu" + i.ToString();
+                    string TempData2 = "Delete" + i.ToString();
+                    string TempData3 = "Organization" + i.ToString();
+                    string TempData4 = "Country" + i.ToString();
+                    string TempData5 = "Link" + i.ToString();
+                    <div id="@TempData5"><input name="Link" type="hidden" value="@Model.Students.ElementAt(i).Link"></div>
+                    <div id="@TempData">
+                        <fieldset>
+                            <legend>Student</legend>
+                            <div id="@TempData2"  style="float: right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;" title="Click to delete this record.">
+                                x</div>
+                            <div class="editor-label">
+                                Name
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" id="@TempData3" name="Name" style="margin-left:2px;width:210px" value="@Model.Students.ElementAt(i).Name" />
+                            </div>
+                            <div class="editor-label">
+                                Type
+                            </div>
+                            <div class="editor-field">
+                            @{List<SelectListItem> list = new List<SelectListItem>();
+
+                              SelectListItem temp = new SelectListItem();
+                              temp.Text = "PhD Student"; temp.Value = "1"; if (@Model.Students.ElementAt(i).Type == 1) { temp.Selected = true; }
+                              list.Add(temp);
+                              SelectListItem temp2 = new SelectListItem();
+                              temp2.Text = "Master Student"; temp2.Value = "2"; if (@Model.Students.ElementAt(i).Type == 2) { temp2.Selected = true; }
+                              list.Add(temp2);
+                              SelectListItem temp3 = new SelectListItem();
+                              temp3.Text = "Undergraduate Student"; temp3.Value = "3"; if (@Model.Students.ElementAt(i).Type == 3) { temp3.Selected = true; }
+                              list.Add(temp3);
+                              SelectListItem temp4 = new SelectListItem();
+                              temp4.Text = "Other Student"; temp4.Value = "4"; if (@Model.Students.ElementAt(i).Type == 4) { temp4.Selected = true; }
+                              list.Add(temp4);
+                            }
+                            @Html.DropDownList("Type", list)
+                            </div>
+
+                            <div class="editor-label">
+                                Start Year (yyyy)
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" name="StartYear" value="@Model.Students.ElementAt(i).StartYear"/>
+                            </div>
+                            <div class="editor-label">
+                                End Year (yyyy)
+                            </div>
+                            <div class="editor-field">
+                                <input type="text" name="EndYear" value="@Model.Students.ElementAt(i).EndYear"/>
+                            </div>
+                            <div class="editor-label">
+                                About
+                            </div>
+                            <div class="editor-field">
+                                <textarea rows="3" cols="60" name="About" type="text">@Model.Students.ElementAt(i).About</textarea>
+                            </div>
+
+                           
+                             
+                        </fieldset>
+                    </div>
+            
+                              i = i + 1;
+                }</div>
+            
+            <p>
+                <div id="Add" style="cursor: pointer;back: white;background: white;width: 25px;padding: 2px 5px;color: dimgray;" title="Click to add another record.">
+                    Add</div>
+                <input type="submit" value="Save" style="float: right; padding: 3px 8px; cursor: pointer;">
+            </p>
+        }</div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+        
+    </div>
+</div>
+@Html.Partial("_Footer")
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        counter = 0;
+        if ($('#Edu0').length) { AutoComplete(0); counter++; $('#Delete0').click(function () { Delete(0); }); }
+        if ($('#Edu1').length) { AutoComplete(1); counter++; $('#Delete1').click(function () { Delete(1); }); }
+        if ($('#Edu2').length) { AutoComplete(2); counter++; $('#Delete2').click(function () { Delete(2); }); }
+        if ($('#Edu3').length) { AutoComplete(3); counter++; $('#Delete3').click(function () { Delete(3); }); }
+        if ($('#Edu4').length) { AutoComplete(4); counter++; $('#Delete4').click(function () { Delete(4); }); }
+        if ($('#Edu5').length) { AutoComplete(5); counter++; $('#Delete5').click(function () { Delete(5); }); }
+        if ($('#Edu6').length) { AutoComplete(6); counter++; $('#Delete6').click(function () { Delete(6); }); }
+        if ($('#Edu7').length) { AutoComplete(7); counter++; $('#Delete7').click(function () { Delete(7); }); }
+        if ($('#Edu8').length) { AutoComplete(8); counter++; $('#Delete8').click(function () { Delete(8); }); }
+        if ($('#Edu9').length) { AutoComplete(9); counter++; $('#Delete9').click(function () { Delete(9); }); }
+        $('#Add').click(function () { AddField(); });
+        if (counter==0) AddField();
+        function autoCompleteRender(ul, item) 
+        {
+            var searchTerm = this.term;
+            var itemLabel = item.value;
+            itemLabel = itemLabel.replace(new RegExp("(" + item.value + ")", "gi"), "<div style='width:40px;float:left'><img src='"+item.label+"' style='margin-left:auto; margin-right:auto; width:30px; float:left;'></div>$1");
+            return $("<li></li>").data("item.autocomplete", item).append("<a>" + itemLabel +" ("+item.organization + ")</a>").appendTo(ul);
+        }
+        function AutoComplete(id) 
+        {
+            $("#Organization"+id).autocomplete({ 
+                
+                source: function (request, response) {$.ajax({
+			        url: "/Profile/FindUserNames", type: "POST", dataType: "json",
+                    data: { searchText: request.term, maxResults: 10 },
+                    success: function (data) {
+                    response($.map(data, function (item) 
+                        {return { organization:item.Organization, label: item.PhotoUrl, value: item.FirstName+" "+item.LastName, id: item.UserProfileId }}
+                        ))
+                        }  
+                        })
+                },
+                select:function(event, ui){$("#Link"+id).html("<input name='Link' type='hidden' value='"+ui.item.id+"'></input>")}    
+            }).data("autocomplete")._renderItem = autoCompleteRender;
+        
+
+            $("#Country"+id).autocomplete({
+				source: function (request, response) {$.ajax({
+					url: "/Profile/FindCountryNames", type: "POST", dataType: "json",
+					data: { searchText: request.term, maxResults: 10 },
+					success: function (data) {
+					response($.map(data, function (item) {
+						return { label: item.Name, value: item.Name, id: item.CountryId }
+						}))
+					}
+				})
+                },
+            });
+         }
+      
+
+        function AddField() {
+            if (counter >= 10) alert("You can add a maximum of 10 Student Records");
+            else {
+                var name;
+                if (!($('#Edu0').length)) name = 0;
+                else if (!($('#Edu1').length)) name = 1;
+                else if (!($('#Edu2').length)) name = 2;
+                else if (!($('#Edu3').length)) name = 3;
+                else if (!($('#Edu4').length)) name = 4;
+                else if (!($('#Edu5').length)) name = 5;
+                else if (!($('#Edu6').length)) name = 6;
+                else if (!($('#Edu7').length)) name = 7;
+                else if (!($('#Edu8').length)) name = 8;
+                else if (!($('#Edu9').length)) name = 9;
+
+                $('#EducationFields').append("<div id='Link"+name+"'><input name='Link' type='hidden' value='0'></div><div id='Edu"+name+"'><fieldset><legend>Student</legend><div id='Delete"+name+"' style='float:right;background: lightGrey;color: dimGray;padding: 0px 6px;cursor: pointer;' title='Click to delete this record.'>x</div><div class='editor-label'>Name</div><div class='editor-field'><input type='text' id='Organization"+name+"' name='Name' style='margin-left:2px;width:210px'/></div><div class='editor-label'>Type</div><div class='editor-field'><select id='Type' name='Type' class='valid'><option value='1'>PhD Student</option><option value='2'>Master Student</option><option value='3'>Undergraduate Student</option><option value='4'>Other Student</option></select></div><div class='editor-label'>Start Year (yyyy)</div><div class='editor-field'><input type='text' name='StartYear'/></div><div class='editor-label'>End Year (yyyy)</div><div class='editor-field'><input type='text' name='EndYear'/></div><div class='editor-label'>About</div><div class='editor-field'><textarea rows='3' cols='60' name='About' type='text'></textarea></div></fieldset></div>");
+                $('#Delete' + name).click(function () { Delete(name); });
+                counter++;
+                AutoComplete(name);
+
+            }
+        }
+        function Delete(id) {
+           
+            if ($('#Edu' + id).length) {
+                $('#Edu' + id).slideUp('fast', function () { $('#Edu' + id).remove(); });
+                counter--;
+            }
+        }
+    });
+    </script>       

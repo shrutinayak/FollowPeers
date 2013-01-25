@@ -1,0 +1,268 @@
+﻿@model FollowPeers.Models.UserProfile 
+@{
+    ViewBag.Title = @Model.FirstName + " " + @Model.LastName + " Update Your Profile";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Update Your Profile
+        </h2>
+        @{var message = ViewData["message"];}
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.bgiframe.js") type="text/javascript"></script>
+        <script src=@Url.Content("~/Scripts/jquery.mcdropdown.js") type="text/javascript"></script>
+         <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        @using (Html.BeginForm())
+        {
+            if (message != null)
+            {
+                <div style="background: #eee;padding: 5px;color: green;">@message</div>
+            }
+            @Html.ValidationSummary(true)
+          <fieldset style="display:none" >
+                <legend>Basic Information</legend>
+                @Html.HiddenFor(model => model.UserProfileId)
+                @Html.HiddenFor(model => model.UserName)
+                @Html.HiddenFor(model => model.activated)
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.FirstName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LastName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Gender)
+                </div>
+                <div class="editor-field">
+                    @{List<string> list1 = new List<string>();
+                      list1.Add("Male");
+                      list1.Add("Female");
+                    }
+                    @Html.DropDownList("Gender", new SelectList(list1))
+                    @Html.ValidationMessageFor(model => model.Gender)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Status, "Marital Status")
+                </div>
+                <div class="editor-field">
+                    @{List<string> list2 = new List<string>();
+                      list2.Add("Single");
+                      list2.Add("Married");
+                      list2.Add("Divorced");
+                      list2.Add("Widowed");
+                    }
+                    @Html.DropDownList("Status", new SelectList(list2))
+                    @Html.ValidationMessageFor(model => model.Status)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Profession)
+                </div>
+                <div class="editor-field">
+                    @{List<string> list = new List<string>();
+                      list.Add("Individual");
+                      list.Add("Corporate");
+                    }
+                    @Html.DropDownList("Profession", new SelectList(list))
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Organization, "Organization")
+                </div>
+                <div class="editor-field">
+                    <input type="text" id="Organization" name="Organization" style="width:210px" value="@Html.Encode(Model.Organization)" />                    
+                    <script type="text/javascript" language="javascript">
+                    var dd,val;
+                       $(document).ready(function(){  
+                       var options = new Object();
+                       options.select = select_handler;
+                       options.init = init;    
+                       var counter = 0; 
+                       var interest = new Array(3);  
+                       var exceeded = 0;   
+                       var int1=0,int2=0,int3=0;
+                       function deletenode(num)
+                        {
+                             $('#interest'+num).slideUp('slow', function() {$('#interest'+num).remove();  });
+                             counter--;
+                             if (num==1) int1=0;
+                             if (num==2) int2=0;
+                             if (num==3) int3=0;
+                        }
+                                             
+                       if ($("#interest1").length)
+                       {
+                            int1=1; 
+                            interest[0] = $("input[id='Specialization1.Specializationid']").val();
+                            //alert(interest[0]);
+                            counter++;
+                            $('#delete1').click(function(){deletenode(1);});
+                       }
+                       if ($("#interest2").length)
+                       {
+                            int2=1;
+                            interest[1] = $("input[id='Specialization2.Specializationid']").val();
+                            counter++;
+                            $('#delete2').click(function(){deletenode(2);});
+                       }
+                       if ($("#interest3").length)
+                       {
+                            int3=1;
+                            interest[2] = $("input[id='Specialization3.Specializationid']").val();
+                            counter++;
+                            $('#delete3').click(function(){deletenode(3);});
+                       }
+                       $("#SpecializationId").mcDropdown("#SpecializationIdmenu",options);
+                       
+                       function init() {
+                               dd = $("#SpecializationId").mcDropdown();
+                               $("#Organization").autocomplete({source: function (request, response) {$.ajax({
+                                        url: "/Profile/FindOrganizationNames", type: "POST", dataType: "json",
+                                        data: { searchText: request.term, maxResults: 10 },
+                                        success: function (data) {
+                                            response($.map(data, function (item) {
+                                                return { label: item.Name, value: item.Name, id: item.OrganizationId }
+                                            }))
+                                        }
+                                    })
+                                },
+                                
+                            });
+                       }
+
+                        
+                        function select_handler() 
+                        {
+                            val = dd.getValue();
+                            //alert(val);
+                            var value = val.toString().substring(0,val.toString().search(','));
+                            
+                            if ((value!=interest[0]) && (value!=interest[1]) && (value!=interest[2]) && (counter!=3))
+                            {
+                               
+                                var texttoappend = $("li[ id = "+value+" ]").text();
+                                if (texttoappend.length < 60)
+                                {
+                                    counter++;
+                                    var tempnum;
+                                    if (int1==0){ tempnum=1; int1=1;}
+                                    else if(int2==0) {tempnum=2; int2=1;}
+                                    else if(int3==0) {tempnum=3; int3=1;}
+                                    interest[counter-1] = value;
+                                    $('#interest').append("<div id='interest"+tempnum+"' style='width:100%;display:none'><div class='editor-label'><label>Interest</label></div><div class='editor-field' style='height:20px; border-bottom: 1px solid #CCC;width: 50%; float:left'>"+texttoappend+"</div><div id='delete"+tempnum+"' style='color:#666;cursor:pointer;'>x</div><div style='clear:both'></div></div>");
+                                    $('#interest'+tempnum).append("<input name='Specialization' id ='Specialization"+tempnum+"_Specializationid' type='hidden' value='"+value+"'>");  
+                                    $('#interest'+tempnum).slideToggle("slow");
+
+                                    $('#delete'+counter).click(function(){deletenode(counter);});
+                                }
+                            }
+                            else if ((counter==3)&&(value!=interest[0]) && (value!=interest[1]) && (value!=interest[2]))
+                            {
+                               exceeded = 1;
+                               $('#notification').html("You can enter a maximum of 3 research interests");
+                               $('#notification').slideDown("slow");  
+                            }
+                         }
+                        });
+                    </script>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Research Interest</legend>
+                <div id="notification" style="display:none; height: 22px;"></div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Specializations, "Add your research interest")
+                </div>
+                <div class="editor-field" style="float:left; width:auto">
+                    <input type="text" name="SpecializationId" id="SpecializationId" style="width:0px" value="" />
+                   
+                </div>
+                <br /><br />
+                <div id="interest">
+
+                @{
+                      if (Model.Specializations.Count() > 0)
+                      {  
+                        <div id="interest1" style="width: 100%; ">
+	                        <div class="editor-label">
+    		                    <label>Interest</label>
+                            </div>
+	                        <div class="editor-field" style="height:20px; border-bottom: 1px solid #CCC;width: 50%; float:left">@Model.Specializations.ElementAt(0).SpecializationName</div>
+	                        <div id="delete1" style="color:#666;cursor:pointer;">x</div>
+	                        <div style="clear:both"></div>
+	                        <input id="Specialization1.Specializationid" name="Specialization" type="hidden" value="@Model.Specializations.ElementAt(0).SpecializationId">
+                        </div>
+                      }
+                      if (Model.Specializations.Count() > 1)
+                      {  
+                        <div id="interest2" style="width: 100%; ">
+	                        <div class="editor-label">
+    		                    <label>Interest</label>
+                            </div>
+	                        <div class="editor-field" style="height:20px; border-bottom: 1px solid #CCC;width: 50%; float:left">@Model.Specializations.ElementAt(1).SpecializationName</div>
+	                        <div id="delete2" style="color:#666;cursor:pointer;">x</div>
+	                        <div style="clear:both"></div>
+	                        <input id="Specialization2.Specializationid" name="Specialization" type="hidden" value="@Model.Specializations.ElementAt(1).SpecializationId">
+                        </div>
+                      }
+                      if (Model.Specializations.Count() > 2)
+                      {  
+                        <div id="interest3" style="width: 100%; ">
+	                        <div class="editor-label">
+    		                    <label>Interest</label>
+                            </div>
+	                        <div class="editor-field" style="height:20px; border-bottom: 1px solid #CCC;width: 50%; float:left">@Model.Specializations.ElementAt(2).SpecializationName</div>
+	                        <div id="delete3" style="color:#666;cursor:pointer;">x</div>
+	                        <div style="clear:both"></div>
+	                        <input id="Specialization3.Specializationid" name="Specialization" type="hidden" value="@Model.Specializations.ElementAt(2).SpecializationId">
+                        </div>
+                      } 
+                }
+                </div>
+                
+            </fieldset>
+            
+            <p>
+                <input type="submit" value="Save" style="float: right;padding: 3px 8px;cursor: pointer;">
+            </p>
+        }
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+        
+    </div>
+</div>
+@Html.Partial("_Footer")
+
+<ul id="SpecializationIdmenu" class="mcdropdown_menu" style="left:495px;">
+@{
+    FollowPeers.Models.FollowPeersDBEntities db = new FollowPeers.Models.FollowPeersDBEntities();
+    IQueryable<string> Query = (from entry in db.Specializations orderby entry.Field select entry.Field).Distinct();
+
+    foreach (string entry in Query)
+    {
+        IQueryable<FollowPeers.Models.Specialization> Query2 = from specialization in db.Specializations orderby specialization.Field where specialization.Field == entry select specialization;
+        <li>@entry
+        <ul>
+        @foreach (FollowPeers.Models.Specialization specialization1 in Query2)
+        {
+            <li rel="@specialization1.SpecializationId" id="@specialization1.SpecializationId">@specialization1.SpecializationName</li>
+        }
+        </ul></li>
+    }
+    
+}
+
+   

@@ -1,0 +1,164 @@
+﻿@model FollowPeers.Models.PatentModel
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.Partial("_Header")
+ @{
+     FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+     string name = Membership.GetUser().UserName;
+     FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
+     if (myprofile.UserProfileId == Model.UserProfile.UserProfileId)
+     {
+                    @Html.Partial("_SideBar2")
+     }
+     else
+     {
+                    @Html.Partial("_SideBar1")
+     }
+ }
+
+
+<div class="grid_10">
+    <div class="box">
+        <h2>Details</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <fieldset>
+            <legend>Patent Details!</legend>
+            @*-----------Ranking-----------*@
+            <div class="display-label" style="font-weight:bold">Ranking :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Ranking)
+            </div>
+            @*-----------ViewCount-----------*@
+            <div class="display-label" style="font-weight:bold">ViewCount :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ViewCount)
+            </div>
+            @*-----------Title-----------*@
+            <div class="display-label" style="font-weight:bold">Name of Patent :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Title)
+            </div>
+            @*-----------About-----------*@
+            <div class="display-label" style="font-weight:bold">About the Patent : </div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.About)
+            </div>
+            @*-----------RefNo-----------*@
+            <div class="display-label" style="font-weight:bold">Patent Number :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.RefNo)
+            </div>
+            @*-----------ApplyYear-----------*@
+            <div class="display-label" style="font-weight:bold">Application Date:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ApplyYear)
+            </div>
+            @*-----------AproveYear-----------*@
+            <div class="display-label" style="font-weight:bold">Approval Date :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.AproveYear)
+            </div>
+            @*-----------Country-----------*@
+            <div class="display-label" style="font-weight:bold">Country :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Country)
+            </div>
+            @*-----------Keyword-----------*@
+            <div class="display-label" style="font-weight:bold">Keywords for search :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Keyword)
+            </div>
+            <input id="patentIdAJAX" style="display:none" type="text" value="@Model.ID" >
+        </fieldset>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Model.ID }) |
+
+            @{
+                if (myprofile.UserProfileId == Model.UserProfile.UserProfileId)
+                {
+                    // This viewer is author
+                    @Html.ActionLink("Back to My Patent", "MyPatent");
+                                                                     <text>|</text>
+                    @Html.ActionLink("Back to Patent Db", "Index");
+                }
+                else
+                {
+                    @Html.ActionLink("Back to Patent Db", "Index");
+                }
+            }
+
+        </p>
+    </div>
+</div>
+
+<div class="grid_3">
+    <div class="box">
+        <h2>Bookmarking Controls</h2>
+                @{
+            if (ViewBag.bookmarktag)
+            {
+                <br />
+         <div id="bookmark_it" title="Bookmark Patent" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 15px; color:White; width:120px; text-align:center;">
+                Bookmark Patent
+                </div>
+            <br />
+            }
+            else
+            {
+                <br />
+                <div id="unbookmark_it" title="Un-Bookmark Patent" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 5px; color:White; width:140px; text-align:center;">
+                Un-Bookmark Patent
+                </div>
+            <br />}
+            }
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+
+<script type="text/javascript" language="javascript">
+    $("#bookmark_it").click(function () {
+        // Get publication ID
+        var id1 = $("#patentIdAJAX").val();
+        // Send Ajax Request
+        $.ajax({
+            type: "POST",
+            url: "/PatentModel/AddBookmark",
+            data: "ID=" + id1,
+            success: function () {
+                alert('Bookmarked');
+                window.history.back(-1);
+            }
+        });
+    });
+
+    $("#unbookmark_it").click(function () {
+        // Get publication ID
+        var id2 = $("#patentIdAJAX").val();
+        // Send Ajax Request
+        $.ajax({
+            type: "POST",
+            url: "/PatentModel/DeleteBookmark",
+            data: "ID=" + id2,
+            success: function () {
+                alert('Un-Bookmarked');
+                window.history.back(-1);
+            }
+        });
+    });
+
+</script>

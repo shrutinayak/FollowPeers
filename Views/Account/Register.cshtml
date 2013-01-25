@@ -1,0 +1,82 @@
+﻿@model FollowPeers.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Register";
+}
+@Html.Partial("_Header")
+<div class="grid_16">
+    <h2 id="page-heading">Good of you to join us. Please fill out the form below.</h2>
+</div>
+<div class="clear"></div>
+<div class="grid_10 prefix_3">
+<div class="box">
+<h2>Create a New Account</h2>
+<p>
+    Passwords are required to be a minimum of @Membership.MinRequiredPasswordLength characters in length.
+</p>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")
+    <div>
+        <fieldset class="login">
+            
+            <p class="notice">Sign up Now! It's Free...</p>
+         <!--   <p>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName) 
+            </p> -->
+            <input type="hidden" name="UserName" id="UserName" value="0" />
+            <p class="editor-label">
+                @Html.LabelFor(m => m.FirstName,"First Name")
+                @Html.TextBoxFor(m => m.FirstName)
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </p>
+            <p class="editor-label">
+                @Html.LabelFor(m => m.LastName,"Last Name")
+                @Html.TextBoxFor(m => m.LastName)
+                @Html.ValidationMessageFor(m => m.LastName)
+            </p>
+
+            <p class="editor-label">
+            
+                    @Html.LabelFor(model => model.Profession)
+                
+                    @{List<string> list = new List<string>();
+                      list.Add("Individual");
+                      list.Add("Corporate");
+                    }
+                    @Html.DropDownList("Profession", new SelectList(list))
+                
+            </p>
+            <p class="editor-label">
+                @Html.LabelFor(m => m.Email)
+                <input length="0" data-val="true" data-val-required="The Email address field is required." id="Email" name="Email" type="text" value=" ">
+                @Html.ValidationMessageFor(m => m.Email)
+            </p>
+
+            <p class="editor-label">
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </p>
+
+            <p class="editor-label">
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword)
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </p>
+
+            
+            <input type="submit" value="Register" style="float: right;padding: 8px 4px;cursor: pointer;">
+            
+      </fieldset>
+    </div>
+}
+</div>
+</div>
+<div class="clear"></div>
+@Html.Partial("_Footer")

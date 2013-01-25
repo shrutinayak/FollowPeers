@@ -1,0 +1,72 @@
+﻿@model IEnumerable<FollowPeers.Models.PatentModel>
+@{
+    ViewBag.Title = "Patent Search";
+}
+
+@Html.Partial("_Header3")
+@Html.Partial("_SideBar4")
+
+<div class="grid_10">
+    <div class="box">
+        <h2>Patents</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+         <br />   
+        <table>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Year of Application
+                </th>
+                <th>
+                    Year of Approval
+                </th>
+                <th>
+                    Reference Number
+                </th>
+                <th>Actions</th>
+            </tr>
+
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplyYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AproveYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RefNo)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id=item.ID })
+                </td>
+            </tr>
+        }
+        </table>
+    </div>
+</div>
+            
+<div class="grid_3">
+    <div class="box">
+        <h2>Top Patents</h2>
+        @*@{Html.RenderAction("ProgressTracker", "Profile");}*@
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+
+@helper Script(string scriptName)
+{
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}

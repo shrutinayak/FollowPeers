@@ -1,0 +1,93 @@
+﻿@model IEnumerable<FollowPeers.Models.PatentModel>
+@{
+    ViewBag.Title = "My Bookmarked Patents";
+    
+       @Html.Partial("_Header")
+      @Html.Partial("_SideBar5")
+    
+}
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            My Bookmarked Patents
+        </h2>
+        @if (Model.Count() == 0)
+        {
+            <div style="padding:10px;">You have no bookmarked patents.</div>
+        }
+            <table id="myDataTable" class="display">
+                <thead>
+                    <tr>
+                        <th>
+                            Title
+                        </th>
+                        <th>
+                            Patent Number
+                        </th>
+                        <th>
+                            Country
+                        </th>
+                        <th>
+                            Approval Year
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RefNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AproveYear)
+                            </td>
+                            <td>
+                                @Html.ActionLink("More..", "Details", "PatentModel", new { id = item.ID }, null)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+       
+    </div>
+</div>
+@Html.Partial("_Footer")
+
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+
+    $('#Image').mouseover(function () {
+        $('#Keyword').slideDown("fast");
+        $('#Journal').slideDown("fast");
+        $('#Conference').slideDown("fast");
+        $('#University').slideDown("fast");
+    });
+    $('#Image').mouseout(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+</script>

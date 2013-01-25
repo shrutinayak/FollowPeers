@@ -1,0 +1,7 @@
+﻿@model System.DateTime?
+           
+@*@Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue,
+    new { data_datepicker = true })
+
+   *@ 
+@Html.TextBox("", Model.HasValue ? Model.Value.ToString("dd-MM-yyyy") : string.Empty, new { data_datepicker = true })

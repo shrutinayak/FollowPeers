@@ -1,0 +1,161 @@
+﻿@model IEnumerable<FollowPeers.Models.Job>
+@{
+    ViewBag.Title = "Recommended Jobs For You";
+    @Html.Partial("_Header")
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    @Html.Partial("_SideBar4")
+}
+
+
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Recommemded Jobs For You  <div class="editing" style="float:right" ><span id="trigger" style="float:right;text-decoration:underline;cursor:pointer;">Advanced Search</span>
+                <div id="toolWrapper" style="display: none; top:-7px;">
+                <div style="padding:7px;color:#777;background: #ddd;width: 100%;margin: 3px;">Advanced Job Search</div>
+                <form style="padding:7px;">
+                    <div class="editor-label"  style="color: grey;font-weight: bold;">Keywords</div>
+                    <div class="editor-field" style="height:auto">
+                          <input type="text" name="keywords" value="" style="width:252px;" />
+                    </div>
+                    
+                    <div class="editor-label"  style="color: grey;font-weight: bold;">Country</div>
+                    <div class="editor-field" style="height:auto">
+                    @{
+                             List<SelectListItem> items = new List<SelectListItem>();
+                             foreach (var i in followPeersDB.Countries)
+                             {
+                                 items.Add(new SelectListItem { Text = i.Name, Value = i.Name });
+                             }
+                             IEnumerable<SelectListItem> list = items.ToArray();
+                             @Html.DropDownList("Country", list, new { style = "width:257px;" });
+                             
+                         }
+
+
+                          
+                    </div>
+
+                    <div class="editor-label"  style="color: grey;font-weight: bold;">Specialization</div>
+                    <div class="editor-field" style="height:auto">
+                          @{
+                             List<SelectListItem> items2 = new List<SelectListItem>();
+                             foreach (var i in followPeersDB.Specializations)
+                             {
+                                 items2.Add(new SelectListItem { Text = i.SpecializationName, Value = i.SpecializationName });
+                             }
+                             IEnumerable<SelectListItem> list2 = items2.ToArray();
+                             @Html.DropDownList("Specialization", list2,new { style = "width:257px;" });
+                             
+                         }
+                         
+
+                    </div>
+
+                    <input type="submit" style="float: right;padding: 5px;background: #ccc;cursor: pointer;margin-top: -10px;margin-right:1px;border: 1px solid #bbb;" value="Submit" />
+      
+                </form>
+                </div>
+                </div>
+        </h2>
+       
+        @if (Model.Count() == 0)
+        {
+            <div style="padding:10px;">No Job Matches Your Profile</div>
+        }
+        else
+        {
+
+            foreach (var item in Model)
+            {   <div style="height:90px">
+            @{
+                FollowPeers.Models.UserProfile me = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserProfileId == item.ownerId);
+                string myname = Membership.GetUser().UserName;
+                FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == myname);
+                    }
+                <div class="block" style="overflow:hidden; height:70px; width:70px;float:left; text-align: center">
+                    <a href="/Profile/DetailJob/@item.JobId"><img src="@Html.Encode(me.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" /></a>
+                </div>
+                <div style="float:left; margin: 7px 0px 0px 5px;">
+                @Html.ActionLink(item.Title, "DetailJob", new { id = item.JobId }) (@Html.DisplayFor(modelitem => item.Country))
+                <br />
+                Posted By 
+                 @if (Membership.GetUser().UserName == me.UserName)
+                 {
+                     @Html.ActionLink("Me", "Index", new { id = me.UserProfileId }) 
+                 }
+                 else
+                 {
+                     @Html.ActionLink(me.FirstName + " " + me.LastName, "Index", new { id = me.UserProfileId }) 
+                 }
+                 on @item.publishDate.ToShortDateString()
+                
+                <br />
+                For @foreach (var s in item.Specializations)
+                    {
+                       <text>@s.SpecializationName </text>
+                    }
+                
+                <br />
+                @{int peoplebookmarked = @item.UserProfiles.Count() - 1;}
+                Bookmarked by @peoplebookmarked people
+                
+               
+                </div>
+              
+                <div id="follow" style="float:right;margin:15px;">
+                 @if (myprofile.UserProfileId != item.ownerId)
+                 {
+
+                     if (ViewData[item.JobId.ToString()] == "1")
+                     {
+                         using (Html.BeginForm("UnBookmark", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                         {
+                            <input type="hidden" name="jobid" value="@item.JobId" />
+                            <input type="submit" value="UnBookmark" style="padding: 8px 20px;color:gray;float: right;cursor: pointer;font-weight: bold;" />
+                         }
+                     }
+                     else
+                     {
+                         using (Html.BeginForm("Bookmark", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                         {
+                            <input type="hidden" name="jobid" value="@item.JobId" />
+                            <input type="submit" value="Bookmark" style="padding: 8px 20px;float: right;cursor: pointer;font-weight: bold;" />
+                         }
+                     }
+                 }</div>
+                <div style="clear:none"></div></div>
+                
+                
+
+            }
+        }
+        
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+      @{Html.RenderAction("JobRecommendation", "Profile",null);} 
+    </div>
+</div>
+@Html.Partial("_Footer")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#trigger").click(function () {
+            $('#toolWrapper').toggle(function () {
+                $(document).click(function (event) {
+                    if (!($(event.target).is('#toolWrapper') || $(event.target).parents('#toolWrapper').length || $(event.target).is('#trigger'))) {
+                        $('#toolWrapper').hide(500);
+                    }
+                });
+            });
+        });
+
+
+
+
+    });
+
+</script>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<FollowPeers.Models.Message>
+
+@{
+    ViewBag.Title = "Messagaes > Starred";
+}
+
+@Html.Partial("_Header")
+@Html.Partial("_MessageSideBar")
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px">Starred Messages</h2>
+        <table style="margin:5px 0px 5px 0px">
+        @{
+            if (!Model.Any(m =>m.Starred))
+            {
+                <tr>
+                    <td>You have no Starred messages yet.
+                     </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr >
+                        <td>
+                            <div class="MessageContainer">
+                               <img src="../../Content/TempImages/default.jpg" style="width:10%; height:48px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/>
+                                <div class="messageDetails" style="width:73%;height:40px; float:left; padding: 5px 0px 0px 10px;">
+                                    <div class="messageName"> @Html.ActionLink(item.Reciever, "Details", new { id = item.MessageId })</div>
+                                    <div class="messageSubject">@Html.Label(item.Subject)</div>
+                                </div>
+                                <div class="MessageOptions" style="width:15%; float:right; display:inline-block;">
+                                    @Html.ActionLink("star", "Star", new { id = item.MessageId }) |
+                                    @Html.ActionLink("trash", "Trash", new { id = item.MessageId })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+       }
+        </table>
+    </div>
+</div>
+
+
+@Html.Partial("_Footer")

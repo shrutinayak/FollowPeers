@@ -1,0 +1,79 @@
+﻿@model FollowPeers.Models.PatentModel
+@{
+    ViewBag.Title = "Delete";
+}
+
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+
+<div class="grid_10">
+    <div class="box">
+        <h2>Delete Patent</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <h3>Are you sure you want to delete this?</h3>
+        <fieldset>
+            <legend>Patent Delete!</legend>
+            @*-----------Title-----------*@
+            <div class="display-label" style="font-weight:bold">Title of Patent :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Title)
+            </div>
+            @*-----------About-----------*@
+            <div class="display-label" style="font-weight:bold">About the Patent : </div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.About)
+            </div>
+            @*-----------RefNo-----------*@
+            <div class="display-label" style="font-weight:bold">Panten Number :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.RefNo)
+            </div>
+            @*-----------ApplyYear-----------*@
+            <div class="display-label" style="font-weight:bold">Application Date:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ApplyYear)
+            </div>
+            @*-----------AproveYear-----------*@
+            <div class="display-label" style="font-weight:bold">Approval Date :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.AproveYear)
+            </div>
+            @*-----------Country-----------*@
+            <div class="display-label" style="font-weight:bold">Country Filed In :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Country)
+            </div>
+            @*-----------Keyword-----------*@
+            <div class="display-label" style="font-weight:bold">Keywords :</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Keyword)
+            </div>
+        </fieldset>
+        @using (Html.BeginForm()) {
+        <p>
+            <input type="submit" value="Delete" /> |
+            @Html.ActionLink("Back to My Patent", "MyPatent")
+        </p>
+        }
+    </div>
+</div>
+
+<div class="grid_3">
+    <div class="box">
+        <h2></h2>
+        @*@{Html.RenderAction("ProgressTracker", "Profile");}*@
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+
+@helper Script(string scriptName)
+{
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
