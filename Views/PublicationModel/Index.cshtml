@@ -8,7 +8,7 @@
     FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
 }
 
-@Html.Partial("_PubHeader")
+@Html.Partial("_Header")
 <div class="container">
     <div class="box">
         <div class="span12"> 
@@ -17,12 +17,12 @@
 				    <a href="#" style="margin-right: 10px">Previous</a>
 				</li>
 				<li>
-				    <div class="span2">
+				    <div class="span3">
 		    	        <div class="thumbnail">
                             <img src="../../Content/images/Pub1.png" alt="">
                             <div class="caption">
                                 <h6>Social Entreprenurship Study</h6>
-                                    <p>The syllabus of social Entrepreneurship...</p>
+                                    <p>By Shruti Nayak</p>
                                     <i class="icon-star icon-color"></i>
                                     <i class="icon-star icon-color"></i>
                                     <i class="icon-star icon-color"></i>
@@ -38,7 +38,7 @@
                             <img src="../../Content/images/Pub2.png" alt="">
                             <div class="caption">
                                 <h6>The Principles of Parliamentary Rep</h6>
-                                <p>Dodgson's contribution...</p>
+                                <p>By Aaron Ektar</p>
                                 <i class="icon-star icon-color"></i>
                                 <i class="icon-star icon-color"></i>
                             </div>
@@ -51,7 +51,7 @@
                             <img src="../../Content/images/Pub3.png" alt="">
                             <div class="caption">
                                 <h6>Human geneology</h6>
-                                <p>This study of Human geneology shows that...</p>
+                                <p>By Arnold Schwatzneiger</p>
                                 <i class="icon-star icon-color"></i>
                                 <i class="icon-star icon-color"></i>
                                 <i class="icon-star icon-color"></i>
@@ -68,9 +68,7 @@
 
           <div class="box">            
             <div id="Tabs">
-            <br/>
-           
-            
+            <br/>    
                 <ul class="nav nav-tabs">               
                     <li id="li_tab1" onclick="tab('tab1')"><a>Uploads</a></li>
                     <li id="li_tab2" onclick="tab('tab2')"><a>Discussions</a></li>

@@ -1,0 +1,176 @@
+﻿
+<div class="grid_16">
+    <ul class="nav main" id="smallheader">
+        <li><a href="../../Bulletin?sort=3" id="branding">FollowPeers</a></li>
+        @{
+            if (User.Identity.IsAuthenticated)
+            {
+                FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+                string name = Membership.GetUser().UserName;
+                FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
+               
+                <li class="secondary" style="margin-top: 13px; margin-right:5px;">@Html.ActionLink(myprofile.FirstName + " " + myprofile.LastName, "Index", "Profile", new { id = myprofile.UserProfileId }, null)
+                <ul>
+                    <li style="float:right">@Html.ActionLink("Update Profile", "Edit", "Profile")</li>
+                    <li style="float:right">@Html.ActionLink("Bookmark Items", "ViewBookmarkJobs", "Profile")</li>
+                    <li style="float:right">@Html.ActionLink("Privacy", "TierFollowers", "Profile")</li>
+                    <li style="float:right">@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+                </ul>
+            </li>
+            
+             
+            <li class="secondary" style="margin-top: 13px;"><a href="../../News?reader=Yahoo"
+                title="Read News">
+                <img src="../../Content/images/icons/16x16/world.png" /></a> </li>
+            <li class="secondary" style="margin-top: 13px;"><a href="../../Message/Index" title="Check Mails">
+                <img src="../../Content/images/icons/16x16/email.png" /></a></li>
+            
+
+            
+            
+            
+
+            <li class="secondary" style="float: left; margin-left: 60px; margin-top: 10px;">
+            
+            <div class="textBox"><input type="text" value="" maxlength="100" name="searchBox" id="search" style="padding:0 0 0 9px;"/>
+		    <div class="searchBtn">	&nbsp;</div>
+            </div>
+
+            <div id="content"><div class="search-background" style="margin-top:-26px;">
+			<label><img src="../../Content/css/images/loader.gif" alt="" /></label>
+            </div><div id="sub_cont" style="display:none;border: 1px solid #AAA;-webkit-box-shadow: 0 15px 30px #888;"></div>
+            </div>
+
+            </li>
+            
+            <li class="secondary" style="margin-top: 13px;">
+               <a id="Notification"><img src="../../Content/images/icons/16x16/newspaper.png" /><span style="color:orange;" id="newCount"></span></a>
+                <div id="noti_cont" style="display:none;border: 1px solid #AAA;-webkit-box-shadow: 0 15px 30px #888;"></div> 
+            </li>
+                
+            }
+        }
+    </ul>
+</div>
+<div class="clear">
+</div>
+            <script type="text/javascript" language="javascript">
+
+                $(document).ready(function () {
+                    //show loading bar
+                    $('#sub_cont').hide();
+                    $('#content').hide();
+                    $('#newCount').load('../../Profile/GetNumberofNewNoti');
+
+                    function showLoader() {
+                        $('.search-background').fadeIn(200);
+                        $('#content').show();
+                    }
+
+                    $(document).click(function (event) {
+                        if (!($(event.target).is('#content') || $(event.target).parents('#content').length || $(event.target).is('#content'))) {
+                            $('#content').hide();
+                            if (!($(event.target).is('#Notification') || $(event.target).parents('#Notification').length || $(event.target).is('#Notification'))) {
+                                $('#noti_cont').hide();
+                                $('#Notification').css("background", "#666");
+                            }
+                        }
+                    });
+
+
+                    $('#Notification').click(function () {
+                        $('#noti_cont').show();
+                        $('#Notification').css("background", "#555");
+                        //                        if ($('#newCount').innerHTML != "") {
+                        //                            $('#noti_cont').css("margin-left", "-205px");
+                        //                        }
+                        //                        else {
+                        //                            $('#noti_cont').css("margin-left", "-214px");
+                        //                        }
+                        $('#newCount').load("../../Profile/MarkNotificationsasSeen");
+
+                        $("#noti_cont").load("../../Profile/GetNotifications");
+                    });
+
+                    //hide loading bar
+
+                    function hideLoader() {
+                        $('#sub_cont').fadeIn(50);
+                        $('.search-background').fadeOut(50);
+                    };
+
+                    $('#search').keyup(function (e) {
+                        lastKeyPressCode = e.keyCode;
+                        if ($("#search").val().length > 1) {
+                            if (lastKeyPressCode != 46 && !(lastKeyPressCode > 8 && lastKeyPressCode < 32)) {
+                                //showLoader();
+                                $('#content').show();
+                                $('#sub_cont').fadeIn(50);
+                                $("#content #sub_cont").load("../../Profile/searchajax?val=" + $("#search").val(), hideLoader());
+                            }
+
+                        }
+                        if (e.keyCode == 13) {
+                            //showLoader();
+                            $('#content').show();
+                            $('#sub_cont').fadeIn(50);
+                            $("#content #sub_cont").load("../../Profile/searchajax?val=" + $("#search").val(), hideLoader());
+                        }
+                    });
+
+                    $(".searchBtn").click(function () {
+                        //showLoader();
+                        //   $('#sub_cont').fadeIn(1500);
+                        //   $("#content #sub_cont").load("../../Profile/searchajax?val=" + $("#search").val(), hideLoader());
+                        if ($("#search").val() == "Search")
+                            location.href = "../../Profile/Search";
+                        else
+                            location.href = "../../Profile/Search?keywords=" + $("#search").val();
+                    });
+
+
+                    function puthint(divname, hinttext) {
+                        $(document).ready(function () {
+
+                            // Define what happens when the textbox comes under focus
+                            // Remove the watermark class and clear the box
+                            $(divname).focus(function () {
+
+                                $(this).filter(function () {
+
+                                    // We only want this to apply if there's not 
+                                    // something actually entered
+                                    return $(this).val() == "" || $(this).val() == hinttext
+
+                                }).removeClass("watermarkOn").val("");
+
+                            });
+
+                            // Define what happens when the textbox loses focus
+                            // Add the watermark class and default text
+                            $(divname).filter(function () {
+
+                                // We only want this to apply if there's not
+                                // something actually entered
+                                return $(this).val() == ""
+
+                            }).addClass("watermarkOn").val(hinttext);
+
+                            $(divname).blur(function () {
+
+                                $(this).filter(function () {
+
+                                    // We only want this to apply if there's not
+                                    // something actually entered
+                                    return $(this).val() == ""
+
+                                }).addClass("watermarkOn").val(hinttext);
+
+                            });
+
+                        });
+                    }
+                    puthint("#search", "Search");
+                });
+
+            </script>
