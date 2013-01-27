@@ -10,7 +10,7 @@
 <div class="container" id="main">
 <div class="row">
  @Html.Partial("_SideBar1", new ViewDataDictionary { { "PhotoUrl", @myprofile.PhotoUrl }, { "ProfileName", @myprofile.UserProfileId }, { "Name", @myprofile.FirstName + " " + myprofile.LastName }, { "Myself", myself } })
-    <div class="box" style="overflow: auto; text-align:left">
+    <div class="box" style="text-align:left">
         
             @{
                 string sel1 = ""; string sel2 = ""; string sel3 = "";
@@ -25,7 +25,7 @@
                 <option value='3' @sel3>Corporations</option>
              </select>
             <form class="navbar-search pull-right">
-		 	    <input type="text" class="search-query" placeholder="Search your friends">
+		 	    <input type="text" class="search-query" placeholder="Search your friends"/>
 			</form>
 
     @{
@@ -34,9 +34,14 @@
         { 
         <table>
         <tr>
+        <td><h3 style="text-align:center">Following (@ViewData["followscount"])</h3></td>
+        <td><h3 style="text-align:center">Followers (@ViewData["followerscount"])</h3></td>
+        </tr>
+        
+        <tr>
         <td style="width:400px;">
-            <h3 style="text-align:center">Follows (@ViewData["followscount"])</h3>
-            <div class="box">
+        
+        <div>
             @{
                 if (Model.Count() == 0)
                 {
@@ -48,16 +53,11 @@
             { 
                 if ((ViewData[item.UserName] == "1") || (ViewData[item.UserName] == "2"))
                 { 
-                    <div style="height:90px">
-                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left; text-align: center">
-                            <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:50px;" /></a>
+                    <div class="thumbnail" style="height:70px;">
+                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
+                            <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="width:50px;" /></a>
                         </div>
-                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) | @Html.DisplayFor(modelitem => item.Profession)
-                            <br />
-                            <a href="/Profile/Search?department=@item.Departments">@Html.DisplayFor(modelitem => item.Departments)</a> , <a href="/Profile/Search?organization=@item.Organization">@Html.DisplayFor(modelitem => item.Organization)</a>
-                            <br />
-                            @Html.DisplayFor(modelitem => item.Country) 
-                        </div>
+                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) | @Html.DisplayFor(modelitem => item.Profession)</div>
                         <div id="follow">
                              @{string myname = Membership.GetUser().UserName; }
                              @if (item.UserName != myname )
@@ -75,8 +75,8 @@
         </div>
         </td> 
         <td style="width:400px;">
-            <h3 style="text-align:center">Followers (@ViewData["followerscount"])</h3>
-            <div class="box">
+            
+            <div>
             @{
                 if (Model.Count() == 0)
                 {
@@ -88,7 +88,7 @@
                 if ((ViewData[item2.UserName] == "0") || (ViewData[item2.UserName] == "2"))
                 {
                     <div style="height:90px">
-                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left; text-align: center">
+                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
                           <a href="/Profile/Index/@item2.UserProfileId"><img src="@Html.Encode(item2.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" /></a>
                         </div>
                         <div>@Html.ActionLink(item2.FirstName + " " + item2.LastName, "Index", new { id = item2.UserProfileId }) | @Html.DisplayFor(modelitem => item2.Profession)
@@ -307,7 +307,7 @@
     }
     </div>
 </div>   
-
+</div>
 <script type="text/javascript">
     function setswitch(sel) {
         var opt = sel.options[sel.selectedIndex].value;
