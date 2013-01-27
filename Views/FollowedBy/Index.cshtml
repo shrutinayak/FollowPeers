@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<FollowPeers.Models.UserProfile>
 @using FollowPeers.Models;
-@Html.Partial("_PubHeader")
+@Html.Partial("_Header")
 @{
     var name = Session["username"].ToString();
     FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
@@ -25,7 +25,7 @@
                 <option value='3' @sel3>Corporations</option>
              </select>
             <form class="navbar-search pull-right">
-		 	    <input type="text" class="search-query" placeholder="Search">
+		 	    <input type="text" class="search-query" placeholder="Search your friends">
 			</form>
 
     @{
@@ -34,7 +34,7 @@
         { 
         <table>
         <tr>
-        <td>
+        <td style="width:400px;">
             <h3 style="text-align:center">Follows (@ViewData["followscount"])</h3>
             <div class="box">
             @{
@@ -74,7 +74,7 @@
             }       
         </div>
         </td> 
-        <td>
+        <td style="width:400px;">
             <h3 style="text-align:center">Followers (@ViewData["followerscount"])</h3>
             <div class="box">
             @{
@@ -121,7 +121,7 @@
         {
         <table>
         <tr>
-        <td>
+        <td style="width:400px;">
         <div class="box">
         <h2>Follows</h2>
         @{
@@ -163,7 +163,7 @@
         }      
         </div>
         </td> 
-        <td>
+        <td style="width:400px;">
         <div class="box">
             <h2>Followers </h2>
             @{
@@ -215,7 +215,7 @@
         {              
         <table>
         <tr>
-        <td>
+        <td style="width:400px;">
         <div class="box">
             <h2>Follows </h2>
             @{
@@ -258,7 +258,7 @@
             }   
        </div>
         </td> 
-        <td>
+        <td style="width:400px;">
         <div class="box">
             <h2>Followers </h2>
             @{

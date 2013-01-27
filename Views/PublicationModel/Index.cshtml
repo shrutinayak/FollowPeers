@@ -19,7 +19,7 @@
 				<li>
 				    <div class="span3">
 		    	        <div class="thumbnail">
-                            <img src="../../Content/images/Pub1.png" alt="">
+                            <img src="../../Content/images/Pub1.png" alt=""/>
                             <div class="caption">
                                 <h6>Social Entreprenurship Study</h6>
                                     <p>By Shruti Nayak</p>
@@ -35,7 +35,7 @@
                 <li>
 				    <div class="span3">
           		        <div class="thumbnail">
-                            <img src="../../Content/images/Pub2.png" alt="">
+                            <img src="../../Content/images/Pub2.png" alt=""/>
                             <div class="caption">
                                 <h6>The Principles of Parliamentary Rep</h6>
                                 <p>By Aaron Ektar</p>
@@ -48,13 +48,13 @@
                  <li>
 				    <div class="span3">
 		    	        <div class="thumbnail">
-                            <img src="../../Content/images/Pub3.png" alt="">
+                            <img src="../../Content/images/Pub3.png" alt=""/>
                             <div class="caption">
                                 <h6>Human geneology</h6>
                                 <p>By Arnold Schwatzneiger</p>
-                                <i class="icon-star icon-color"></i>
-                                <i class="icon-star icon-color"></i>
-                                <i class="icon-star icon-color"></i>
+                                <i class="icon-bar"></i>
+                                <i class="icon-bar"></i>
+                                <i class="icon-bar"></i>
                             </div>
           		        </div>
           		    </div>
@@ -94,8 +94,19 @@
         @{
             if (Model.Count() != 0)
             {
-      
                 <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
+            <div class="pull-right">
+				<div class="btn-group">
+				  <a class="btn btn-primary" href="#"><i class="icon-upload icon-white"></i>Add new</a>
+				  <ul class="dropdown-menu">
+				    <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+				    <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+				    <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+				    <li class="divider"></li>
+				    <li><a href="#"><i class="i"></i> Make admin</a></li>
+				  </ul>
+				</div>
+			</div>
 				<div class="pull-right">
 				    <div class="btn-group">
 				        <a class="btn btn-primary" href="#"><i class="icon-upload icon-white"></i>@Html.ActionLink("Add Publication", "Create")</a>
@@ -105,8 +116,8 @@
                 {
             <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
                 <div style="float: left;" id="Image">
-                    <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;
-                        width: 50px;" />
+                    <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;width: 50px;" />
+                        
                 </div>
                 <div style="margin-left: 8px; float: left;">
                     <a href="/PublicationModel/Details/@item.publicationID" id="title"><b>@item.title</b></a> 
@@ -134,10 +145,11 @@
             else
             {
                 <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
-				
-				<button class="btn btn-primary"; style="float:left">@Html.ActionLink("Add", "Create")</button>
-				  
-			     
+			    <div class="pull-right">
+				    <div class="btn-group">
+				        <a class="btn btn-primary" href="#"><i class="icon-upload icon-white"></i>@Html.ActionLink("Add", "Create")</a>
+				    </div>
+	            </div>				       
             }
       }  
                     </div>

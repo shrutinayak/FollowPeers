@@ -232,11 +232,12 @@ a:hover {
   width: 220px;
 }
 .span2 {
-  width: 140px;
+  width: 120px;
 }
 .span1 {
   width: 60px;
 }
+
 .offset12 {
   margin-left: 980px;
 }
@@ -4415,7 +4416,25 @@ input[type="submit"].btn.btn-mini {
   margin-bottom: 20px;
   margin-left: 20px;
 }
+
 .thumbnail {
+  display: block;
+  padding: 2px;
+  line-height: 10px;
+  border: 3px solid #ddd;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055);
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.tempthumbnail {
   display: block;
   padding: 4px;
   line-height: 20px;
@@ -4431,6 +4450,7 @@ input[type="submit"].btn.btn-mini {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
+
 a.thumbnail:hover {
   border-color: #2fa4e7;
   -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
@@ -4444,7 +4464,7 @@ a.thumbnail:hover {
   margin-right: auto;
 }
 .thumbnail .caption {
-  padding: 9px;
+  padding: 3px;
   color: #555555;
 }
 .label,
