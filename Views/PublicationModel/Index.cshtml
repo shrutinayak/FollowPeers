@@ -65,9 +65,8 @@
                 </ul>
             </div>
         </div>
-
-          <div class="box">            
-            <div id="Tabs">
+            
+            <div class="span8">
             <br/>    
                 <ul class="nav nav-tabs">               
                     <li id="li_tab1" onclick="tab('tab1')"><a>Uploads</a></li>
@@ -97,21 +96,11 @@
                 <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
             <div class="pull-right">
 				<div class="btn-group">
-				  <a class="btn btn-primary" href="#"><i class="icon-upload icon-white"></i>Add new</a>
-				  <ul class="dropdown-menu">
-				    <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-				    <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-				    <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-				    <li class="divider"></li>
-				    <li><a href="#"><i class="i"></i> Make admin</a></li>
-				  </ul>
+				  <a class="btn btn-primary" href="Create"><i class="icon-upload icon-white"></i>Add new</a>
 				</div>
 			</div>
-				<div class="pull-right">
-				    <div class="btn-group">
-				        <a class="btn btn-primary" href="#"><i class="icon-upload icon-white"></i>@Html.ActionLink("Add Publication", "Create")</a>
-				    </div>
-			    </div>
+           
+				        
                 foreach (var item in Model)
                 {
             <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
@@ -146,18 +135,57 @@
             {
                 <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
 			    <div class="pull-right">
-				    <div class="btn-group">
-				        <a class="btn btn-primary" href="#"><i class="icon-upload icon-white"></i>@Html.ActionLink("Add", "Create")</a>
-				    </div>
-	            </div>				       
+				    <div class="btn-group">          
+                        <a class="btn btn-primary" href="Create"><i class="icon-upload icon-white">Add new</i></a>           
+                    </div>
+                </div>
             }
       }  
-                    </div>
-                </div> <!– End of Content_Area Div –>
-            </div> <!– End of Tabs Div –>
-        </div>
-    </div>
+      </div>
+               </div>
+            </div>  
+            <div class="span4">
+					<div class="pull-right">
+					<h5>Recent Publications</h5>
+							<!--<div class=""><div class="hero-unit"></div></div>-->
+							<div class="accordion" id="accordion2">
+						        <div class="accordion-group">
+						          <div class="accordion-heading">
+						            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+						              Science
+						            </a>
+						          </div>
+						          <div id="collapseOne" class="accordion-body in collapse" style="height: auto; ">
+						            <div class="accordion-inner">
+						             <div>
+						          <li><a>Human geneology research 2002.pdf</a></li>
+						          <li><a>Study of evolution of science.pdf</a></li>
+						              <a class="pull-right" href="#" style="font-size:10px">View All</a>
+						         	</div>
+						            </div>
+						          </div>
+						        </div>
+						        <div class="accordion-group">
+						          <div class="accordion-heading">
+						            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+						              Economics
+						            </a>
+						          </div>
+						          <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
+						            <div class="accordion-inner">
+						              <div>
+						              <li><a>Study on Research Social Network</a></li>
+						              <li><a>Geetika Lohani posted on Economics</a></li>
+						                <a class="pull-right" href="#" style="font-size:10px">View All</a>
+						          </div>
+						            </div>
+						          </div>
+						        </div>
+						    </div>
+                                 </div>
+                </div>
 </div>
+
 
 @Html.Partial("_Footer")
 @helper Script(string scriptName)
