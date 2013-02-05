@@ -1,4 +1,5 @@
 ﻿@model FollowPeers.Models.PublicationModel
+@using WebMatrix.Data;
 @{
     ViewBag.Title = "Add Publication";
 }
@@ -24,7 +25,8 @@
                 @*-----------OwnerId-----------*@
                 <input id="OwnerId" name="OwnerId" type="hidden" value="@ViewBag.userID" />
                 @*-----------ViewCount-----------*@
-                <input id="ViewCount" name="ViewCount" type="hidden" value="0" />
+                <input id="ViewCount" name="ViewCount" type="hidden" value="0" />              
+                
                 @*-----------Title-----------*@
                 <div class="editor-label" id="title_l">
                     @Html.LabelFor(model => model.title, "Title ")
@@ -49,10 +51,26 @@
                     @Html.DropDownList("Status", new SelectList(publicationstatus))
                     @Html.ValidationMessageFor(model => model.status)
                 </div>
+                  @*-----------Specialisations-----------*@
+                <div class="editor-label" id="author_l">
+                    @Html.LabelFor(model => model.author, "Specialisation(s) ")
+                </div>
+                 <div>
+                 @{
+                    var db = Database.Open("FollowPeersDB");
+                    List<string> specialisations = new List<string>();
+                    foreach (var row in db.Query("Select distinct(Field) from Specializations"))
+                    {
+                        specialisations.Add(row.Field);
+                    }
+                    @Html.DropDownList("Specialisation", new SelectList(specialisations))
+                    }
+                </div>
                 @*-----------Author-----------*@
                 <div class="editor-label" id="author_l">
                     @Html.LabelFor(model => model.author, "Author(s) ")
                 </div>
+               
                 <div class="editor-field" id="author_f">
                     @Html.TextBoxFor(model => model.author, new { size = 78 })
                     @Html.ValidationMessageFor(model => model.author)
@@ -200,6 +218,7 @@ $("#publisher_l").show();
         $("#keyword_f").show();
         $("#description_l").show();
         $("#description_f").show();
+        $("#specialisations_f").show();
 
         function AutoCompleteJournal() 
         {
