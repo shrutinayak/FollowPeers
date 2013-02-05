@@ -1,9 +1,5 @@
 ﻿@model FollowPeers.Models.RegisterModel
-@using System.Data;
-@using System.Collections;
-@using System.Linq;
 @using WebMatrix.Data;
-
 @using (Html.BeginForm("Register", "Account"))
 {
             
@@ -47,17 +43,21 @@
             
                    @* @Html.LabelFor(model => model.Profession)*@
                    <p>Select User Type and interests from below</p>
-                    @{
-                      List<string> profession = new List<string>();
+                
+                    @{List<string> profession = new List<string>();
                       profession.Add("Individual");
-                      profession.Add("Corporation");              
+                      profession.Add("Corporate");
                     }
                     @Html.DropDownList("Profession", new SelectList(profession), new { @class = "btn", @style = "width:47%;" })
 
-                     @{List<string> interest = new List<string>();
-                       var db = Database.Open("FollowPeersDB");
-                       foreach (var row in db.Query("select distinct(Field) from Specializations"))
-                       { profession.Add(row.Field); }
+                     @{
+                      var db = Database.Open("FollowPeersDB");
+                      List<string> interest = new List<string>();
+                      foreach (var row in db.Query("Select Distinct(Field) from Specializations"))
+                      {
+                          interest.Add(row.Field);
+                      }
+                     
                     }
                     @Html.DropDownList("Profession", new SelectList(interest), new { @class = "btn", @style = "width:47%;" })
                 
