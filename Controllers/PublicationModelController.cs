@@ -34,7 +34,7 @@ namespace FollowPeers.Controllers
         //
         // GET: /PublicationModel/MyPublication
 
-        public ViewResult MyPublication()
+       /* public ViewResult MyPublication()
         {
             string name = Membership.GetUser().UserName;
             int userID;
@@ -46,7 +46,7 @@ namespace FollowPeers.Controllers
                          select n;
 
             return View(result.ToList());
-        }
+        }*/
 
 
         //

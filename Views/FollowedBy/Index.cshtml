@@ -57,7 +57,7 @@
                         <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
                             <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="width:50px;" /></a>
                         </div>
-                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) | @Html.DisplayFor(modelitem => item.Profession)</div>
+                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId })</div>
                         <div id="follow">
                              @{string myname = Membership.GetUser().UserName; }
                              @if (item.UserName != myname )
@@ -87,28 +87,22 @@
             {
                 if ((ViewData[item2.UserName] == "0") || (ViewData[item2.UserName] == "2"))
                 {
-                    <div style="height:90px">
+                    <div class="thumbnail" style="height:70px;">
                         <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
-                          <a href="/Profile/Index/@item2.UserProfileId"><img src="@Html.Encode(item2.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" /></a>
+                            <a href="/Profile/Index/@item2.UserProfileId"><img src="@Html.Encode(item2.PhotoUrl)" style="width:50px;" /></a>
                         </div>
-                        <div>@Html.ActionLink(item2.FirstName + " " + item2.LastName, "Index", new { id = item2.UserProfileId }) | @Html.DisplayFor(modelitem => item2.Profession)
-                            <br />
-                            <a href="/Profile/Search?department=@item2.Departments">@Html.DisplayFor(modelitem => item2.Departments)</a> , <a href="/Profile/Search?organization=@item2.Organization">@Html.DisplayFor(modelitem => item2.Organization)</a>
-                            <br />
-                             @Html.DisplayFor(modelitem => item2.Country) 
-                        </div>
-                        <div id="follow2" style="float:right">
-                            @{string myname = Membership.GetUser().UserName; }
-                            @if (item2.UserName != myname && ViewData[item2.UserName] != "2")
-                            {
+                        <div>@Html.ActionLink(item2.FirstName + " " + item2.LastName, "Index", new { id = item2.UserProfileId })</div>
+                        <div id="follow">
+                             @{string myname = Membership.GetUser().UserName; }
+                             @if (item2.UserName != myname )
+                             {
                                 using (Html.BeginForm("Follow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
                                 {
-                                    <input type="hidden" name="username" value="@item2.UserName" />
-                                    <input type="submit" value="Follow" style="width:70px;color:gray;cursor: pointer;float:right" />
-                                } 
+                                 <input type="hidden" name="username" value="@item2.UserName" />
+                                 <input type="submit" value="UnFollow" style="width:70px;color:gray;cursor: pointer;float:right" />
+                                }                   
                             }
                         </div>
-                        <div style="clear:none"></div> 
                     </div>
                 }         
             }
@@ -121,9 +115,12 @@
         {
         <table>
         <tr>
+        <td><h3 style="text-align:center">Following (@ViewData["followscount"])</h3></td>
+        <td><h3 style="text-align:center">Followers (@ViewData["followerscount"])</h3></td>
+        </tr>
+        <tr>
         <td style="width:400px;">
-        <div class="box">
-        <h2>Follows</h2>
+        <div>
         @{
             if (Model.Count() == 0)
             {
@@ -136,36 +133,30 @@
             {
                 if ((ViewData[item.UserName] == "1") || (ViewData[item.UserName] == "2"))
                 {
-                    <div style="height:90px">
-                        <div class="block" style="overflow:hidden; height:70px;float:left; text-align: center">
-                            <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:50px;" /></a>
+                    <div class="thumbnail" style="height:70px;">
+                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
+                            <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="width:50px;" /></a>
                         </div>
-                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) | @Html.DisplayFor(modelitem => item.Profession)
-                            <br />
-                            <a href="/Profile/Search?department=@item.Departments">@Html.DisplayFor(modelitem => item.Departments)</a><a href="/Profile/Search?organization=@item.Organization">@Html.DisplayFor(modelitem => item.Organization)</a>
-                            <br />
-                            @Html.DisplayFor(modelitem => item.Country) 
-                        </div>
-                        <div style="text-align:right">
-                            @{string myname = Membership.GetUser().UserName; }
-                            @if (item.UserName != myname)
-                            {
+                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId })</div>
+                        <div id="follow">
+                             @{string myname = Membership.GetUser().UserName; }
+                             @if (item.UserName != myname )
+                             {
                                 using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
                                 {
-                                    <input type="hidden" name="username" value="@item.UserName" />
-                                    <input type="submit" value="UnFollow" style="color:gray;cursor: pointer;float:right" />
-                                }
+                                 <input type="hidden" name="username" value="@item.UserName" />
+                                 <input type="submit" value="UnFollow" style="width:70px;color:gray;cursor: pointer;float:right" />
+                                }                   
                             }
                         </div>
-                     </div>
+                    </div>
                 } 
             }
         }      
         </div>
         </td> 
         <td style="width:400px;">
-        <div class="box">
-            <h2>Followers </h2>
+        <div>
             @{
                 if (Model.Count() == 0)
                 {
@@ -178,29 +169,23 @@
                 {
                     if ((ViewData[item.UserName] == "0") || (ViewData[item.UserName] == "2"))
                     {
-                        <div style="height:70px">
-                            <div class="block" style="overflow:hidden; height:70px; width:50px;float:left; text-align: center">
-                                <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:50px;" /></a>
-                            </div>
-                            <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) | @Html.DisplayFor(modelitem => item.Profession)
-                                <br />
-                                <a href="/Profile/Search?department=@item.Departments">@Html.DisplayFor(modelitem => item.Departments)</a> , <a href="/Profile/Search?organization=@item.Organization">@Html.DisplayFor(modelitem => item.Organization)</a>
-                                <br />
-                                @Html.DisplayFor(modelitem => item.Country) 
-                            </div>
-                            <div id="follow6" style="float:right;margin:15px;">
-                                @{string myname = Membership.GetUser().UserName; }
-                                @if (item.UserName != myname && ViewData[item.UserName] != "2")
-                                {  
-                                    using (Html.BeginForm("Follow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
-                                    {
-                                        <input type="hidden" name="username" value="@item.UserName" />
-                                        <input type="submit" value="Follow" style="width:70px;color:gray;cursor: pointer;float:right" />
-                                    }
-                                }
-                            </div>
-                            <div style="clear:none"></div> 
+                       <div class="thumbnail" style="height:70px;">
+                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
+                            <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="width:50px;" /></a>
                         </div>
+                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId })</div>
+                        <div id="follow">
+                             @{string myname = Membership.GetUser().UserName; }
+                             @if (item.UserName != myname )
+                             {
+                                using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                                {
+                                 <input type="hidden" name="username" value="@item.UserName" />
+                                 <input type="submit" value="Follow" style="width:70px;color:gray;cursor: pointer;float:right" />
+                                }                   
+                            }
+                        </div>
+                    </div>
                     }
               
                 }
@@ -215,9 +200,12 @@
         {              
         <table>
         <tr>
+        <td><h3 style="text-align:center">Following (@ViewData["followscount"])</h3></td>
+        <td><h3 style="text-align:center">Followers (@ViewData["followerscount"])</h3></td>
+        </tr>
+        <tr>
         <td style="width:400px;">
-        <div class="box">
-            <h2>Follows </h2>
+        <div>
             @{
                 if (Model.Count() == 0)
                 {
@@ -230,37 +218,30 @@
                 {
                     if ((ViewData[item.UserName] == "1") || (ViewData[item.UserName] == "2"))
                     {
-                        <div style="height:90px">
-                            <div class="block" style="overflow:hidden; height:70px; width:70px;float:left; text-align: center">
-                                <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:70px;" /></a>
-                            </div>
-                            <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId }) | @Html.DisplayFor(modelitem => item.Profession)
-                                <br />
-                                <a href="/Profile/Search?department=@item.Departments">@Html.DisplayFor(modelitem => item.Departments)</a> , <a href="/Profile/Search?organization=@item.Organization">@Html.DisplayFor(modelitem => item.Organization)</a>
-                                <br />
-                                @Html.DisplayFor(modelitem => item.Country) 
-                            </div>
-                            <div id="follow5" style="float:right;margin:15px;">
-                                @{string myname = Membership.GetUser().UserName; }
-                                @if (item.UserName != myname)
-                                {
-                                    using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
-                                    {
-                                        <input type="hidden" name="username" value="@item.UserName" />
-                                        <input type="submit" value="UnFollow" style="width:70px;color:gray;cursor: pointer;float:right" />
-                                    }
-                                }
-                            </div>
-                            <div style="clear:none"></div> 
+                       <div class="thumbnail" style="height:70px;">
+                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
+                            <a href="/Profile/Index/@item.UserProfileId"><img src="@Html.Encode(item.PhotoUrl)" style="width:50px;" /></a>
                         </div>
+                        <div>@Html.ActionLink(item.FirstName + " " + item.LastName, "Index", new { id = item.UserProfileId })</div>
+                        <div id="follow">
+                             @{string myname = Membership.GetUser().UserName; }
+                             @if (item.UserName != myname )
+                             {
+                                using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
+                                {
+                                 <input type="hidden" name="username" value="@item.UserName" />
+                                 <input type="submit" value="UnFollow" style="width:70px;color:gray;cursor: pointer;float:right" />
+                                }                   
+                            }
+                        </div>
+                    </div>
                     }
                 }
             }   
        </div>
         </td> 
         <td style="width:400px;">
-        <div class="box">
-            <h2>Followers </h2>
+        <div>
             @{
                 if (Model.Count() == 0)
                 {
@@ -273,29 +254,23 @@
                 {
                     if ((ViewData[item2.UserName] == "0") || (ViewData[item2.UserName] == "2"))
                     {
-                        <div style="height:90px">
-                            <div class="block" style="overflow:hidden; height:70px; width:50px;float:left; text-align: center">
-                                <a href="/Profile/Index/@item2.UserProfileId"><img src="@Html.Encode(item2.PhotoUrl)" style="margin-left:auto; margin-right:auto; width:50px;" /></a>
-                            </div>
-                            <div>@Html.ActionLink(item2.FirstName + " " + item2.LastName, "Index", new { id = item2.UserProfileId }) | @Html.DisplayFor(modelitem => item2.Profession)
-                                <br />
-                                <a href="/Profile/Search?department=@item2.Departments">@Html.DisplayFor(modelitem => item2.Departments)</a> , <a href="/Profile/Search?organization=@item2.Organization">@Html.DisplayFor(modelitem => item2.Organization)</a>
-                                <br />
-                                @Html.DisplayFor(modelitem => item2.Country) 
-                            </div>
-                            <div id="follow2" style="float:right;margin:15px;">
-                                @{string myname2 = Membership.GetUser().UserName; }
-                                @if (item2.UserName != myname2 && ViewData[item2.UserName] != "2")
+                        <div class="thumbnail" style="height:70px;">
+                        <div class="block" style="overflow:hidden; height:70px; width:50px;float:left;">
+                            <a href="/Profile/Index/@item2.UserProfileId"><img src="@Html.Encode(item2.PhotoUrl)" style="width:50px;" /></a>
+                        </div>
+                        <div>@Html.ActionLink(item2.FirstName + " " + item2.LastName, "Index", new { id = item2.UserProfileId })</div>
+                        <div id="follow">
+                             @{string myname = Membership.GetUser().UserName; }
+                             @if (item2.UserName != myname )
+                             {
+                                using (Html.BeginForm("UnFollow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
                                 {
-                                    using (Html.BeginForm("Follow", "Profile", new { url = HttpContext.Current.Request.Url.AbsoluteUri }))
-                                    {
-                                        <input type="hidden" name="username" value="@item2.UserName" />
-                                        <input type="submit" value="Follow" style="width:70px;color:gray;cursor: pointer;float:right" />
-                                    }
-                                }
-                            </div>
-                            <div style="clear:none"></div> 
-                         </div>
+                                 <input type="hidden" name="username" value="@item2.UserName" />
+                                 <input type="submit" value="Follow" style="width:70px;color:gray;cursor: pointer;float:right" />
+                                }                   
+                            }
+                        </div>
+                    </div>
                     }
                 }  
             }

@@ -67,12 +67,32 @@
                                                                                            else
                                                                                            {<text>Forum</text>}
                                                                               </a></li>
-
+                                                                              <li><a href="/Event/Index">
+                        <img src="../../Content/images/icons/16x16/calendar.png" />@if (myself == 1)
+                                                                                           {<text>Events</text>}
+                                                                                           else
+                                                                                           {<text>Events</text>}
+                                                                              </a></li>
+                                                                              <li><a href="/Job/Index">
+                        <img src="../../Content/images/icons/16x16/calendar.png" />@if (myself == 1)
+                                                                                           {<text>Jobs</text>}
+                                                                                           else
+                                                                                           {<text>Jobs</text>}
+                                                                              </a></li>
                     @if (myself == 0)
                     {
                         <li><a href="../../Message/Create?Receiver=@profilename">
                         <img src="../../Content/images/icons/16x16/email.png" />Message</a></li>
                     }
                 </ul>
+                <h5>GROUPS</h5>
+
+		          <ul class="nav nav-list">
+					  <!--<li class="active"><a href="#"><i class="icon-home icon-white"></i> Home</a></li>-->
+					  <li><a href="#"><i class="icon-flag"></i>Economics <!--<span class="badge pull-right">1</span2>--></a></li>
+					  <li><a href="#"><i class="icon-leaf"></i>Photosynthesis<span class="badge pull-right">2</span></a></li>
+					  <li><a href="#"><i class="icon-camera"></i>Photography <span class="badge pull-right">1</span></a></li>
+					  <li><a href="#"><i class="icon-globe"></i>Science Facts <span class="badge pull-right">5</span></a></li>
+					</ul>
             </div>
 }

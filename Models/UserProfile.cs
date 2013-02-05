@@ -58,6 +58,8 @@ namespace FollowPeers.Models
         public virtual ICollection<Job> Jobs { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public List<int> PublicationBookmark { get; set; }
+
+        //public virtual ICollection<Event> Events { get; set; }
     }
     public class Keyword
     {

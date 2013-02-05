@@ -1,0 +1,98 @@
+﻿@model IEnumerable<FollowPeers.Models.Event>
+@using FollowPeers.Models;
+
+@{
+    ViewBag.Title = "Event Details";
+}
+
+@{
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+}
+
+@Html.Partial("_Header")
+@Html.Partial("_SideBar1")
+
+
+
+<div class="grid_9">
+    <div class="box">
+        <h2 style="height: 20px"> Events </h2>
+
+        @using (Html.BeginForm("AddEvent","Event"))
+        {
+            @Html.ValidationSummary(true)
+             
+            <!DOCTYPE html>  
+            <head>
+            <title>Event Calendar</title>
+            <link href="@Url.Content("~/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+            <link href="@Url.Content("~/css/bootstrap.css")" rel="stylesheet" type="text/css" />
+            <link href="@Url.Content("~/css/datepicker.css")" rel="stylesheet" type="text/css" />
+            <link href="css/datepicker.less" rel="stylesheet" type="text/css" />
+            <link href="@Url.Content("~/css/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
+            <script src="@Url.Content("~/js/jquery-1.8.2.min.js")" type="text/javascript"></script>
+            <script src="js/bootstrap-datepicker.js" ></script>
+            </head>
+            
+            <body>
+            <fieldset>
+                    
+                    <table style="margin:5px 0px 5px 0px">
+                        <tr>
+                            <td>
+
+                                <legend style="width:80%; height: 40px; padding-top:10px;"><img src="../../Content/images/icons/32x32/calendar.png" style="width:24px; height:24px; padding:5px 2px 5px 2px; display:inline-block; float:left;"/> Events </legend>
+                        
+                         <table>
+                         @{ 
+                             if (Model!=null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        <div style="padding:5px 0px 0px 5px;font-size: 1.1em; font-weight: bold;">  @Html.Label(Convert.ToString(item.EventName))</div>
+                                    
+                                        <div style="padding:5px 0px 5px 5px;font-size: 0.9em; font-weight: normal; border:0 none black;">@Html.Label(Convert.ToString(item.EventDateTime))</div>
+
+                                        <div><input type="submit" name="Submit" value="Going" style="float: right; padding: 3px 8px;" class="btn btn-primary" />
+                                            <input type="submit" name="Not Submit" value="Not Going" style="float: right; padding: 3px 8px;" class="btn btn-primary" /></div>
+                                    </td>
+                                </tr>
+                               
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                <td> No events to Display on your profile.
+                                </td>
+                                </tr> 
+                            }
+                        }
+                        </table>
+                          
+                             </td>
+                        </tr>
+                        <tr>
+                            <p>
+                               <div>
+                                @Html.ActionLink("Add New Event", "AddEvent")
+                                </div>
+                            </p>
+                        </tr>
+                    </table>
+            </fieldset>  
+            <script src="@Url.Content("~/js/bootstrap.min.js")"></script>
+            </body>
+                    
+        }
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+
+
+

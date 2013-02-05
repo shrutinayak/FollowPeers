@@ -36,5 +36,6 @@ namespace FollowPeers.Models
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserTypes> UserTypes { get; set; }
+        public DbSet<Event> Events { get; set; }
     }
 }

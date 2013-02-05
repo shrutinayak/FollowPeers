@@ -76,6 +76,8 @@
     <Compile Include="Controllers\BulletinController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\FollowedByController.cs" />
@@ -92,6 +94,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Bookmark.cs" />
+    <Compile Include="Models\Event.cs" />
     <Compile Include="Models\UserTypes.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Conference.cs" />
@@ -3264,7 +3267,6 @@
     <Content Include="Views\Profile\FollowedByList.cshtml" />
     <Content Include="Views\Profile\FollowingList.cshtml" />
     <Content Include="Views\Profile\TierFollowers.cshtml" />
-    <Content Include="Views\PublicationModel\MyPublication.cshtml" />
     <Content Include="Views\PatentModel\MyPatent.cshtml" />
     <Content Include="Views\Profile\EditPortfolio.cshtml" />
     <Content Include="Views\Profile\PostJob.cshtml" />
@@ -3304,6 +3306,9 @@
     <Content Include="Views\Shared\sidetemp.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\Headertemp.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\AddEvent.cshtml" />
+    <Content Include="Views\Job\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

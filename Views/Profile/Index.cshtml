@@ -62,7 +62,7 @@
         window.location = "#"+opt;
     }
     </script>
-@Html.Partial("_PubHeader")
+@Html.Partial("_Header")
 @{
     string name = Membership.GetUser().UserName;
     FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
@@ -75,7 +75,7 @@
         @Html.Partial("_SideBar1", new ViewDataDictionary { { "PhotoUrl", @Model.PhotoUrl }, { "ProfileName", @Model.UserProfileId }, { "Name", @Model.FirstName + " " + Model.LastName } })
  
     }
-    }
+ }
 
 
 
@@ -453,20 +453,6 @@
                 User Account is not activated.</div>
             
         }
-    </div>
-</div>
-<div class="grid_3">
-    <div class="box">
-        <h2>
-            @Model.FirstName @Model.LastName follows</h2>
-        @{Html.RenderAction("Following", "Profile", Model.UserProfileId);}
-    </div>
-</div>
-<div class="grid_3">
-    <div class="box">
-        <h2>
-            @Model.FirstName @Model.LastName's followers</h2>
-        @{Html.RenderAction("FollowedBy", "Profile", Model.UserProfileId);}
     </div>
 </div>
 @Html.Partial("_Footer")

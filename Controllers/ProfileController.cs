@@ -457,7 +457,7 @@ namespace FollowPeers.Controllers
             if (userprofile.Organization == null) toadd = true;
             // if (ModelState.IsValid && userprofile.FirstName != null && userprofile.LastName != null)
 
-            if (TryUpdateModel(userprofile, "", new string[] { "Country", "FirstName", "LastName", "Gender", "Status", "Birthday", "Profession", "Organization", "AboutMe", "Departments" }, new string[] { "PhotoUrl", "Status", "StatusMessage", "Specializations", "Educations", "Contact" }))
+            if (TryUpdateModel(userprofile, "", new string[] { "Country", "FirstName", "LastName", "Gender", "Status", "Birthday", "Organization", "AboutMe", "Departments" }, new string[] { "PhotoUrl", "Status", "StatusMessage", "Specializations", "Educations", "Contact" }))
             {
                 //if a user adds a new organization
                 if ((followPeersDB.Organizations.SingleOrDefault(p => p.Name == userprofile.Organization)) == null)
