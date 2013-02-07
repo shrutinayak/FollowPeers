@@ -161,6 +161,11 @@ namespace FollowPeers.Controllers
                 {
                     publicationmodel.viewCount = 0;
                 }
+                if (publicationmodel.specialisation == null)
+                {
+                    publicationmodel.specialisation = "Physics";
+                }
+                publicationmodel.timestamp = DateTime.Now.ToString();
 
                 string name = Membership.GetUser().UserName;
                 UserProfile user = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);

@@ -24,7 +24,6 @@ namespace FollowPeers.Controllers
                     myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
                     myprofile.UserName.Trim();
                     followPeersDB.SaveChanges();
-
                 }
                 ViewBag.username = name;
                     return RedirectToAction("Index", "Bulletin", new { sort = 3 });

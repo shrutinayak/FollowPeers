@@ -5,7 +5,7 @@
             if (User.Identity.IsAuthenticated)
             {
                 FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
-                string name = Session["username"].ToString();
+                string name = Membership.GetUser().UserName;
                 FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
                 
             <div class="navbar navbar-fixed-top" >
@@ -19,9 +19,9 @@
 			          <a class="brand">Follow Peers</a>
 			        <ul class="nav">
 			          <li class="divider-vertical"></li>
-			          <li class=""> <a href="@Url.Content("~/Profile/")">Home</a></li>
+			          <li class=""> <a href="@Url.Content("~/Views/Profile/Index")">Home</a></li>
 			          <li class="divider-vertical"></li>
-			          <li class=""> <a href="profile.html">Profile</a></li>
+			          <li class=""> <a href="@Url.Content("~/Views/Profile/Index")">Profile</a></li>
 			          <li class="divider-vertical"></li>
 		          	  <li class=""> <a href="@Url.Content("~/Profile/FollowedByList/?name=" + Session["username"])">Peers</a></li>
 		          	  <li class="dropdown" style="margin-left:-10px">

@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<FollowPeers.Models.PublicationModel>
 @using FollowPeers.Models;
+@using WebMatrix.Data;
 @{
     ViewBag.Title = "My Publication";
     FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
@@ -63,10 +64,10 @@
 				    <a href="#" style="margin-left: -10px; padding-left: 20px; padding-right: 20px">Next</a>
 				  </li>
                 </ul>
-            </div>
-        </div>
+         </div>
+     </div>
             
-            <div class="span7">
+            <div class="span8">
             <br/>    
                 <ul class="nav nav-tabs">               
                     <li id="li_tab1" onclick="tab('tab1')"><a>Uploads</a></li>
@@ -93,19 +94,21 @@
         @{
             if (Model.Count() != 0)
             {
-                <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
-            <div class="pull-right">
+               <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
+                <div class="pull-right">
 				<div class="btn-group">
-				  <a class="btn btn-primary" href="Create"><i class="icon-upload icon-white"></i>Add new</a>
+				  <a class="btn btn-primary" href="@Url.Content("~/PublicationModel/Create")"><i class="icon-upload icon-white"></i>Add new</a>
 				</div>
-			</div>
-           
-				        
-                foreach (var item in Model)
+			    </div>
+                
+				<table class="span7">    
+                @foreach (var item in Model)
                 {
-            <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                    <tr><td>
+               
+                <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
                 <div style="float: left;" id="Image">
-                    <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;width: 50px;" />
+                    <img class="mouseover" src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;width: 50px;" />
                         
                 </div>
                 <div style="margin-left: 8px; float: left;">
@@ -113,13 +116,13 @@
                     <div id="Author">Author(s) : @item.author</div>
                     <div id="Year">Year of Publication : @item.year</div>
                     @{if (@item.keyword != null)
-                      {<div id="Keyword">Keyword(s) : @item.keyword</div>}}
+                      {<div class="hidden" id="Keyword">Keyword(s) : @item.keyword</div>}}
                     @{if (@item.journal != null)
-                      {<div id="Journal">Journal : @item.journal</div>}}
+                      {<div class="hidden" id="Journal">Journal : @item.journal</div>}}
                     @{if (@item.conference != null)
-                      {<div id="Conference">Conference : @item.conference</div>}}
+                      {<div class="hidden" id="Conference">Conference : @item.conference</div>}}
                     @{if (@item.university != null)
-                      {<div id="University">University : @item.university</div>}}
+                      {<div class="hidden" id="University">University : @item.university</div>}}
                 </div>
                 <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.type)
                     | @Html.DisplayFor(modelItem => item.status)  |
@@ -129,14 +132,17 @@
                     </div>
             </div>
             <hr /> 
+            </td></tr>
+   
                 }
+                </table>
             }
             else
             {
                 <span class="label label-info">Number of publications uploaded: @Model.Count()</span>
             <div class="pull-right">
 				<div class="btn-group">
-				  <a class="btn btn-primary" href="Create"><i class="icon-upload icon-white"></i>Add new</a>
+				  <a class="btn btn-primary" href="@Url.Content("../../Views/PublicationModel/Create.cshtml")"><i class="icon-upload icon-white"></i>Add new</a>
 				</div>
 			</div>
             }
@@ -144,45 +150,38 @@
       </div>
                </div>
             </div>  
-            <div class="span4">
-					<div class="pull-right">
+            <div class="span4" style="position:relative">
+					<div class="pull-left">
 					<h5>Recent Publications</h5>
 							<!--<div class=""><div class="hero-unit"></div></div>-->
 							<div class="accordion" id="accordion2">
-						        <div class="accordion-group">
+                            @{var db = Database.Open("FollowPeersDB");
+                              foreach (var row in db.Query("Select distinct(Field) from Specializations"))
+                              {
+                                  <div class="accordion-group">
 						          <div class="accordion-heading">
 						            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-						              Science
+						              @row.Field
 						            </a>
 						          </div>
 						          <div id="collapseOne" class="accordion-body in collapse" style="height: auto; ">
 						            <div class="accordion-inner">
 						             <div>
-						          <li><a>Human geneology research 2002.pdf</a></li>
-						          <li><a>Study of evolution of science.pdf</a></li>
+                                     @{foreach (var row2 in db.Query("Select * from PublicationModels where specialisation='" + @row.Field + "' ORDER BY timestamp DESC"))
+                                       {
+                                        <li><a>@row2.Title</a></li>
+                                       }
+                                       }
 						              <a class="pull-right" href="#" style="font-size:10px">View All</a>
-						         	</div>
+                                     </div>
 						            </div>
 						          </div>
 						        </div>
-						        <div class="accordion-group">
-						          <div class="accordion-heading">
-						            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-						              Economics
-						            </a>
-						          </div>
-						          <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
-						            <div class="accordion-inner">
-						              <div>
-						              <li><a>Study on Research Social Network</a></li>
-						              <li><a>Geetika Lohani posted on Economics</a></li>
-						                <a class="pull-right" href="#" style="font-size:10px">View All</a>
-						          </div>
-						            </div>
-						          </div>
-						        </div>
+                              }
+                              }
+       
 						    </div>
-                                 </div>
+                        </div>
                 </div>
 </div>
 
@@ -192,33 +191,35 @@
     {
     <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
 }
-    	    
+ 	    
 <script type="text/javascript" language="javascript">
-    $(document).ready(function () {
+    $('.hidden').hide(function () {
         $('#Keyword').hide();
         $('#Journal').hide();
         $('#Conference').hide();
         $('#University').hide();
     });
-
+     $('.mouseover').mouseover(function () {
+       $('#Keyword').slideDown("fast");
+       $('#Journal').slideDown("fast");
+       $('#Conference').slideDown("fast");
+       $('#University').slideDown("fast");
+       });
+    $('.mouseover').mouseout(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });     
     $('.carousel').carousel({
         interval: 2000
     });
+   
     $('#myModal').modal()
     $('#myModal').modal('hide')
 
-    $('#Image').mouseover(function () {
-        $('#Keyword').slideDown("fast");
-        $('#Journal').slideDown("fast");
-        $('#Conference').slideDown("fast");
-        $('#University').slideDown("fast");
-    });
-    $('#Image').mouseout(function () {
-        $('#Keyword').hide();
-        $('#Journal').hide();
-        $('#Conference').hide();
-        $('#University').hide();
-    });
+    
+    
 function tab(tab) {
 document.getElementById('tab1').style.display = 'none';
 document.getElementById('tab2').style.display = 'none';

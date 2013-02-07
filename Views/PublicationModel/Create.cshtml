@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Add Publication";
 }
-@Html.Partial("_PubHeader")
+@Html.Partial("_Header")
 <div class="container">
     <div class="box">
         <h2>
@@ -64,6 +64,7 @@
                         specialisations.Add(row.Field);
                     }
                     @Html.DropDownList("Specialisation", new SelectList(specialisations))
+                    @Html.ValidationMessageFor(model => model.specialisation)
                     }
                 </div>
                 @*-----------Author-----------*@

@@ -27,7 +27,8 @@ namespace FollowPeers.Models
         public string publisher { get; set; }
         public string conference { get; set; }
         public string university { get; set; }
-
+        public string specialisation {get; set;}
+        public string timestamp { get; set; }
    
         public string referenceID { get; set; }
         public int year { get; set; }
