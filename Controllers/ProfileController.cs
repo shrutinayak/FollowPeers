@@ -60,7 +60,7 @@ namespace FollowPeers.Controllers
         {
             string name = Membership.GetUser().UserName;
             UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
-            string specializationname = " "; IEnumerable<Job> tempresult = null;
+            string specializationname = " "; IEnumerable<Jobs> tempresult = null;
             if (myprofile.Specializations.Count() != 0)
             {
                 specializationname = myprofile.Specializations.ElementAt(0).SpecializationName;
@@ -70,7 +70,7 @@ namespace FollowPeers.Controllers
                              orderby j.Title
                              select j;
 
-                List<Job> temp = new List<Job>();
+                List<Jobs> temp = new List<Jobs>();
                 foreach (var r in tempresult)
                 {
                     if (r.Specializations.Contains(spec))
@@ -95,7 +95,7 @@ namespace FollowPeers.Controllers
         {
             string name = Membership.GetUser().UserName;
             UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
-            string specializationname = " "; IEnumerable<Job> tempresult = null;
+            string specializationname = " "; IEnumerable<Jobs> tempresult = null;
             if (myprofile.Specializations.Count() != 0)
             {
                 specializationname = myprofile.Specializations.ElementAt(0).SpecializationName;
@@ -105,7 +105,7 @@ namespace FollowPeers.Controllers
                              orderby j.Title
                              select j;
 
-                List<Job> temp = new List<Job>();
+                List<Jobs> temp = new List<Jobs>();
                 foreach (var r in tempresult)
                 {
                     if (r.Specializations.Contains(spec))
@@ -574,114 +574,7 @@ namespace FollowPeers.Controllers
             } //add a new update record for the followers            
         }
 
-        [HttpPost]
-        public ActionResult PostJob(FormCollection formCollection, string[] Title, string[] Country, int?[] Students, int?[] Professors, int?[] Investors, int?[] Researchers, string[] Specializations, string[] Description)
-        {
-            string name = Membership.GetUser().UserName;
-            UserProfile userprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
-            {
-                if (Title == null)
-                {
-                    int count1 = userprofile.Jobs.Count();
-                    for (int i = 0; i < count1; i++)
-                    {
-                        followPeersDB.Jobs.Remove(userprofile.Jobs.ElementAt(0));
-                    }
-
-
-                    //followPeersDB.Entry(userprofile).State = EntityState.Modified;
-                    followPeersDB.SaveChanges();
-                    return RedirectToAction("PostJob", "Profile", new { message = "Successfully Posted" });
-                }
-
-                int count = Title.Count();
-
-                for (int i = 0; i < count; i++)
-                {
-                    string temptitle1 = Title.ElementAt(i);
-                    Job tempJob1 = followPeersDB.Jobs.SingleOrDefault(p => p.Title == temptitle1 && p.ownerId == userprofile.UserProfileId);
-
-                    if (tempJob1 == null)//this is a new job... so create one 
-                    {
-                        string tempTitle = Title.ElementAt(i);
-                        string tempCountry = Country.ElementAt(i);
-                        string tempDescription = Description.ElementAt(i);
-                        bool tempStudents = false, tempProfessors = false, tempInvestors = false, tempResearchers = false;
-                        try
-                        {
-                            if (Students[i] != null) { tempStudents = true; }
-                        }
-                        catch { }
-
-                        try { if (Investors[i] != null) { tempInvestors = true; } }
-                        catch
-                        { }
-                        try { if (Researchers[i] != null) { tempResearchers = true; } }
-                        catch { }
-                        try { if (Professors[i] != null) { tempProfessors = true; } }
-                        catch
-                        { }
-
-                        char[] delimiterChars = { ',' };
-                        string[] words = Specializations.ElementAt(i).Split(delimiterChars);
-
-                        Job tempJob = new Job
-                        {
-                            Title = tempTitle,
-                            Country = tempCountry,
-                            Description = tempDescription,
-                            students = tempStudents,
-                            professors = tempProfessors,
-                            investors = tempInvestors,
-                            researchers = tempResearchers,
-                            publishDate = DateTime.Now,
-                            Specializations = new List<Specialization>()
-                        };
-
-                        int tempcount = words.Count();
-                        int c = 0;
-                        foreach (string s in words)
-                        {
-                            if (c == tempcount - 1) { break; }
-                            if (s != "" || s != " ")
-                            {
-                                string s2 = s.Trim();
-                                int id = Convert.ToInt16(s2);
-                                Specialization tempS = followPeersDB.Specializations.SingleOrDefault(p => p.SpecializationId == id);
-                                tempJob.Specializations.Add(tempS);
-                            }
-                            c++;
-                        }
-                        userprofile.Jobs.Add(tempJob);
-                        tempJob.ownerId = userprofile.UserProfileId;
-                    }
-                }
-
-                int count2 = userprofile.Jobs.Count();
-                bool delete = true;
-                List<Job> userjobs = userprofile.Jobs.ToList();
-                for (int i = 0; i < count2; i++)
-                {
-                    delete = true;
-                    string temptitle = userjobs.ElementAt(i).Title;
-                    for (int j = 0; j < Title.Count(); j++)
-                    {
-                        if (temptitle == Title.ElementAt(j))
-                        { delete = false; }
-                    }
-
-                    if ((delete == true) && (userjobs.ElementAt(i).ownerId == userprofile.UserProfileId))
-                    {
-                        Job tempJob = followPeersDB.Jobs.SingleOrDefault(p => p.Title == temptitle && p.ownerId == userprofile.UserProfileId);
-                        followPeersDB.Jobs.Remove(tempJob);
-                    }
-                }
-                //followPeersDB.Entry(userprofile).State = EntityState.Modified;
-                followPeersDB.SaveChanges();
-                return RedirectToAction("PostJob", "Profile", new { message = "Successfully Posted" });
-            }
-
-        }
+        
 
         [HttpPost]
         public ActionResult EditEducation(FormCollection formCollection, string[] Organization, string[] startYear, string[] endYear, string[] Degree, string[] Country)
@@ -971,7 +864,7 @@ namespace FollowPeers.Controllers
         }
         public ActionResult DetailJob(int id)
         {
-            Job j = followPeersDB.Jobs.First(p => p.JobId == id);
+            Jobs j = followPeersDB.Jobs.First(p => p.JobId == id);
             string name = Membership.GetUser().UserName;
             UserProfile userprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
             string temp = j.JobId.ToString();
@@ -991,7 +884,7 @@ namespace FollowPeers.Controllers
             UserProfile userprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
             string Keywords = " ";
             Specialization spec = null;
-            IEnumerable<Job> result = null;
+            IEnumerable<Jobs> result = null;
             string searchstring = "Job Search Results ";
             if ((keywords != null) && (keywords != "") && (keywords.Length != 0))
             {
@@ -1001,7 +894,7 @@ namespace FollowPeers.Controllers
             }
             if ((specialization != null) && (specialization != "Any"))
             {
-                IEnumerable<Job> tempresult = null;
+                IEnumerable<Jobs> tempresult = null;
                 spec = followPeersDB.Specializations.First(p => p.SpecializationName.Contains(specialization));
                 tempresult = from j in followPeersDB.Jobs
                              where ((j.Title.Contains(Keywords) || (j.Description.Contains(Keywords))))
@@ -1017,7 +910,7 @@ namespace FollowPeers.Controllers
                     searchstring = searchstring + " in " + country;
                 }
                 result = null;
-                List<Job> temp = new List<Job>();
+                List<Jobs> temp = new List<Jobs>();
                 foreach (var r in tempresult)
                 {
                     if (r.Specializations.Contains(spec))
@@ -1077,7 +970,7 @@ namespace FollowPeers.Controllers
                                               orderby a.FirstName
                                               select a;
 
-            IEnumerable<Job> jobs = from j in followPeersDB.Jobs
+            IEnumerable<Jobs> jobs = from j in followPeersDB.Jobs
                                     where (j.Title.Contains(val) || j.Description.Contains(val))
                                     orderby j.Title
                                     select j;
@@ -1263,8 +1156,8 @@ namespace FollowPeers.Controllers
         {
             string name = Membership.GetUser().UserName;
             myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
-            List<Job> result = myprofile.Jobs.ToList();
-            List<Job> tempresult = myprofile.Jobs.ToList();
+            List<Jobs> result = myprofile.Jobs.ToList();
+            List<Jobs> tempresult = myprofile.Jobs.ToList();
             foreach (var j in tempresult)
             {
                 if (j.ownerId == myprofile.UserProfileId) { result.Remove(j); }
@@ -1476,7 +1369,7 @@ namespace FollowPeers.Controllers
             int jobidINT = Convert.ToInt16(jobid);
             // UserProfile followerProfile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == username);
             // UserProfile followerProfile = new UserProfile();
-            Job job = followPeersDB.Jobs.SingleOrDefault(p => p.JobId == jobidINT);
+            Jobs job = followPeersDB.Jobs.SingleOrDefault(p => p.JobId == jobidINT);
             myprofile.Jobs.Add(job);
             followPeersDB.SaveChanges();
 
@@ -1508,7 +1401,7 @@ namespace FollowPeers.Controllers
             int jobidINT = Convert.ToInt16(jobid);
             // UserProfile followerProfile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == username);
             // UserProfile followerProfile = new UserProfile();
-            Job job = followPeersDB.Jobs.SingleOrDefault(p => p.JobId == jobidINT);
+            Jobs job = followPeersDB.Jobs.SingleOrDefault(p => p.JobId == jobidINT);
             myprofile.Jobs.Remove(job);
             followPeersDB.SaveChanges();
             Response.Redirect(url);

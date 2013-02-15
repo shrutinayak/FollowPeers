@@ -11,6 +11,6 @@ namespace FollowPeers.Models
         public string Field { get; set; }
         public string SpecializationName { get; set; }
         public virtual ICollection<UserProfile> UserProfiles { get; set; }
-        public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Jobs> Jobs { get; set; }
     }
 }

@@ -80,7 +80,7 @@
     <Compile Include="Controllers\BulletinController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
-    <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="Models\ForumModels.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Industry.cs" />
-    <Compile Include="Models\Job.cs" />
+    <Compile Include="Models\Jobs.cs" />
     <Compile Include="Models\Journal.cs" />
     <Compile Include="Models\NoticeComment.cs" />
     <Compile Include="Models\Notification.cs" />
@@ -3312,7 +3312,8 @@
     <Content Include="Views\Shared\Headertemp.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Event\AddEvent.cshtml" />
-    <Content Include="Views\Job\Index.cshtml" />
+    <Content Include="Views\Jobs\Index.cshtml" />
+    <Content Include="Views\Jobs\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

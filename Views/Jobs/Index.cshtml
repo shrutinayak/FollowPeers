@@ -1,0 +1,93 @@
+﻿@model IEnumerable<FollowPeers.Models.Jobs>
+@using FollowPeers.Models;
+@Html.Partial("_Header")
+@{
+    ViewBag.Title = "Jobs";
+    FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+    string name = Membership.GetUser().UserName;
+    ViewBag.UserName = name;
+    FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
+}
+<div class="container" id="main">
+    <div class="row">
+@Html.Partial("_SideBar1")
+        <div class="span8">
+           <ul class="nav nav-tabs"> 
+                    <li id="li_tab1" onclick="tab('tab1')"><a>Jobs Home</a></li>
+                    <li id="li_tab2" onclick="tab('tab2')"><a>Applied Jobs</a></li>
+                    <li id="li_tab3" onclick="tab('tab3')"><a>Saved Jobs</a></li>
+                    <li id="li_tab4" onclick="tab('tab4')"><a>Uploaded Jobs</a></li>
+               </ul>   
+                <div id="Content_Area" class="tab-content">
+                    <div id="tab2" style="display: none;" class="tab-pane" >
+                        <p>This is the text for tab 2.</p>
+                    </div>
+                    <div id="tab3" style="display: none;" class="tab-pane" >
+                        <p>You havent like any recommendations</p>
+                    </div>
+                    <div id="tab4" style="display: none;" class="tab-pane" >
+                       <div style="border-style:inset">
+                       </div>  
+                    </div>
+                    <div id="tab1" style="display: none; overflow:hidden; padding:0px,0px,0px,0px; margin:0px;" class="tab-pane" >
+                    <div class="span8" style="padding:0px,0px,0px,0px; margin:0px;">
+                        <div class="row span7">
+                            <a class="btn btn-primary" href="@Url.Content("~/Jobs/Create")"><i class="icon-upload icon-white"></i>Add new</a>
+                            <div class="form-search pull-right" >
+                                <input type="text" class="input-medium search-query" />
+                                <button type="submit" class="btn">Search Jobs</button>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                       <div style="border-style:inset">
+                       @{ if (Model.Count() != 0)
+                          {
+                             foreach (var item in Model)
+                             {
+                    <tr><td>
+               
+                <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                <div style="float: left;" id="Image">
+                    <img class="mouseover" src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;width: 50px;" />
+                        
+                </div>
+                <div style="margin-left: 8px; float: left;">
+                    <a href="/PublicationModel/Details/@item.JobId" id="title"><b>@item.Title</b></a> 
+                    <div id="Year">Publication : @item.Enddate</div>
+                </div>
+                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.Industry)
+                    | @Html.DisplayFor(modelItem => item.Jobfunction)  |
+                    <div style="float:right; font-size: 15px; margin-left: 5px;">
+                        @Html.ActionLink("More>>", "Details", new { id = item.JobId })
+                    </div>
+                    </div>
+            </div>
+            <hr /> 
+            </td></tr>
+                           }}
+                          }
+                       </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+    </div>
+
+<script type="text/javascript">
+    function tab(tab) {
+        document.getElementById('tab1').style.display = 'none';
+        document.getElementById('tab2').style.display = 'none';
+        document.getElementById('tab3').style.display = 'none';
+        document.getElementById('tab4').style.display = 'none';
+        document.getElementById('li_tab1').setAttribute("class", "");
+        document.getElementById('li_tab2').setAttribute("class", "");
+        document.getElementById('li_tab3').setAttribute("class", "");
+        document.getElementById('li_tab4').setAttribute("class", "");
+        document.getElementById(tab).style.display = 'block';
+        document.getElementById('li_' + tab).setAttribute("class", "active");
+    }
+</script>
+</script>
+

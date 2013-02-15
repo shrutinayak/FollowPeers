@@ -44,10 +44,7 @@
                         string TempData = "Com" + i.ToString();
                         string TempData2 = "Delete" + i.ToString();
                         string TempData4 = "Country" + i.ToString();
-                        if (E.students == true) { Students = "checked"; }
-                        if (E.professors == true) { Professors = "checked"; }
-                        if (E.investors == true) { Investors = "checked"; }
-                        if (E.researchers == true) { Researchers = "checked"; }
+                       
                     <div id="@TempData">
                         <fieldset>
                             <legend>Job Post @(i + 1)</legend>
@@ -64,18 +61,7 @@
                             </div>
 
                             <div class="editor-label"  style="color: grey;font-weight: bold;">Target Groups</div>
-                            <div class="editor-field" style="height:22px">
-
-                                <input type="hidden" name="Students" value="1" @Students /> @if (Students == "checked")
-                                                                                            {<text>Students  </text>}
-                                <input type="hidden" name="Professors" value="1" @Professors /> @if (Professors == "checked")
-                                                                                                {<text>Professors  </text>}
-                                <input type="hidden" name="Investors" value="1" @Investors /> @if (Investors == "checked")
-                                                                                              {<text>Investors  </text>}
-                                <input type="hidden" name="Researchers" value="1" @Researchers /> @if (Researchers == "checked")
-                                                                                                  {<text>Researchers  </text>}
-                            </div>
-                               
+                         
                             <div class="editor-label"  style="color: grey;font-weight: bold;">Target Specializations</div>
                             <div class="editor-field" style="height:22px">
                             @{string specialization = "";

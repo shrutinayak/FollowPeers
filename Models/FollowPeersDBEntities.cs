@@ -29,7 +29,7 @@ namespace FollowPeers.Models
         public DbSet<Journal> Journals { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Conference> Conferences { get; set; }
-        public DbSet<Job> Jobs { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
         public DbSet<Forum> Forums { get; set; }
         public DbSet<ForumTopic> ForumTopics { get; set; }
         public DbSet<ForumPost> ForumPosts { get; set; }

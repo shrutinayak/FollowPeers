@@ -55,7 +55,7 @@ namespace FollowPeers.Models
         public virtual ICollection<Keyword> Keywords { get; set; }
         public virtual ICollection<Conversation> Conversations { get; set; }
         public virtual ICollection<Portfolio> Portfolios { get; set; }
-        public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Jobs> Jobs { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public List<int> PublicationBookmark { get; set; }
 
