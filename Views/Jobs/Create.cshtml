@@ -7,11 +7,7 @@
         {
             @Html.ValidationSummary(true)
             <fieldset>
-                <legend>Enter Job Details!</legend>
-                @*-----------OwnerId-----------*@
-                <input id="OwnerId" name="OwnerId" type="hidden" value="@ViewBag.userID" />
-                @*-----------ViewCount-----------*@
-                <input id="ViewCount" name="ViewCount" type="hidden" value="0" />              
+                <legend>Enter Job Details!</legend>          
                 @*-----------Job ID-----------*@
                 <div class="editor-label" id="title_l">
                     @Html.LabelFor(model => model.JobId, "Job ID")
@@ -19,14 +15,6 @@
                 <div class="editor-field" id="title_f">
                     @Html.TextBoxFor(model => model.JobId, new { size = 78 })
                     @Html.ValidationMessageFor(model => model.JobId)
-                </div>
-                @*-----------Owner ID-----------*@
-                <div class="editor-label" id="title_l">
-                    @Html.LabelFor(model => model.ownerId, "Owner ID")
-                </div>
-                <div class="editor-field" id="title_f">
-                    @Html.TextBoxFor(model => model.ownerId, new { size = 78 })
-                    @Html.ValidationMessageFor(model => model.ownerId)
                 </div>
                 @*-----------Title-----------*@
                 <div class="editor-label" id="title_l">
@@ -46,7 +34,7 @@
                 </div>
                   @*-----------Specialisations-----------*@
                 <div class="editor-label" id="author_l">
-                    @Html.LabelFor(model => model.Specializations, "Specialisation(s) ")
+       
                 </div>
                  <div>
                  @{
@@ -56,8 +44,6 @@
             {
                 specialisations.Add(row.Field);
             }
-                    @Html.DropDownList("Specialisation", new SelectList(specialisations))
-                    @Html.ValidationMessageFor(model => model.Specializations)
                     }
                 </div>
                 @*-----------Type-----------*@
@@ -198,3 +184,4 @@
         }
     </div>
 @Html.Partial("_Footer")
+

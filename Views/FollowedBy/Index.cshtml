@@ -2,7 +2,7 @@
 @using FollowPeers.Models;
 @Html.Partial("_Header")
 @{
-    var name = Session["username"].ToString();
+    string name = Membership.GetUser().UserName;
     FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
     var myself = ViewData["Myself"];
     FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);

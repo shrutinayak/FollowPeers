@@ -12,6 +12,7 @@ namespace FollowPeers.Models
         [Key]
         public int JobId { set; get; }
         public string City { set; get; }
+        public int ownerID { set; get; }
         public string Country { set; get; }
         public DateTime publishDate { get; set; }
         public DateTime Enddate { get; set; }
@@ -22,12 +23,30 @@ namespace FollowPeers.Models
         public string Industry { get; set; }
         public string Other { get; set; }
         public string Jobfunction { get; set; }
-        public int ownerId { set; get; }
         public string Company { set; get; }
         public string Title { set; get; }
         public string Type { set; get; }
         public string Description { set; get; }
         public virtual UserProfile UserProfile { get; set; }
-        public virtual ICollection<Specialization> Specializations { get; set; }
+        public  Jobs()
+        {
+            JobId = 0;
+            City = "Published";
+            ownerID = 0;
+            Country = "Book";
+            publishDate = DateTime.Today;
+            Enddate = DateTime.Today;
+            Requirements = "N.A.";
+            Email = "N.A.";
+            URL = "";
+            Experience = "";
+            Industry = " ";
+            Other = " ";
+            Jobfunction = " ";
+            Company = " ";
+            Title = " ";
+            Type = "";
+            Description = "";
+        }
     }
 }

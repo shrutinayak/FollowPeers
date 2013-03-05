@@ -1,0 +1,156 @@
+﻿@model FollowPeers.Models.Jobs
+@using FollowPeers.Models;
+@{
+    ViewBag.Title = "Job Details";
+}
+@Html.Partial("_Header")
+ @{
+     FollowPeers.Models.FollowPeersDBEntities followPeersDB = new FollowPeers.Models.FollowPeersDBEntities();
+     string name = Membership.GetUser().UserName;
+     ViewBag.UserName = name;
+     FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
+     if (myprofile.UserProfileId == Model.ownerID)
+     {
+                    @Html.Partial("_SideBar2")
+     }
+     else
+     {
+                    @Html.Partial("_SideBar1")
+     }
+}
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            Details 
+            
+            </h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <fieldset>
+            <legend>Job Details</legend>
+            
+           <div class="display-label">
+                ViewCount:</div>
+            <div class="display-field">
+            </div>
+            <div class="display-label">
+                Title:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Title)
+            </div>
+            
+            <div class="display-label">
+                Author(s):</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Country)
+            </div>
+            
+            <div class="display-label">
+                Type:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.City)
+            </div>
+            
+            <div class="display-label">
+                Owner Name:
+            </div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ownerID)
+            </div>
+            
+            <div class="display-label">
+                Year:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Company)
+            </div>
+            <hr />
+            <div class="display-label">
+                Description:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Requirements)
+            </div>
+            <hr />
+            <div class="display-label">
+                Status:</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Other)
+            </div>
+            
+           
+           
+            
+           
+           
+        </fieldset>
+        <p>
+            
+          
+
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+ 
+        <h2>Bookmarking Controls</h2>
+                @{
+                    if (ViewBag.bookmarktag)
+                    {
+                <br />
+         <div id="bookmark_it" title="Bookmark Publication" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 15px; color:White; width:120px; text-align:center;">
+                Bookmark Publication
+                </div>
+            <br />
+                    }
+                    else
+                    {
+                <br />
+                <div id="unbookmark_it" title="Un-Bookmark Publication" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 5px; color:White; width:140px; text-align:center;">
+                Un-Bookmark Publication
+                </div>
+            <br />}
+            }
+
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+
+<script type="text/javascript" language="javascript">
+    $("#bookmark_it").click(function () {
+        // Get publication ID
+        var id1 = $("#publicationIdAJAX").val();
+        // Send Ajax Request
+        $.ajax({
+            type: "POST",
+            url: "/PublicationModel/AddBookmark",
+            data: "ID=" + id1,
+            success: function () {
+                alert('Bookmarked');
+                window.history.back(-1);
+            }
+        });
+    });
+
+    $("#unbookmark_it").click(function () {
+        // Get publication ID
+        var id2 = $("#publicationIdAJAX").val();
+        // Send Ajax Request
+        $.ajax({
+            type: "POST",
+            url: "/PublicationModel/DeleteBookmark",
+            data: "ID=" + id2,
+            success: function () {
+                alert('Un-Bookmarked');
+                window.history.back(-1);
+            }
+        });
+    });
+
+</script>

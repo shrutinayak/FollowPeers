@@ -26,9 +26,32 @@
                         <p>You havent like any recommendations</p>
                     </div>
                     <div id="tab4" style="display: none;" class="tab-pane" >
-                       <div style="border-style:inset">
-                       </div>  
-                    </div>
+                       @{ 
+                           if (Model.Count() != 0)
+                           {
+                               <table>
+                               @foreach (var item in Model)
+                               {
+                              
+                    <tr><td>       
+                <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                <div style="margin-left: 8px;">
+                    <a href="/Jobs/Details/@item.JobId" id="title"><b>@item.Title</b></a> 
+                    <div id="Year">Job : @item.Enddate</div>
+                </div>
+                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.Industry)
+                    | @Html.DisplayFor(modelItem => item.Jobfunction) 
+                 </div>
+            </div>
+            <hr /> 
+            </td></tr>
+                               }
+                                 </table>
+                           }
+                         
+                        
+                           }
+                           </div>
                     <div id="tab1" style="display: none; overflow:hidden; padding:0px,0px,0px,0px; margin:0px;" class="tab-pane" >
                     <div class="span8" style="padding:0px,0px,0px,0px; margin:0px;">
                         <div class="row span7">
@@ -40,33 +63,30 @@
                         </div>
                         <br />
                         <br />
-                       <div style="border-style:inset">
+                       <div style="border-style:solid">
+                       <table>
                        @{ if (Model.Count() != 0)
                           {
-                             foreach (var item in Model)
-                             {
-                    <tr><td>
-               
+                              foreach (var item in Model)
+                              {
+                                  if (item.UserProfile.UserProfileId == myprofile.UserProfileId)
+                                  {
+                    <tr><td>       
                 <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
-                <div style="float: left;" id="Image">
-                    <img class="mouseover" src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;width: 50px;" />
-                        
-                </div>
-                <div style="margin-left: 8px; float: left;">
-                    <a href="/PublicationModel/Details/@item.JobId" id="title"><b>@item.Title</b></a> 
-                    <div id="Year">Publication : @item.Enddate</div>
+                <div style="margin-left: 8px;">
+                    <a href="/Jobs/Details/@item.JobId" id="title"><b>@item.Title</b></a> 
+                    <div id="Year">Job : @item.Enddate</div>
                 </div>
                 <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.Industry)
-                    | @Html.DisplayFor(modelItem => item.Jobfunction)  |
-                    <div style="float:right; font-size: 15px; margin-left: 5px;">
-                        @Html.ActionLink("More>>", "Details", new { id = item.JobId })
-                    </div>
+                    | @Html.DisplayFor(modelItem => item.Jobfunction)
                     </div>
             </div>
             <hr /> 
-            </td></tr>
-                           }}
+            </td></tr>}
+                              }
                           }
+                          }
+                          </table>
                        </div>
                         </div>
                     </div>

@@ -35,7 +35,6 @@ namespace FollowPeers.Controllers
                 myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
                 myprofile.UserName.Trim();
                 followPeersDB.SaveChanges();
-
             }
 
             if (viewerprofile.firsttime == true)
@@ -66,23 +65,23 @@ namespace FollowPeers.Controllers
                 specializationname = myprofile.Specializations.ElementAt(0).SpecializationName;
                 Specialization spec = followPeersDB.Specializations.First(p => p.SpecializationName.Contains(specializationname));
                 tempresult = from j in followPeersDB.Jobs
-                             where ((j.Country == myprofile.Country) && (j.ownerId != myprofile.UserProfileId))
+                             where ((j.Country == myprofile.Country) && (j.ownerID != myprofile.UserProfileId))
                              orderby j.Title
                              select j;
 
                 List<Jobs> temp = new List<Jobs>();
                 foreach (var r in tempresult)
                 {
-                    if (r.Specializations.Contains(spec))
+                   /* if (r.Specializations.Contains(spec))
                     {
                         temp.Add(r);
-                    }
+                    }*/
                 }
                 if (temp.Count() > 2) return PartialView(temp);
             }
 
             tempresult = from j in followPeersDB.Jobs
-                         where ((j.Country == myprofile.Country) && (j.ownerId != myprofile.UserProfileId))
+                         where ((j.Country == myprofile.Country) && (j.ownerID != myprofile.UserProfileId))
                          orderby j.Title
                          select j;
 
@@ -101,23 +100,23 @@ namespace FollowPeers.Controllers
                 specializationname = myprofile.Specializations.ElementAt(0).SpecializationName;
                 Specialization spec = followPeersDB.Specializations.First(p => p.SpecializationName.Contains(specializationname));
                 tempresult = from j in followPeersDB.Jobs
-                             where ((j.Country == myprofile.Country) && (j.ownerId != myprofile.UserProfileId))
+                             where ((j.Country == myprofile.Country) && (j.ownerID != myprofile.UserProfileId))
                              orderby j.Title
                              select j;
 
                 List<Jobs> temp = new List<Jobs>();
                 foreach (var r in tempresult)
                 {
-                    if (r.Specializations.Contains(spec))
+                    /*if (r.Specializations.Contains(spec))
                     {
                         temp.Add(r);
-                    }
+                    }*/
                 }
                 if (temp.Count() > 2) return View(temp);
             }
 
             tempresult = from j in followPeersDB.Jobs
-                         where ((j.Country == myprofile.Country) && (j.ownerId != myprofile.UserProfileId))
+                         where ((j.Country == myprofile.Country) && (j.ownerID != myprofile.UserProfileId))
                          orderby j.Title
                          select j;
             return View(tempresult);
@@ -868,7 +867,7 @@ namespace FollowPeers.Controllers
             string name = Membership.GetUser().UserName;
             UserProfile userprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
             string temp = j.JobId.ToString();
-            if (userprofile.Jobs.Contains(j) && j.ownerId != userprofile.UserProfileId)//need to add a button
+            if (userprofile.Jobs.Contains(j) && j.ownerID != userprofile.UserProfileId)//need to add a button
                 ViewData[temp] = "1";
             else
                 ViewData[temp] = "0";
@@ -913,16 +912,16 @@ namespace FollowPeers.Controllers
                 List<Jobs> temp = new List<Jobs>();
                 foreach (var r in tempresult)
                 {
-                    if (r.Specializations.Contains(spec))
+                    /*if (r.Specializations.Contains(spec))
                     {
                         temp.Add(r);
-                    }
+                    }*/
 
                 }
                 foreach (var u in temp)
                 {
                     string temp1 = u.JobId.ToString();
-                    if (userprofile.Jobs.Contains(u) && u.ownerId != userprofile.UserProfileId)//need to add a button
+                    if (userprofile.Jobs.Contains(u) && u.ownerID != userprofile.UserProfileId)//need to add a button
                         ViewData[temp1] = "1";
                     else
                         ViewData[temp1] = "0";
@@ -950,7 +949,7 @@ namespace FollowPeers.Controllers
             foreach (var u in result)
             {
                 string temp = u.JobId.ToString();
-                if (userprofile.Jobs.Contains(u) && u.ownerId != userprofile.UserProfileId)//need to add a button
+                if (userprofile.Jobs.Contains(u) && u.ownerID != userprofile.UserProfileId)//need to add a button
                     ViewData[temp] = "1";
                 else
                     ViewData[temp] = "0";
@@ -1160,7 +1159,7 @@ namespace FollowPeers.Controllers
             List<Jobs> tempresult = myprofile.Jobs.ToList();
             foreach (var j in tempresult)
             {
-                if (j.ownerId == myprofile.UserProfileId) { result.Remove(j); }
+                if (j.ownerID == myprofile.UserProfileId) { result.Remove(j); }
             }
             return View(result);
         }
@@ -1373,7 +1372,7 @@ namespace FollowPeers.Controllers
             myprofile.Jobs.Add(job);
             followPeersDB.SaveChanges();
 
-            UserProfile updateowner = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserProfileId == job.ownerId);
+            UserProfile updateowner = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserProfileId == job.ownerID);
             string jobdescription = job.Description;
             if (jobdescription.Length > 60) jobdescription = job.Description.Substring(0, 60) + "...";
             Notification newnoti = new Notification

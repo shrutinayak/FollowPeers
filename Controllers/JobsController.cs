@@ -17,7 +17,7 @@ namespace FollowPeers.Controllers
         //
         // GET: /Default1/
 
-        public ActionResult Index()
+        public ViewResult Index()
         {
             string name = Membership.GetUser().UserName;
             int userID;
@@ -27,24 +27,23 @@ namespace FollowPeers.Controllers
                          select n;
 
             return View(result.ToList());
-            //return View(followPeersDB.PublicationModels.ToList());
         }
 
         //
         // GET: /Default1/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult Create()
         {
+            string name = Membership.GetUser().UserName;
+            UserProfile user = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+
+            int userID;
+            userID = user.UserProfileId;
+
+            ViewBag.userID = userID;
             return View();
         }
 
-        //
-        // GET: /Default1/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        } 
 
         //
         // POST: /Default1/Create
@@ -53,20 +52,30 @@ namespace FollowPeers.Controllers
         [HttpPost]
         public ActionResult Create(Jobs jobmodel)
         {
-                jobmodel.Enddate = DateTime.Now;
-                jobmodel.publishDate = DateTime.Now;
+            if (ModelState.IsValid)
+            {
                 string name = Membership.GetUser().UserName;
                 UserProfile user = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+                if (jobmodel.Enddate == null)
+                {
+                    jobmodel.Enddate = DateTime.Now;
+                }
+                if (jobmodel.publishDate == null)
+                {
+                    jobmodel.publishDate = DateTime.Now;
+                }
+                jobmodel.ownerID = user.UserProfileId;
+
+
                 jobmodel.UserProfile = user;
-                user.Jobs.Add(jobmodel);
-
                 int jobid = followPeersDB.Jobs.Count() + 1;
+                user.Jobs.Add(jobmodel);
                 CreateUpdates("Published a new job titled " + jobmodel.Title, "/PublicationModel/Details/" + jobid, 6, user.UserProfileId);
-
-                //followPeersDB.PublicationModels.Add(publicationmodel);
                 followPeersDB.Entry(user).State = EntityState.Modified;
                 followPeersDB.SaveChanges();
-                return View("Index");
+                return RedirectToAction("Index");
+            }
+            return View(jobmodel);
         }
 
         public void CreateUpdates(string message, string link, int type, int id)
@@ -137,6 +146,27 @@ namespace FollowPeers.Controllers
 
         //
         // GET: /Default1/Delete/5
+
+        public ViewResult Details(int id)
+        {
+            Jobs jobmodel = followPeersDB.Jobs.Find(id);
+
+            string name = Membership.GetUser().UserName;
+            UserProfile user = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+            followPeersDB.Entry(user).State = EntityState.Modified;
+            followPeersDB.SaveChanges();
+
+            ViewBag.bookmarktag = false;
+            // Check if a bookmark with these credentials exsists in the Db
+            Bookmark bookmark = followPeersDB.Bookmarks.SingleOrDefault(b => b.itemID == id && b.userID == user.UserProfileId && b.bookmarkType == "Jobs");
+
+            if (bookmark == null)
+            {
+                ViewBag.bookmarktag = true;
+            }
+
+            return View(jobmodel);
+        }
  
         public ActionResult Delete(int id)
         {
