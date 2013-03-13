@@ -13,7 +13,7 @@ namespace FollowPeers.Controllers
     public class JobsController : Controller
     {
         private FollowPeersDBEntities followPeersDB = new FollowPeersDBEntities();
-
+        static UserProfile myprofile;
         //
         // GET: /Default1/
 
@@ -27,6 +27,11 @@ namespace FollowPeers.Controllers
                          select n;
 
             return View(result.ToList());
+        }
+
+        public ViewResult SavedJobs()
+        {
+            return View();
         }
 
         //
@@ -121,28 +126,6 @@ namespace FollowPeers.Controllers
         //
         // GET: /Default1/Edit/5
  
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Default1/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
- 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         //
         // GET: /Default1/Delete/5
@@ -170,9 +153,29 @@ namespace FollowPeers.Controllers
  
         public ActionResult Delete(int id)
         {
-            return View();
+            Jobs jobmodel = followPeersDB.Jobs.Find(id);
+            followPeersDB.Jobs.Remove(jobmodel);
+            followPeersDB.SaveChanges();
+            return RedirectToAction("Index");
         }
 
+        public ActionResult Edit(int id)
+        {
+            Jobs jobmodel = followPeersDB.Jobs.Find(id);
+            return View(jobmodel);
+        } 
+
+        [HttpPost]
+        public ActionResult Edit(Jobs jobmodel)
+        {
+            if (ModelState.IsValid)
+            {
+                followPeersDB.Entry(jobmodel).State = EntityState.Modified;
+                followPeersDB.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(jobmodel);
+        }
         //
         // POST: /Default1/Delete/5
 
@@ -190,5 +193,35 @@ namespace FollowPeers.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public ActionResult Save(int jobid)
+        {
+            string name = Membership.GetUser().UserName;
+            myprofile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == name);
+            int jobidINT = Convert.ToInt16(jobid);
+            // UserProfile followerProfile = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserName == username);
+            // UserProfile followerProfile = new UserProfile();
+            Jobs job = followPeersDB.Jobs.SingleOrDefault(p => p.JobId == jobidINT);
+            myprofile.Jobs.Add(job);
+            followPeersDB.SaveChanges();
+
+            UserProfile updateowner = followPeersDB.UserProfiles.SingleOrDefault(p => p.UserProfileId == job.ownerID);
+            string jobtitle = job.Title;
+            Notification newnoti = new Notification
+            {
+                message = myprofile.FirstName + " Applied to your job post : " + jobtitle,
+                link = "/Profile/Index/" + myprofile.UserProfileId,
+                New = true,
+                imagelink = myprofile.PhotoUrl,
+            };
+
+            updateowner.Notifications.Add(newnoti);
+            followPeersDB.Entry(updateowner).State = EntityState.Modified;
+            followPeersDB.SaveChanges();
+            return View();
+        }
+
+
     }
 }

@@ -9,21 +9,18 @@
      string name = Membership.GetUser().UserName;
      ViewBag.UserName = name;
      FollowPeers.Models.UserProfile myprofile = followPeersDB.UserProfiles.First(p => p.UserName == name);
-     if (myprofile.UserProfileId == Model.ownerID)
-     {
-                    @Html.Partial("_SideBar2")
-     }
-     else
-     {
-                    @Html.Partial("_SideBar1")
-     }
 }
-<div class="grid_10">
-    <div class="box">
-        <h2>
-            Details 
-            
-            </h2>
+<div class="container" id="main">
+<div class="row">
+@{ if (myprofile.UserProfileId == Model.ownerID)
+   {
+                    @Html.Partial("_SideBar1")
+   }
+ }
+    <div class="span6">
+    <div class="box" style="border: 1px solid #eee; padding-left:5px;">
+
+    </div>
         @Script("jquery.validate.min.js")
         @Script("jquery.validate.unobtrusive.min.js")
         @Script("jquery.bgiframe.js")
@@ -31,8 +28,6 @@
         <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
         <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
         <fieldset>
-            <legend>Job Details</legend>
-            
            <div class="display-label">
                 ViewCount:</div>
             <div class="display-field">
@@ -78,43 +73,31 @@
                 Status:</div>
             <div class="display-field">
                 @Html.DisplayFor(model => model.Other)
-            </div>
-            
-           
-           
-            
-           
-           
-        </fieldset>
-        <p>
-            
-          
-
+            </div>          
+        </fieldset>        
     </div>
+     <div class="span3" style=" text-align:left; border-left: 1px solid #eee; padding-left:10px;">
+      <input id="JobId" style="display:none" type="text" value="@Model.JobId" >
+    @{
+        if (Model.ownerID != myprofile.UserProfileId)
+        {
+   
+    <a class="btn btn-warning" style="width:150px;">Apply Now</a> 
+    <br />
+    <br />
+       @Html.ActionLink("Save Job", "Save", new { id = Model.JobId }) 
+    <br />             
+    <a href="#">Recommend Job</a>
+        }
+        else
+        {
+           @Html.ActionLink("Delete Job", "Delete", new { id = Model.JobId })
+        <br />
+           @Html.ActionLink("Edit Job", "Edit", new { id = Model.JobId })
+        }
+        }
+         </div>
 </div>
-<div class="grid_3">
-    <div class="box">
- 
-        <h2>Bookmarking Controls</h2>
-                @{
-                    if (ViewBag.bookmarktag)
-                    {
-                <br />
-         <div id="bookmark_it" title="Bookmark Publication" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 15px; color:White; width:120px; text-align:center;">
-                Bookmark Publication
-                </div>
-            <br />
-                    }
-                    else
-                    {
-                <br />
-                <div id="unbookmark_it" title="Un-Bookmark Publication" style="padding: 5px;background: #555;cursor: pointer;margin-top: 5px;border: 1px solid #bbb;margin-left: 5px; color:White; width:140px; text-align:center;">
-                Un-Bookmark Publication
-                </div>
-            <br />}
-            }
-
-    </div>
 </div>
 @Html.Partial("_Footer")
 @helper Script(string scriptName)
@@ -123,13 +106,13 @@
 }
 
 <script type="text/javascript" language="javascript">
-    $("#bookmark_it").click(function () {
+    $("#Save_it").click(function () {
         // Get publication ID
-        var id1 = $("#publicationIdAJAX").val();
+        var id1 = $("#JobId").val();
         // Send Ajax Request
         $.ajax({
             type: "POST",
-            url: "/PublicationModel/AddBookmark",
+            url: "/Jobs/Save",
             data: "ID=" + id1,
             success: function () {
                 alert('Bookmarked');

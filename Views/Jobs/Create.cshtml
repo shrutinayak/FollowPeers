@@ -1,12 +1,13 @@
 ﻿@model FollowPeers.Models.Jobs
 @using WebMatrix.Data;
 @Html.Partial("_Header")
-
+@Html.Partial("_SideBar1")
 <div class="container" id="main">   
         @using (Html.BeginForm())
         {
             @Html.ValidationSummary(true)
             <fieldset>
+            <div style="margin-left:10px">
                 <legend>Enter Job Details!</legend>          
                 @*-----------Job ID-----------*@
                 <div class="editor-label" id="title_l">
@@ -77,21 +78,6 @@
                     @Html.ValidationMessageFor(model => model.Country)
                   }  
                 </div>  
-                @*-----------City-----------*@
-                <div class="editor-label" id="country_l">
-                    @Html.LabelFor(model => model.City, "City")
-                </div>
-                <div>
-                 @{
-            List<string> city = new List<string>();
-            foreach (var row in db.Query("Select distinct(Name) from Countries"))
-            {
-                city.Add(row.Name);
-            }
-                    @Html.DropDownList("City", new SelectList(city))
-                    @Html.ValidationMessageFor(model => model.City)
-                  }  
-                </div>  
                   @*-----------Industry-----------*@
                 <div class="editor-label" id="industry_l">
                     @Html.LabelFor(model => model.Industry, "Industry")
@@ -99,7 +85,7 @@
                 <div>
                  @{
             List<string> industry = new List<string>();
-            foreach (var row in db.Query("Select distinct(Name) from Countries"))
+            foreach (var row in db.Query("Select distinct(Name) from Industries"))
             {
                 industry.Add(row.Name);
             }
@@ -114,10 +100,14 @@
                 <div>
                  @{
             List<string> experience = new List<string>();
-            foreach (var row in db.Query("Select distinct(Name) from Countries"))
-            {
-                experience.Add(row.Name);
-            }
+            experience.Add("Executive");
+            experience.Add("Director");
+            experience.Add("Mid-Senior Level");
+            experience.Add("Associate");
+            experience.Add("Entry Level");
+            experience.Add("Internship");
+            experience.Add("Not Applicable");
+            
                     @Html.DropDownList("Experience", new SelectList(experience))
                     @Html.ValidationMessageFor(model => model.Experience)
                   }  
@@ -129,7 +119,7 @@
                 <div>
                  @{
             List<string> jobfunction = new List<string>();
-            foreach (var row in db.Query("Select distinct(Name) from Countries"))
+            foreach (var row in db.Query("Select distinct(Name) from JobFunctions"))
             {
                 jobfunction.Add(row.Name);
             }
@@ -158,7 +148,7 @@
                     @Html.LabelFor(model => model.Email, "Email")
                 </div>
                 <div class="editor-field" id="publishingdate_f">
-                    @Html.TextAreaFor(model => model.Email, new { size = 78 })
+                    @Html.TextBoxFor(model => model.Email, new { size = 78 })
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
                  @*-----------URL-----------*@
@@ -166,7 +156,7 @@
                     @Html.LabelFor(model => model.URL, "URL")
                 </div>
                 <div class="editor-field" id="publishingdate_f">
-                    @Html.TextAreaFor(model => model.URL, new { size = 78 })
+                    @Html.TextBoxFor(model => model.URL, new { size = 78 })
                     @Html.ValidationMessageFor(model => model.URL)
                 </div>
                 @*-----------Others----------*@
@@ -177,6 +167,7 @@
                     @Html.TextAreaFor(model => model.Other, new { cols = "49", rows = "5" })
                     @Html.ValidationMessageFor(model => model.Other)
                 </div>
+            </div>
             </fieldset>
             <p>
                 <input type="submit" value="Create" style="float: right; padding: 3px 8px;" class="btn btn-primary"/>

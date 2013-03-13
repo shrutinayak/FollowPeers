@@ -1377,7 +1377,7 @@ namespace FollowPeers.Controllers
             if (jobdescription.Length > 60) jobdescription = job.Description.Substring(0, 60) + "...";
             Notification newnoti = new Notification
             {
-                message = myprofile.FirstName + " bookmarked your job post : " + jobdescription,
+                message = myprofile.FirstName + " Applied to your job post : " + jobdescription,
                 link = "/Profile/Index/" + myprofile.UserProfileId,
                 New = true,
                 imagelink = myprofile.PhotoUrl,

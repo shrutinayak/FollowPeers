@@ -1,0 +1,277 @@
+﻿@model FollowPeers.Models.Jobs
+@using WebMatrix.Data;
+@{
+    ViewBag.Title = "Edit Job";
+}
+@Html.Partial("_Header")
+    <div class="container" id="main">
+    <div class="box">
+    @Html.Partial("_SideBar2")
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("modernizr-1.7.min.js")
+        @Script("jquery-ui-1.8.11.js")
+        @Script("jquery.tools.min.js")
+        @Script("jquery.rte.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            <div style="margin-left:10px">
+
+               @*-----------PublicationId-----------*@
+                @Html.HiddenFor(model => model.JobId)
+                @*-----------OwnerID-----------*@
+                @Html.HiddenFor(model => model.ownerID)
+                @*-----------Job ID-----------*@
+                <div class="editor-label" id="title_l">
+                    @Html.LabelFor(model => model.JobId, "Job ID")
+                </div>
+                <div class="editor-field" id="title_f">
+                    @Html.TextBoxFor(model => model.JobId, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.JobId)
+                </div>
+                @*-----------Title-----------*@
+                <div class="editor-label" id="title_l">
+                    @Html.LabelFor(model => model.Title, "Job Title ")
+                </div>
+                <div class="editor-field" id="title_f">
+                    @Html.TextBoxFor(model => model.Title, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Title)
+                </div>
+                      @*-----------Company-----------*@
+                <div class="editor-label" id="title_l">
+                    @Html.LabelFor(model => model.Company, "Company")
+                </div>
+                <div class="editor-field" id="title_f">
+                    @Html.TextBoxFor(model => model.Company, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Company)
+                </div>
+                  @*-----------Specialisations-----------*@
+                <div class="editor-label" id="author_l">
+       
+                </div>
+                 <div>
+                 @{
+            var db = Database.Open("FollowPeersDB");
+            List<string> specialisations = new List<string>();
+            foreach (var row in db.Query("Select distinct(Field) from Specializations"))
+            {
+                specialisations.Add(row.Field);
+            }
+                    }
+                </div>
+                @*-----------Type-----------*@
+                <div class="editor-label" id = "type_l">
+                    @Html.LabelFor(model => model, "Type ")
+                </div>
+                <div class="editor-field" id = "type_f">
+                    @{
+            List<string> publicationtype = new List<string>();
+            publicationtype.Add("Full-time");
+            publicationtype.Add("Part-time");
+            publicationtype.Add("Contract");
+            publicationtype.Add("Temporary");
+            publicationtype.Add("Other");
+                    }
+                    @Html.DropDownList("Type", new SelectList(publicationtype))
+                    @Html.ValidationMessageFor(model => model.Type)
+                </div>
+                 @*-----------Country-----------*@
+                <div class="editor-label" id="country_l">
+                    @Html.LabelFor(model => model.Country, "Country")
+                </div>
+                <div>
+                 @{
+            List<string> countries = new List<string>();
+            foreach (var row in db.Query("Select distinct(Name) from Countries"))
+            {
+                countries.Add(row.Name);
+            }
+                    @Html.DropDownList("Country", new SelectList(countries))
+                    @Html.ValidationMessageFor(model => model.Country)
+                  }  
+                </div>  
+                  @*-----------Industry-----------*@
+                <div class="editor-label" id="industry_l">
+                    @Html.LabelFor(model => model.Industry, "Industry")
+                </div>
+                <div>
+                 @{
+            List<string> industry = new List<string>();
+            foreach (var row in db.Query("Select distinct(Name) from Industries"))
+            {
+                industry.Add(row.Name);
+            }
+                    @Html.DropDownList("Industry", new SelectList(industry))
+                    @Html.ValidationMessageFor(model => model.Industry)
+                  }  
+                </div> 
+                @*-----------Experience-----------*@
+                <div class="editor-label" id="experience_l">
+                    @Html.LabelFor(model => model.Experience, "Experience")
+                </div>
+                <div>
+                 @{
+            List<string> experience = new List<string>();
+            experience.Add("Executive");
+            experience.Add("Director");
+            experience.Add("Mid-Senior Level");
+            experience.Add("Associate");
+            experience.Add("Entry Level");
+            experience.Add("Internship");
+            experience.Add("Not Applicable");
+            
+                    @Html.DropDownList("Experience", new SelectList(experience))
+                    @Html.ValidationMessageFor(model => model.Experience)
+                  }  
+                </div>  
+                  @*-----------Job Function-----------*@
+                <div class="editor-label" id="experience_l">
+                    @Html.LabelFor(model => model.Jobfunction, "Job Function")
+                </div>
+                <div>
+                 @{
+            List<string> jobfunction = new List<string>();
+            foreach (var row in db.Query("Select distinct(Name) from JobFunctions"))
+            {
+                jobfunction.Add(row.Name);
+            }
+                    @Html.DropDownList("Job Function", new SelectList(jobfunction))
+                    @Html.ValidationMessageFor(model => model.Jobfunction)
+                  }  
+                </div>  
+                 @*-----------Requirements-----------*@
+                <div class="editor-label" id="Requirements_l">
+                    @Html.LabelFor(model => model.Requirements, "Requirements")
+                </div>
+                <div class="editor-field" id="Requirements_f">
+                    @Html.TextAreaFor(model => model.Requirements, new { cols = "49", rows = "5" })
+                    @Html.ValidationMessageFor(model => model.Requirements)
+                </div>                         
+                @*-----------Description-----------*@
+                <div class="editor-label" id="description_l">
+                    @Html.LabelFor(model => model.Description, "Description")
+                </div>
+                <div class="editor-field" id="description_f">
+                    @Html.TextAreaFor(model => model.Description, new { cols = "49", rows = "5" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+                 @*-----------Email-----------*@
+                <div class="editor-label" id="publishingdate_l">
+                    @Html.LabelFor(model => model.Email, "Email")
+                </div>
+                <div class="editor-field" id="publishingdate_f">
+                    @Html.TextBoxFor(model => model.Email, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+                 @*-----------URL-----------*@
+                <div class="editor-label" id="publishingdate_l">
+                    @Html.LabelFor(model => model.URL, "URL")
+                </div>
+                <div class="editor-field" id="publishingdate_f">
+                    @Html.TextBoxFor(model => model.URL, new { size = 78 })
+                    @Html.ValidationMessageFor(model => model.URL)
+                </div>
+                @*-----------Others----------*@
+                <div class="editor-label" id="publishingdate_l">
+                    @Html.LabelFor(model => model.Other, "Other")
+                </div>
+                <div class="editor-field" id="publishingdate_f">
+                    @Html.TextAreaFor(model => model.Other, new { cols = "49", rows = "5" })
+                    @Html.ValidationMessageFor(model => model.Other)
+                </div>
+            </div>
+            <p>
+                <input type="submit" value="Save" style="float: right; padding: 3px 8px;" />
+            </p>
+        }
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+       if ($('#journal').length) {
+            AutoCompleteJournal();
+        }
+        if ($('#publisher').length) {
+            AutoCompletePublisher();
+        }
+        if ($('#conference').length) {
+            AutoCompleteConference();
+        }
+        if ($('#university').length) {
+            AutoCompleteUniversity();
+        }
+    });
+
+        function AutoCompleteJournal() 
+        {
+            $("#journal").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findJournalNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.JournalID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+
+            function AutoCompletePublisher() 
+        {
+            $("#publisher").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findPublisherNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.PublisherID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+            function AutoCompleteConference() 
+        {
+            $("#conference").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findConferenceNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.ConferenceID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+        function AutoCompleteUniversity() 
+        {
+            $("#university").autocomplete({source: function (request, response) {$.ajax({
+            url: "/PublicationModel/findUniversityNames", type: "POST", dataType: "json",
+            data: { searchText: request.term, maxResults: 5 },
+            success: function (data) {
+            response($.map(data, function (item) {
+            return { label: item.Name, value: item.Name, id: item.UniversityID }
+                }))
+                }
+                })
+                },
+            });
+        }
+
+</script>
+

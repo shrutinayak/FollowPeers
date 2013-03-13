@@ -29,21 +29,16 @@
                        @{ 
                            if (Model.Count() != 0)
                            {
-                               <table>
+                               <table class="table table-hover">
                                @foreach (var item in Model)
-                               {
-                              
+                               {                             
                     <tr><td>       
-                <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
                 <div style="margin-left: 8px;">
                     <a href="/Jobs/Details/@item.JobId" id="title"><b>@item.Title</b></a> 
-                    <div id="Year">Job : @item.Enddate</div>
                 </div>
-                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.Industry)
-                    | @Html.DisplayFor(modelItem => item.Jobfunction) 
-                 </div>
-            </div>
-            <hr /> 
+                <div>
+                    <b>@item.Company    |   @item.Country   |   @item.publishDate</b>
+                </div>
             </td></tr>
                                }
                                  </table>
@@ -63,31 +58,26 @@
                         </div>
                         <br />
                         <br />
-                       <div style="border-style:solid">
-                       <table>
+                       <table  class="table table-hover">
                        @{ if (Model.Count() != 0)
                           {
                               foreach (var item in Model)
                               {
                                   if (item.UserProfile.UserProfileId == myprofile.UserProfileId)
                                   {
-                    <tr><td>       
-                <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                                       <tr><td>       
                 <div style="margin-left: 8px;">
                     <a href="/Jobs/Details/@item.JobId" id="title"><b>@item.Title</b></a> 
-                    <div id="Year">Job : @item.Enddate</div>
                 </div>
-                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.Industry)
-                    | @Html.DisplayFor(modelItem => item.Jobfunction)
-                    </div>
-            </div>
-            <hr /> 
-            </td></tr>}
+                <div>
+                    <b>@item.Company    |   @item.Country   |   @item.publishDate</b>
+                </div>
+            </td></tr>
+                                  }
                               }
                           }
                           }
                           </table>
-                       </div>
                         </div>
                     </div>
                 </div>
